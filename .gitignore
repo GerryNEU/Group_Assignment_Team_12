@@ -1,0 +1,4 @@
+# add gitignore rules below
+/.idea/
+*.DS_store
+
