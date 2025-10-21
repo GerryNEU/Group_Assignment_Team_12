@@ -36,7 +36,23 @@ public class PersonDirectory {
                 return p;
             }
         }
-            return null; //not found after going through the whole list
-         }
+        
+        return null; //not found after going through the whole list
+    }
+    
+    public Person findPersonByEmail(String email) {
+        if (email == null || email.isEmpty()) {
+            return null;
+        }
+        
+        for (Person person : personlist) {
+            // Use equal() for safe string comparison
+            if (email.equals(person.getEmail())) {
+                return person;
+            }
+        }
+        
+        return null; // Not found
+    }
     
 }

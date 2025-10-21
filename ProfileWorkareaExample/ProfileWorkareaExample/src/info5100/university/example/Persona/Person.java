@@ -13,6 +13,7 @@ public class Person {
     
     String id;
     String name;
+    String email;
     
     public Person (String id){
         
@@ -20,6 +21,14 @@ public class Person {
     }
     public String getPersonId(){
         return id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public boolean isMatch(String id){
