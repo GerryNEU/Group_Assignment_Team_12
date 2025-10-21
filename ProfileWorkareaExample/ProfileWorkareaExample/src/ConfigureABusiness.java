@@ -53,7 +53,6 @@ class ConfigureABusiness {
         }
         // Assign the original "Kal Faculty" name to the first faculty for consistency
         faculties[0].getPerson().setName("Kal Faculty");
-        uad.findUserAccount("prof1").getAssociatedPerson().setName("Kal Faculty");
         
         // Studnets
         // Create 10 Students and Profiles
