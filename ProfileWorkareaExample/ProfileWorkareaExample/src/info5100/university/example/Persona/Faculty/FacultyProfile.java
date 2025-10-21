@@ -23,6 +23,7 @@ public class FacultyProfile {
         person = p;
         facultyassignments = new ArrayList();
     }
+    
     public  double getProfAverageOverallRating(){
         
         double sum = 0.0;
@@ -56,6 +57,10 @@ public class FacultyProfile {
             return true;
         }
         return false;
+    }
+    
+    public Person getPerson() {
+        return person;
     }
 
 }
