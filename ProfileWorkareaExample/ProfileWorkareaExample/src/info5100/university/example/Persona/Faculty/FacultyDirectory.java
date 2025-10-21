@@ -1,63 +1,89 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package info5100.university.example.Persona.Faculty;
 
-import info5100.university.example.Persona.*;
-import info5100.university.example.Department.Department;
+import info5100.university.example.Persona.Person;
 import java.util.ArrayList;
 
 /**
- *
- * @author kal bugrara
+ * FacultyDirectory — keeps track of all faculty members.
+ * Works like a small database for creating, storing, and searching faculty profiles.
  */
 public class FacultyDirectory {
 
-    Department department;
-    ArrayList<FacultyProfile> teacherlist;
+    private final ArrayList<FacultyProfile> teacherList;
 
-    public FacultyDirectory(Department d) {
-
-        department = d;
-        teacherlist = new ArrayList();
-
+    public FacultyDirectory() {
+        teacherList = new ArrayList<>();
     }
 
-    public FacultyProfile newFacultyProfile(Person p) {
-
-        FacultyProfile sp = new FacultyProfile(p);
-        teacherlist.add(sp);
-        return sp;
-    }
-    
-    public FacultyProfile getTopProfessor(){
-        
-        double bestratingsofar = 0.0;
-        FacultyProfile BestProfSofar = null;
-        for(FacultyProfile fp: teacherlist)
-           if(fp.getProfAverageOverallRating()>bestratingsofar){
-           bestratingsofar = fp.getProfAverageOverallRating();
-           BestProfSofar = fp;
-           }
-        return BestProfSofar;
-        
+    /**
+     * Create a new faculty profile and add it to the directory.
+     * @param person the Person object linked to this faculty
+     * @return the created FacultyProfile
+     */
+    public FacultyProfile newFacultyProfile(Person person) {
+        FacultyProfile fp = new FacultyProfile(person);
+        teacherList.add(fp);
+        return fp;
     }
 
-    public FacultyProfile findTeachingFaculty(String id) {
+    /**
+     * Get the full list of faculty profiles.
+     * @return list of all faculty profiles
+     */
+    public ArrayList<FacultyProfile> getTeacherList() {
+        return teacherList;
+    }
 
-        for (FacultyProfile sp : teacherlist) {
-
-            if (sp.isMatch(id)) {
-                return sp;
+    /**
+     * Find a faculty profile by the person's unique ID.
+     * @param personId the unique ID of the person
+     * @return FacultyProfile if found, otherwise null
+     */
+    public FacultyProfile findFacultyByPersonId(String personId) {
+        for (FacultyProfile fp : teacherList) {
+            if (fp.isMatch(personId)) {
+                return fp;
             }
         }
-            return null; //not found after going through the whole list
-         }
-
-    public FacultyProfile findFaculty(String personId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return null;
     }
-    
+
+    /**
+     * Find which faculty is teaching a specific course number.
+     * @param courseNumber the course ID
+     * @return FacultyProfile of the teaching faculty, or null if none found
+     */
+    public FacultyProfile findTeachingFacultyByCourseNumber(String courseNumber) {
+        for (FacultyProfile fp : teacherList) {
+            for (FacultyAssignment fa : fp.getFacultyAssignments()) {
+                if (courseNumber.equals(fa.getCourseOffer().getCourseNumber())) {
+                    return fp;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Find the faculty with the highest average rating.
+     * @return FacultyProfile with the best rating, or null if no faculty exist
+     */
+    public FacultyProfile getTopProfessor() {
+        double bestRating = 0.0;
+        FacultyProfile bestProfessor = null;
+
+        for (FacultyProfile fp : teacherList) {
+            double avg = fp.getProfAverageOverallRating();
+            if (avg > bestRating) {
+                bestRating = avg;
+                bestProfessor = fp;
+            }
+        }
+        return bestProfessor;
+    }
+
+    @Override
+    public String toString() {
+        return "FacultyDirectory with " + teacherList.size() + " faculty profiles.";
+    }
 }
