@@ -38,7 +38,7 @@ public class CourseOffer {
     }
 
     public String getCourseNumber() {
-        return course.getCOurseNumber();
+        return course.getCourseNumber();
     }
 
     public void generatSeats(int n) {
@@ -88,9 +88,27 @@ public class CourseOffer {
         return course.getCredits();
     }
 
-    public void assignFaculty(FacultyProfile facultyProfile) {
-        this.facultyprofile = facultyprofile;
+    public void assignFaculty(FacultyProfile fp) {
+        this.facultyprofile = new FacultyAssignment(fp, this);
     }
-    
+   
+    public java.util.ArrayList<Seat> getSeatList() {
+        return seatlist;
+    }
+
+  
+    public int getSeatCount() {
+        return seatlist == null ? 0 : seatlist.size();
+    }
+
+
+    public int getEnrolledCount() {
+        if (seatlist == null) return 0;
+        int count = 0;
+        for (Seat s : seatlist) {
+            if (s.isOccupied()) count++;
+        }
+        return count;
+    }
 
 }
