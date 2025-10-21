@@ -2,3 +2,12 @@
 /.idea/
 *.DS_store
 
+/ProfileWorkareaExample/ProfileWorkareaExample/dist/
+
+# build outputs
+ProfileWorkareaExample/ProfileWorkareaExample/build/
+*.class
+*.rs
+*.jar
+*.war
+built-jar.properties

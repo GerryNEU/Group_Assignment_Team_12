@@ -15,8 +15,25 @@ public class FacultyProfile {
     private final ArrayList<FacultyAssignment> facultyAssignments;
 
     public FacultyProfile(Person p) {
-        this.person = p;
-        this.facultyAssignments = new ArrayList<>();
+
+        person = p;
+        facultyAssignments = new ArrayList();
+    }
+    
+    public  double getProfAverageOverallRating(){
+        
+        double sum = 0.0;
+        //for each facultyassignment extract class rating
+        //add them up and divide by the number of teaching assignmnet;
+        for(FacultyAssignment fa: facultyAssignments){
+            
+            sum = sum + fa.getRating();
+            
+        }
+        //divide by the total number of faculty assignments
+        
+        return sum/(facultyAssignments.size()*1.0); //this ensure we have double/double
+        
     }
 
     /**
@@ -35,20 +52,13 @@ public class FacultyProfile {
         return facultyAssignments;
     }
 
-    /** Calculate the average teaching rating across all courses */
-    public double getProfAverageOverallRating() {
-        if (facultyAssignments.isEmpty()) return 0.0;
-        double sum = 0.0;
-        for (FacultyAssignment fa : facultyAssignments) {
-            sum += fa.getRating();
-        }
-        return sum / facultyAssignments.size();
-    }
-
-    /** Return the faculty's Person object */
+ 
+    
     public Person getPerson() {
         return person;
     }
+
+ 
 
     /** Utility method to check if a person ID matches this faculty */
     public boolean isMatch(String id) {
