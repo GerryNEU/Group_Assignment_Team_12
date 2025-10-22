@@ -16,25 +16,23 @@ import java.util.ArrayList;
  */
 public class CourseOffer {
 
-    Course course;
-    int number;
-    ArrayList<Seat> seatlist;
-    CourseSchedule courseSchedule;
-    FacultyAssignment facultyprofile;
+    private Course course;
+    private int number;
+    private ArrayList<Seat> seatlist;
+    private CourseSchedule courseSchedule;
+    private FacultyAssignment facultyAssignment;
 
     public CourseOffer(CourseSchedule cs, Course c) {
-        course = c;
-        courseSchedule = cs;
-        seatlist = new ArrayList();
+        this.course = c;
+        this.courseSchedule = cs;
+        this.seatlist = new ArrayList();
     }
      
-    public void AssignAsTeacher(FacultyProfile fp) {
-
-        facultyprofile = new FacultyAssignment(fp, this);
-    }
-
     public FacultyProfile getFacultyProfile() {
-        return facultyprofile.getFacultyProfile();
+        if (facultyAssignment == null) {
+            return null;
+        }
+        return facultyAssignment.getFacultyProfile();
     }
 
     public String getCourseNumber() {
@@ -89,7 +87,10 @@ public class CourseOffer {
     }
 
     public void assignFaculty(FacultyProfile fp) {
-        this.facultyprofile = new FacultyAssignment(fp, this);
+        this.facultyAssignment = new FacultyAssignment(fp, this);
+        if (fp != null && fp.getFacultyAssignments() != null){
+            fp.getFacultyAssignments().add(this.facultyAssignment);
+        }
     }
    
     public java.util.ArrayList<Seat> getSeatList() {

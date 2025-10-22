@@ -27,7 +27,7 @@ public class Person {
         return false;
     }
 
-    public void setName(String admin_User) {
+    public void setName(String name) {
         this.name = name;
     }
     
