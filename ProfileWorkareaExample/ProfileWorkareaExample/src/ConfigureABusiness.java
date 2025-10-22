@@ -53,7 +53,12 @@ class ConfigureABusiness {
         }
         // Assign the original "Kal Faculty" name to the first faculty for consistency
         faculties[0].getPerson().setName("Kal Faculty");
-        uad.findUserAccount("prof1").getAssociatedPerson().setName("Kal Faculty");
+        UserAccount prof1Account = uad.findUserAccount("prof1");
+        if (prof1Account != null) {
+            prof1Account.getAssociatedPerson().setName("Kal Faculty");
+        } else {
+            System.out.println("Warning: prof1 account not found during initialization.");
+        }
         
         // Studnets
         // Create 10 Students and Profiles

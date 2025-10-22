@@ -33,6 +33,8 @@ public class ProfileWorkAreaMainFrame extends javax.swing.JFrame {
     public ProfileWorkAreaMainFrame() {
         initComponents();
         business = ConfigureABusiness.initialize();
+        setSize(800, 640);
+        setLocationRelativeTo(null);
     }
 
     public void insert(JPanel jpanel) {

@@ -20,6 +20,9 @@ public class CourseSchedule {
     ArrayList<CourseOffer> schedule;
     String semester;
 
+    public ArrayList<CourseOffer> getSchedule(){
+        return schedule;
+    }
     public CourseSchedule(String s, CourseCatalog cc) {
         semester = s;
         coursecatalog = cc;
