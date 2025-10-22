@@ -33,6 +33,7 @@ public class FacultyAssignment {
     }
     public CourseOffer getCourseOffer() {
         return courseOffer;
+
 }
     
 }
