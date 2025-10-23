@@ -22,6 +22,8 @@ public class CourseOffer {
     private CourseSchedule courseSchedule;
     private FacultyAssignment facultyAssignment;
     private String scheduleTime;
+    private String syllabus;
+    private boolean enrollmentOpen = true;
 
     public CourseOffer(CourseSchedule cs, Course c) {
         this.course = c;
@@ -120,5 +122,23 @@ public class CourseOffer {
         }
         return count;
     }
+    public String getSyllabus() {
+        return syllabus == null ? "No syllabus uploaded" : syllabus;
+    }
 
+    public void setSyllabus(String syllabus) {
+        this.syllabus = syllabus;
+    }
+
+    public boolean isEnrollmentOpen() {
+        return enrollmentOpen;
+    }
+
+    public void openEnrollment() {
+        this.enrollmentOpen = true;
+    }
+
+    public void closeEnrollment() {
+        this.enrollmentOpen = false;
+    }
 }

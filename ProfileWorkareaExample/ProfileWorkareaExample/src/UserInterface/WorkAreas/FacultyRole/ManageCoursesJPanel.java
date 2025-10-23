@@ -108,6 +108,8 @@ public class ManageCoursesJPanel extends javax.swing.JPanel {
         tableCourse = new javax.swing.JTable();
         btnBack = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
+        btnSyllabus = new javax.swing.JButton();
+        btnTogEnroll = new javax.swing.JButton();
 
         lblTitle.setFont(new java.awt.Font("Microsoft YaHei UI", 0, 18)); // NOI18N
         lblTitle.setText("Manage Courses");
@@ -141,24 +143,42 @@ public class ManageCoursesJPanel extends javax.swing.JPanel {
             }
         });
 
+        btnSyllabus.setText("Syllabus");
+        btnSyllabus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSyllabusActionPerformed(evt);
+            }
+        });
+
+        btnTogEnroll.setText("ToggleEnrollment");
+        btnTogEnroll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTogEnrollActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(217, 217, 217)
-                .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnSave)
-                .addGap(61, 61, 61))
-            .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 853, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(217, 217, 217)
+                .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(124, 124, 124)
+                .addComponent(btnSyllabus)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnTogEnroll)
+                .addGap(143, 143, 143)
+                .addComponent(btnSave)
+                .addGap(53, 53, 53))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -167,11 +187,13 @@ public class ManageCoursesJPanel extends javax.swing.JPanel {
                 .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
+                .addGap(61, 61, 61)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBack)
-                    .addComponent(btnSave))
-                .addContainerGap(136, Short.MAX_VALUE))
+                    .addComponent(btnSave)
+                    .addComponent(btnSyllabus)
+                    .addComponent(btnTogEnroll))
+                .addContainerGap(106, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -230,10 +252,94 @@ public class ManageCoursesJPanel extends javax.swing.JPanel {
         
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void btnSyllabusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSyllabusActionPerformed
+        // TODO add your handling code here:                                           
+        int selectedRow = tableCourse.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a course first.");
+            return;
+        }
+
+        // 取选中课程号
+        String courseNum = String.valueOf(tableCourse.getValueAt(selectedRow, 0));
+
+        Department dept = business.getDepartment();
+        CourseSchedule cs = dept.getCourseSchedule("Fall 2025");
+        CourseOffer co = cs.getCourseOfferByNumber(courseNum);
+        if (co == null) {
+            JOptionPane.showMessageDialog(this, "Course not found.");
+            return;
+        }
+
+        // 让用户选择文件或输入大纲内容
+        String[] options = {"Select File", "Enter Text"};
+        int choice = JOptionPane.showOptionDialog(
+            this,
+            "How do you want to upload the syllabus?",
+            "Upload Syllabus",
+            JOptionPane.DEFAULT_OPTION,
+            JOptionPane.INFORMATION_MESSAGE,
+            null,
+            options,
+            options[0]
+        );
+
+        if (choice == 0) {
+            // 选择文件
+            javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
+            int result = fileChooser.showOpenDialog(this);
+            if (result == javax.swing.JFileChooser.APPROVE_OPTION) {
+                String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+                co.setSyllabus(filePath);
+                JOptionPane.showMessageDialog(this, "Syllabus uploaded: " + filePath);
+            }
+        } else if (choice == 1) {
+            // 手动输入
+            String syllabusText = JOptionPane.showInputDialog(this, "Enter syllabus text:", co.getSyllabus());
+            if (syllabusText != null && !syllabusText.trim().isEmpty()) {
+                co.setSyllabus(syllabusText);
+                JOptionPane.showMessageDialog(this, "Syllabus updated.");
+            }
+        }
+    
+    }//GEN-LAST:event_btnSyllabusActionPerformed
+
+    private void btnTogEnrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTogEnrollActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = tableCourse.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a course first.");
+            return;
+        }
+
+        String courseNum = String.valueOf(tableCourse.getValueAt(selectedRow, 0));
+
+        Department dept = business.getDepartment();
+        CourseSchedule cs = dept.getCourseSchedule("Fall 2025");
+        CourseOffer co = cs.getCourseOfferByNumber(courseNum);
+        if (co == null) {
+            JOptionPane.showMessageDialog(this, "Course not found.");
+            return;
+        }
+
+        // 切换状态
+        if (co.isEnrollmentOpen()) {
+            co.closeEnrollment();
+            JOptionPane.showMessageDialog(this, "Enrollment closed for course " + courseNum);
+        } else {
+            co.openEnrollment();
+            JOptionPane.showMessageDialog(this, "Enrollment opened for course " + courseNum);
+        }
+
+        populateTable();
+    }//GEN-LAST:event_btnTogEnrollActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSyllabus;
+    private javax.swing.JButton btnTogEnroll;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JTable tableCourse;
