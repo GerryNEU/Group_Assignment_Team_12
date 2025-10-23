@@ -48,4 +48,14 @@ public class UserAccountDirectory {
         }
         return null;
     }
+    
+    public UserAccount findUserAccountByEmail(String email) {
+        for (UserAccount ua : userAccountList) {
+            if (ua.isMatch(email)) {
+                return ua;
+            }
+        }
+        
+        return null;
+    }
 }
