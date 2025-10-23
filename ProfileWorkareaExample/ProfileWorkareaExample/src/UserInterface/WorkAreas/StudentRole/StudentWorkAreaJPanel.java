@@ -42,51 +42,14 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
     public StudentWorkAreaJPanel(Business b, StudentProfile spp, JPanel clp) {
 
         business = b;
-        this.CardSequencePanel = clp;
+        CardSequencePanel = clp;
         student = spp;
         initComponents();
-        setupPanels();
 
     }
     
-    /**
-     * 设置面板切换
-     */
-    private void setupPanels() {
-        // 1. 保存当前的UI内容（NetBeans创建的按钮界面）
-        Component[] components = this.getComponents();
-        JPanel menuPanel = new JPanel();
-        menuPanel.setLayout(this.getLayout());
-        for (Component c : components) {
-            this.remove(c);
-            menuPanel.add(c);
-        }
-        
-        // 2. 把主面板改成CardLayout
-        cardLayout = new CardLayout();
-        this.setLayout(cardLayout);
-        
-        // 3. 创建子面板
-        profilePanel = new ProfileJPanel(student);
-        transcriptPanel = new TranscriptJPanel(student);
-        registrationPanel = new CourseRegistrationJPanel(business, student);
-        graduationPanel = new GraduationAuditJPanel(student);
-        courseworkPanel = new CourseworkJPanel(student);
-        
-        // 4. 添加所有面板到CardLayout
-        this.add(menuPanel, "menu");                    // 主菜单（按钮界面）
-        this.add(profilePanel, "profile");              // Profile面板
-        this.add(transcriptPanel, "transcript");        // Transcript面板
-        this.add(registrationPanel, "registration");    // Registration面板
-        this.add(graduationPanel, "graduation");        // Graduation面板
-        this.add(courseworkPanel, "coursework");        // Coursework面板
-        
-        // 5. 默认显示主菜单
-        cardLayout.show(this, "menu");
-    }
-       private void backToMenu() {
-    cardLayout.show(this, "menu");
-}
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -218,26 +181,41 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCourseWorkIdentifyResourceAssetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCourseWorkIdentifyResourceAssetsActionPerformed
-    cardLayout.show(this, "coursework");
+    CardSequencePanel.add("StudentMenu", this);
+    CourseworkJPanel courseworkPanel = new CourseworkJPanel(student);
+    CardSequencePanel.add("Coursework", courseworkPanel);
+    ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_btnCourseWorkIdentifyResourceAssetsActionPerformed
 
     private void btnManageProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageProfileActionPerformed
 // TODO add your handling code here:
-    cardLayout.show(this, "profile");
+    CardSequencePanel.add("StudentMenu", this);
+    ProfileJPanel profilePanel = new ProfileJPanel(student,CardSequencePanel);
+    CardSequencePanel.add("Profile", profilePanel);
+    ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 }//GEN-LAST:event_btnManageProfileActionPerformed
 
     private void btnGraduationAuditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGraduationAuditActionPerformed
         // TODO add your handling code here:
-    cardLayout.show(this, "graduation");
+    CardSequencePanel.add("StudentMenu", this);
+    GraduationAuditJPanel graduationPanel = new GraduationAuditJPanel(student);
+    CardSequencePanel.add("Graduation", graduationPanel);
+    ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_btnGraduationAuditActionPerformed
 
     private void btnRegistrationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrationActionPerformed
-    cardLayout.show(this, "registration");      
+    CardSequencePanel.add("StudentMenu", this);
+    CourseRegistrationJPanel registrationPanel = new CourseRegistrationJPanel(business, student);
+    CardSequencePanel.add("Registration", registrationPanel);
+    ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);   
 }//GEN-LAST:event_btnRegistrationActionPerformed
 
     private void btnTranscriptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTranscriptActionPerformed
         // TODO add your handling code here:
-         cardLayout.show(this, "transcript");
+    CardSequencePanel.add("StudentMenu", this);
+    TranscriptJPanel transcriptPanel = new TranscriptJPanel(student);
+    CardSequencePanel.add("Transcript", transcriptPanel);
+    ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_btnTranscriptActionPerformed
 
 

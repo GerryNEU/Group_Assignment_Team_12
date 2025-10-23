@@ -8,6 +8,7 @@ import info5100.university.example.Persona.StudentProfile;
 import info5100.university.example.Persona.Person;
 import java.awt.Color;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 
 /**
@@ -19,13 +20,16 @@ public class ProfileJPanel extends javax.swing.JPanel {
     private String originalName;
     private String originalEmail;
     private String originalPhone;
+    private JPanel CardSequencePanel;
 
     /**
      * Creates new form ProfileJPanel
      */
-    public ProfileJPanel(StudentProfile studentProfile) {
-        initComponents();//NetBeans 生成ui初始化
+    public ProfileJPanel( StudentProfile studentProfile, JPanel cardSequencePanel) {
+        this.studentProfile = studentProfile;
+       this.CardSequencePanel = cardSequencePanel; 
         
+        initComponents();//NetBeans 生成ui初始
         customInit();
         loadData();
         setViewMode();
@@ -192,6 +196,7 @@ private void showError(String message) {
         fieldEmail = new javax.swing.JTextField();
         fieldPhone = new javax.swing.JTextField();
         fieldDepartment = new javax.swing.JTextField();
+        btnBack = new javax.swing.JButton();
 
         lblTittle.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         lblTittle.setText("My Profile");
@@ -227,15 +232,19 @@ private void showError(String message) {
             }
         });
 
+        btnBack.setText("< < Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblTittle)
-                .addGap(204, 204, 204))
-            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(314, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(fieldDepartment, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fieldPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -243,29 +252,36 @@ private void showError(String message) {
                     .addComponent(fieldStudentID, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblDepartment)
+                            .addComponent(lblPhone)
+                            .addComponent(lblEmail)
+                            .addComponent(lblStudentID)
+                            .addComponent(lblName))
                         .addGroup(layout.createSequentialGroup()
-                            .addGap(82, 82, 82)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(lblDepartment)
-                                .addComponent(lblPhone)
-                                .addComponent(lblEmail)
-                                .addComponent(lblStudentID)
-                                .addComponent(lblName)))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(122, 122, 122)
+                            .addGap(40, 40, 40)
                             .addComponent(btnEdit)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(btnSave)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(btnCancel))))
-                .addContainerGap(138, Short.MAX_VALUE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lblTittle)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(btnSave)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(btnCancel))))))
+                .addGap(306, 306, 306))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addComponent(btnBack)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
+                .addGap(36, 36, 36)
+                .addComponent(btnBack)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblTittle)
-                .addGap(35, 35, 35)
+                .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblName)
                     .addComponent(fieldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -290,7 +306,7 @@ private void showError(String message) {
                     .addComponent(btnEdit)
                     .addComponent(btnSave)
                     .addComponent(btnCancel))
-                .addGap(159, 159, 159))
+                .addGap(139, 139, 139))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -358,8 +374,15 @@ private void showError(String message) {
         System.out.println("Edit cancelled, data restored.");
     }//GEN-LAST:event_btnCancelActionPerformed
 
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "StudentMenu");
+
+    }//GEN-LAST:event_btnBackActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBack;
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnSave;

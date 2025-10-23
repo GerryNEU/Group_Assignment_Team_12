@@ -67,6 +67,8 @@ class ConfigureABusiness {
         for (int i = 0; i < 20; i++) {
             Person studentPerson = pd.newPerson("S00" + (i + 1));
             studentPerson.setName("Student " + (i + 1));
+            studentPerson.setEmail("student" + (i + 1) + "@university.edu");
+            studentPerson.setPhoneNumber("617-555-" + String.format("%04d", i + 1));
             students[i] = sd.newStudentProfile(studentPerson);
             // Create Student User Account
             uad.newUserAccount(studentPerson, "student" + (i + 1), "****", "Student");
