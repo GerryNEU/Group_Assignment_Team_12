@@ -14,6 +14,7 @@ import Business.Business;
 import UserInterface.WorkAreas.AdminRole.ManagePersonnelWorkResp.ManagePersonsJPanel;
 import info5100.university.example.Persona.Faculty.FacultyProfile;
 import UserInterface.WorkAreas.FacultyRole.ManageCoursesJPanel;
+import UserInterface.WorkAreas.FacultyRole.FacultyWorkAreaJPanel;
 import javax.swing.JPanel;
 
 /**
