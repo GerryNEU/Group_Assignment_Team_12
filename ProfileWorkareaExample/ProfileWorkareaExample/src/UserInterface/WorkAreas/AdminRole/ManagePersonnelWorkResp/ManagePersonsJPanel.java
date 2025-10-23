@@ -6,9 +6,13 @@
 package UserInterface.WorkAreas.AdminRole.ManagePersonnelWorkResp;
 
 import Business.Business;
+import info5100.university.example.Persona.Person;
+import info5100.university.example.Persona.PersonDirectory;
+import javax.swing.JOptionPane;
 
 
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -21,13 +25,37 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
      */
     JPanel CardSequencePanel;
     Business business;
+    PersonDirectory personDirectory;
 
 
     public ManagePersonsJPanel(Business bz, JPanel jp) {
         CardSequencePanel = jp;
         this.business = bz;
+        this.personDirectory = business.getDepartment().getPersonDirectory();
         initComponents();
+        
+        populateTable();
 
+    }
+    
+    private void populateTable() {
+    
+        // Get Table Model
+        DefaultTableModel model = (DefaultTableModel) tblPersons.getModel();
+    
+        // Clear Table
+        model.setRowCount(0);
+        
+        // loop PersonDirectory
+        for (Person person : personDirectory.getPersonlist()) {
+            Object[] row = new Object[3];
+            row[0] = person.getPersonId();
+            row[1] = person.getName();
+            row[2] = person.getEmail(); 
+            
+            // Add this row to table model
+            model.addRow(row);
+        }
     }
 
 
@@ -41,9 +69,12 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         Back = new javax.swing.JButton();
-        Next = new javax.swing.JButton();
-        lblRegisterPersons = new javax.swing.JLabel();
+        btnCreate = new javax.swing.JButton();
         lblTitle = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblPersons = new javax.swing.JTable();
+        btnViewUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(0, 153, 153));
         setLayout(null);
@@ -55,25 +86,55 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
             }
         });
         add(Back);
-        Back.setBounds(20, 260, 80, 23);
+        Back.setBounds(30, 350, 80, 23);
 
-        Next.setText("Next >>");
-        Next.addActionListener(new java.awt.event.ActionListener() {
+        btnCreate.setText("Create");
+        btnCreate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NextActionPerformed(evt);
+                btnCreateActionPerformed(evt);
             }
         });
-        add(Next);
-        Next.setBounds(500, 260, 80, 23);
-
-        lblRegisterPersons.setText("Name");
-        add(lblRegisterPersons);
-        lblRegisterPersons.setBounds(20, 60, 190, 17);
+        add(btnCreate);
+        btnCreate.setBounds(40, 300, 80, 23);
 
         lblTitle.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        lblTitle.setText("Manage Personnel (HR)");
+        lblTitle.setText("Manage Persons (HR)");
         add(lblTitle);
         lblTitle.setBounds(21, 20, 550, 28);
+
+        tblPersons.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "ID", "Name", "Email"
+            }
+        ));
+        jScrollPane1.setViewportView(tblPersons);
+
+        add(jScrollPane1);
+        jScrollPane1.setBounds(20, 50, 590, 230);
+
+        btnViewUpdate.setText("View&Update");
+        btnViewUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewUpdateActionPerformed(evt);
+            }
+        });
+        add(btnViewUpdate);
+        btnViewUpdate.setBounds(130, 300, 150, 23);
+
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+        add(btnDelete);
+        btnDelete.setBounds(290, 300, 72, 23);
     }// </editor-fold>//GEN-END:initComponents
 
     private void BackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackActionPerformed
@@ -84,21 +145,62 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
 
     }//GEN-LAST:event_BackActionPerformed
 
-    private void NextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextActionPerformed
+    private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         // TODO add your handling code here:
         
         AdministerPersonJPanel mppd = new AdministerPersonJPanel(business, CardSequencePanel);
         CardSequencePanel.add(mppd);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 
-    }//GEN-LAST:event_NextActionPerformed
+    }//GEN-LAST:event_btnCreateActionPerformed
+
+    private void btnViewUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewUpdateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnViewUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = tblPersons.getSelectedRow();
+        
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a person to delete.", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Confirm to delete
+        int dialogResult = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this person?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+        
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            // Get Id for table model
+            String personId = (String) tblPersons.getValueAt(selectedRow, 0);
+            
+            // Find people from directory
+            Person personToDelete = personDirectory.findPerson(personId);
+            
+            // TODO: 在删除 Person 之前，应先删除所有关联的账户 We should delete all connective accounts before deleting people
+            // It's a high level function, we will achieve delete person first
+            
+            if (personToDelete != null) {
+                personDirectory.deletePerson(personToDelete);
+                
+                populateTable();
+                
+                JOptionPane.showMessageDialog(this, "Person deleted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Could not find the person to delete.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Back;
-    private javax.swing.JButton Next;
-    private javax.swing.JLabel lblRegisterPersons;
+    private javax.swing.JButton btnCreate;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnViewUpdate;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblTitle;
+    private javax.swing.JTable tblPersons;
     // End of variables declaration//GEN-END:variables
 
 }
