@@ -13,6 +13,7 @@ package UserInterface.WorkAreas.StudentRole;
 import Business.Business;
 import info5100.university.example.Persona.StudentProfile;
 import java.awt.CardLayout;
+import java.awt.Component;
 import javax.swing.JPanel;
 
 /**
@@ -24,7 +25,13 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
     javax.swing.JPanel CardSequencePanel;
     Business business;
     StudentProfile student;
-
+    
+    private CardLayout cardLayout;
+    private ProfileJPanel profilePanel;
+    private JPanel transcriptPanel;
+    private JPanel registrationPanel;
+    private JPanel graduationPanel;
+    private JPanel courseworkPanel;
     /**
      * Creates new form UnitRiskWorkArea
      * @param b
@@ -38,8 +45,48 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
         this.CardSequencePanel = clp;
         student = spp;
         initComponents();
+        setupPanels();
 
     }
+    
+    /**
+     * 设置面板切换
+     */
+    private void setupPanels() {
+        // 1. 保存当前的UI内容（NetBeans创建的按钮界面）
+        Component[] components = this.getComponents();
+        JPanel menuPanel = new JPanel();
+        menuPanel.setLayout(this.getLayout());
+        for (Component c : components) {
+            this.remove(c);
+            menuPanel.add(c);
+        }
+        
+        // 2. 把主面板改成CardLayout
+        cardLayout = new CardLayout();
+        this.setLayout(cardLayout);
+        
+        // 3. 创建子面板
+        profilePanel = new ProfileJPanel(student);
+        transcriptPanel = new TranscriptJPanel(student);
+        registrationPanel = new CourseRegistrationJPanel(business, student);
+        graduationPanel = new GraduationAuditJPanel(student);
+        courseworkPanel = new CourseworkJPanel(student);
+        
+        // 4. 添加所有面板到CardLayout
+        this.add(menuPanel, "menu");                    // 主菜单（按钮界面）
+        this.add(profilePanel, "profile");              // Profile面板
+        this.add(transcriptPanel, "transcript");        // Transcript面板
+        this.add(registrationPanel, "registration");    // Registration面板
+        this.add(graduationPanel, "graduation");        // Graduation面板
+        this.add(courseworkPanel, "coursework");        // Coursework面板
+        
+        // 5. 默认显示主菜单
+        cardLayout.show(this, "menu");
+    }
+       private void backToMenu() {
+    cardLayout.show(this, "menu");
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -171,36 +218,26 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCourseWorkIdentifyResourceAssetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCourseWorkIdentifyResourceAssetsActionPerformed
-        
-
+    cardLayout.show(this, "coursework");
     }//GEN-LAST:event_btnCourseWorkIdentifyResourceAssetsActionPerformed
 
     private void btnManageProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageProfileActionPerformed
-        // TODO add your handling code here:
-
-
-
+// TODO add your handling code here:
+    cardLayout.show(this, "profile");
 }//GEN-LAST:event_btnManageProfileActionPerformed
 
     private void btnGraduationAuditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGraduationAuditActionPerformed
         // TODO add your handling code here:
-
-
+    cardLayout.show(this, "graduation");
     }//GEN-LAST:event_btnGraduationAuditActionPerformed
 
     private void btnRegistrationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrationActionPerformed
-       CourseRegistrationJPanel regPanel =
-        new CourseRegistrationJPanel(CardSequencePanel, userAccount, studentProfile, department);
-
-    CardSequencePanel.add("CourseRegistrationJPanel", regPanel);
-    CardLayout layout = (CardLayout) CardSequencePanel.getLayout();
-    layout.show(CardSequencePanel, "CourseRegistrationJPanel");
-
-        CardSequencePanel.removeAll();
+    cardLayout.show(this, "registration");      
 }//GEN-LAST:event_btnRegistrationActionPerformed
 
     private void btnTranscriptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTranscriptActionPerformed
         // TODO add your handling code here:
+         cardLayout.show(this, "transcript");
     }//GEN-LAST:event_btnTranscriptActionPerformed
 
 

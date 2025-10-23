@@ -4,17 +4,21 @@
  */
 package UserInterface.WorkAreas.StudentRole;
 
+import info5100.university.example.Persona.StudentProfile;
+
 /**
  *
  * @author hug0_
  */
 public class TranscriptJPanel extends javax.swing.JPanel {
+    private StudentProfile studentProfile;
 
     /**
      * Creates new form TranscriptJPanel
      */
-    public TranscriptJPanel() {
+    public TranscriptJPanel(StudentProfile studentProfile) {
         initComponents();
+        this.studentProfile = studentProfile;
     }
 
     /**

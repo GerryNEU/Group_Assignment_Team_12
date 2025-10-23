@@ -4,17 +4,22 @@
  */
 package UserInterface.WorkAreas.StudentRole;
 
+import info5100.university.example.Persona.StudentProfile;
+
 /**
  *
  * @author hug0_
  */
 public class CourseworkJPanel extends javax.swing.JPanel {
+     private StudentProfile studentProfile;
 
     /**
      * Creates new form CourseworkPanel
      */
-    public CourseworkJPanel() {
+    public CourseworkJPanel(StudentProfile studentProfile) {
         initComponents();
+        this.studentProfile = studentProfile;
+        
     }
 
     /**

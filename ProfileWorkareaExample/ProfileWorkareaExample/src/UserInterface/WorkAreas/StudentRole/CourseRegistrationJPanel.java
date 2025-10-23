@@ -4,16 +4,23 @@
  */
 package UserInterface.WorkAreas.StudentRole;
 
+import Business.Business;
+import info5100.university.example.Persona.StudentProfile;
+
 /**
  *
  * @author hug0_
  */
 public class CourseRegistrationJPanel extends javax.swing.JPanel {
+    private Business business;
+    private StudentProfile studentProfile;
 
     /**
      * Creates new form CourseRegistrationJPanel
      */
-    public CourseRegistrationJPanel() {
+    public CourseRegistrationJPanel(Business business, StudentProfile studentProfile) {
+        this.business = business;
+        this.studentProfile = studentProfile;
         initComponents();
     }
 
