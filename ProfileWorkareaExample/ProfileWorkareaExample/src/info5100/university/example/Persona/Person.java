@@ -13,6 +13,7 @@ public class Person {
     
     String id;
     String name;
+    String email;
     
     public Person (String id){
         
@@ -34,6 +35,12 @@ public class Person {
     public String getName() {
         return name;
     }
-    
-    
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
