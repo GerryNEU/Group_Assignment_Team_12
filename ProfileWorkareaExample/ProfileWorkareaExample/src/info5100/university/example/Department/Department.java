@@ -40,7 +40,7 @@ public class Department {
         coursecatalog = new CourseCatalog(this);
         studentdirectory = new StudentDirectory(this); //pass the department object so it stays linked to it
         persondirectory = new PersonDirectory();
-        facultydirectory = new FacultyDirectory(this);
+        facultydirectory = new FacultyDirectory();
         degree = new Degree("MSIS");
         
     }

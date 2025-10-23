@@ -16,29 +16,38 @@ import java.util.ArrayList;
  */
 public class CourseOffer {
 
-    Course course;
-    int number;
-    ArrayList<Seat> seatlist;
-    CourseSchedule courseSchedule;
-    FacultyAssignment facultyprofile;
+    private Course course;
+    private int number;
+    private ArrayList<Seat> seatlist;
+    private CourseSchedule courseSchedule;
+    private FacultyAssignment facultyAssignment;
+    private String scheduleTime;
+    private String syllabus;
+    private boolean enrollmentOpen = true;
 
     public CourseOffer(CourseSchedule cs, Course c) {
-        course = c;
-        courseSchedule = cs;
-        seatlist = new ArrayList();
+        this.course = c;
+        this.courseSchedule = cs;
+        this.seatlist = new ArrayList();
     }
      
-    public void AssignAsTeacher(FacultyProfile fp) {
-
-        facultyprofile = new FacultyAssignment(fp, this);
+    public String getScheduleTime() {
+        return scheduleTime == null ? "TBD" : scheduleTime;
     }
 
+    public void setScheduleTime(String scheduleTime) {
+        this.scheduleTime = scheduleTime;
+    }
+    
     public FacultyProfile getFacultyProfile() {
-        return facultyprofile.getFacultyProfile();
+        if (facultyAssignment == null) {
+            return null;
+        }
+        return facultyAssignment.getFacultyProfile();
     }
 
     public String getCourseNumber() {
-        return course.getCOurseNumber();
+        return course.getCourseNumber();
     }
 
     public void generatSeats(int n) {
@@ -88,9 +97,48 @@ public class CourseOffer {
         return course.getCredits();
     }
 
-    public void assignFaculty(FacultyProfile facultyProfile) {
-        this.facultyprofile = facultyprofile;
+    public void assignFaculty(FacultyProfile fp) {
+        this.facultyAssignment = new FacultyAssignment(fp, this);
+        if (fp != null && fp.getFacultyAssignments() != null){
+            fp.getFacultyAssignments().add(this.facultyAssignment);
+        }
     }
-    
+   
+    public java.util.ArrayList<Seat> getSeatList() {
+        return seatlist;
+    }
 
+  
+    public int getSeatCount() {
+        return seatlist == null ? 0 : seatlist.size();
+    }
+
+
+    public int getEnrolledCount() {
+        if (seatlist == null) return 0;
+        int count = 0;
+        for (Seat s : seatlist) {
+            if (s.isOccupied()) count++;
+        }
+        return count;
+    }
+    public String getSyllabus() {
+        return syllabus == null ? "No syllabus uploaded" : syllabus;
+    }
+
+    public void setSyllabus(String syllabus) {
+        this.syllabus = syllabus;
+    }
+
+    public boolean isEnrollmentOpen() {
+        return enrollmentOpen;
+    }
+
+    public void openEnrollment() {
+        this.enrollmentOpen = true;
+    }
+
+    public void closeEnrollment() {
+        this.enrollmentOpen = false;
+    }
 }
