@@ -21,6 +21,7 @@ public class CourseOffer {
     private ArrayList<Seat> seatlist;
     private CourseSchedule courseSchedule;
     private FacultyAssignment facultyAssignment;
+    private String scheduleTime;
 
     public CourseOffer(CourseSchedule cs, Course c) {
         this.course = c;
@@ -28,6 +29,14 @@ public class CourseOffer {
         this.seatlist = new ArrayList();
     }
      
+    public String getScheduleTime() {
+        return scheduleTime == null ? "TBD" : scheduleTime;
+    }
+
+    public void setScheduleTime(String scheduleTime) {
+        this.scheduleTime = scheduleTime;
+    }
+    
     public FacultyProfile getFacultyProfile() {
         if (facultyAssignment == null) {
             return null;

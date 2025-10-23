@@ -30,6 +30,35 @@ public class ManageCoursesJPanel extends javax.swing.JPanel {
         this.facultyProfile = fp;
         this.cardPanel = clp;
         populateTable();
+        
+        Department dept = business.getDepartment();
+        java.util.List<info5100.university.example.Persona.Faculty.FacultyProfile> allTeachers =
+        dept.getFacultyDirectory().getTeacherList();
+
+        java.util.Vector<String> facultyNames = new java.util.Vector<>();
+        for (info5100.university.example.Persona.Faculty.FacultyProfile f : allTeachers) {
+            facultyNames.add(f.getPerson().getName());
+        }
+
+        javax.swing.JComboBox<String> facultyCombo = new javax.swing.JComboBox<>(facultyNames);
+
+        tableCourse.getColumnModel().getColumn(4)
+                   .setCellEditor(new javax.swing.DefaultCellEditor(facultyCombo));
+        
+        String[] scheduleOptions = {
+            "Monday 09:00–11:00",
+            "Monday 13:00–15:00",
+            "Tuesday 09:00–11:00",
+            "Tuesday 13:00–15:00",
+            "Wednesday 09:00–11:00",
+            "Wednesday 13:00–15:00",
+            "Thursday 09:00–11:00",
+            "Friday 09:00–11:00",
+            "Friday 13:00–15:00",
+            "Saturday 09:00–12:00"
+        };
+        javax.swing.JComboBox<String> comboBox = new javax.swing.JComboBox<>(scheduleOptions);
+        tableCourse.getColumnModel().getColumn(5).setCellEditor(new javax.swing.DefaultCellEditor(comboBox));
     }
     private FacultyProfile safeFacultyOf(CourseOffer co) {
     try {
@@ -59,7 +88,8 @@ public class ManageCoursesJPanel extends javax.swing.JPanel {
                 courseName,
                 co.getSeatCount(),
                 co.getEnrolledCount(),
-                facultyName
+                facultyName,
+                co.getScheduleTime(),    
             };
             dtm.addRow(row);
         }
@@ -77,22 +107,22 @@ public class ManageCoursesJPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tableCourse = new javax.swing.JTable();
         btnBack = new javax.swing.JButton();
-        btnAssign = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
 
         lblTitle.setFont(new java.awt.Font("Microsoft YaHei UI", 0, 18)); // NOI18N
         lblTitle.setText("Manage Courses");
 
         tableCourse.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Course Number", "Course Name", "Seats", "Enrolled", "Faculty"
+                "Course Number", "Course Name", "Seats", "Enrolled", "Faculty", "schedule"
             }
         ));
         jScrollPane1.setViewportView(tableCourse);
@@ -104,10 +134,10 @@ public class ManageCoursesJPanel extends javax.swing.JPanel {
             }
         });
 
-        btnAssign.setText("Assign");
-        btnAssign.addActionListener(new java.awt.event.ActionListener() {
+        btnSave.setText("Save");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAssignActionPerformed(evt);
+                btnSaveActionPerformed(evt);
             }
         });
 
@@ -123,11 +153,11 @@ public class ManageCoursesJPanel extends javax.swing.JPanel {
                 .addGap(33, 33, 33)
                 .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnAssign)
+                .addComponent(btnSave)
                 .addGap(61, 61, 61))
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 853, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -140,8 +170,8 @@ public class ManageCoursesJPanel extends javax.swing.JPanel {
                 .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBack)
-                    .addComponent(btnAssign))
-                .addContainerGap(43, Short.MAX_VALUE))
+                    .addComponent(btnSave))
+                .addContainerGap(136, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -151,44 +181,59 @@ public class ManageCoursesJPanel extends javax.swing.JPanel {
         ((java.awt.CardLayout) cardPanel.getLayout()).previous(cardPanel);
     }//GEN-LAST:event_btnBackActionPerformed
 
-    private void btnAssignActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAssignActionPerformed
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:        
-    int selectedRow = tableCourse.getSelectedRow();
-    if (selectedRow < 0) {
-        JOptionPane.showMessageDialog(this, "Please select a course first.");
-        return;
-    }
+        Department dept = business.getDepartment();
+        CourseSchedule cs = dept.getCourseSchedule("Fall 2025");
+        if (cs == null) {
+            JOptionPane.showMessageDialog(this, "No course schedule found.");
+            return;
+        }
 
-    String courseNumber = (String) tableCourse.getValueAt(selectedRow, 0);
-    Department dept = business.getDepartment();
-    CourseSchedule cs = dept.getCourseSchedule("Fall 2025");
-    if (cs == null) {
-        JOptionPane.showMessageDialog(this, "Course schedule not found for Fall 2025.");
-        return;
-    }
+        DefaultTableModel dtm = (DefaultTableModel) tableCourse.getModel();
+        int rowCount = dtm.getRowCount();
 
-    CourseOffer co = cs.getCourseOfferByNumber(courseNumber);
-    if (co == null) {
-        JOptionPane.showMessageDialog(this, "Selected course not found.");
-        return;
-    }
+        for (int i = 0; i < rowCount; i++) {
+            String courseNum   = String.valueOf(dtm.getValueAt(i, 0));  // Course Number
+            String courseName  = String.valueOf(dtm.getValueAt(i, 1));  // Course Name
+            Object seatObj     = dtm.getValueAt(i, 2);                  // Seats
+            Object enrolledObj = dtm.getValueAt(i, 3);                  // Enrolled
+            String facultyName = String.valueOf(dtm.getValueAt(i, 4));  // Faculty
+            String schedule    = String.valueOf(dtm.getValueAt(i, 5));  // Schedule
+            
+            CourseOffer co = cs.getCourseOfferByNumber(courseNum);
+            if (co == null) continue;
 
-    // Use the safe wrapper instead of calling co.getFacultyProfile() directly
-    if (safeFacultyOf(co) != null) {
-        JOptionPane.showMessageDialog(this, "This course already has an instructor assigned.");
-        return;
-    }
+            co.getSubjectCourse().setName(courseName);  
+            
+            co.setScheduleTime(schedule);              
 
-    facultyProfile.assignToCourse(co);
-    JOptionPane.showMessageDialog(this, "You are now assigned to teach " + co.getSubjectCourse().getName());
-    populateTable();
+            try {
+                int newSeatCount = Integer.parseInt(String.valueOf(seatObj));
+                if (newSeatCount > 0 && newSeatCount != co.getSeatCount()) {
+                    co.generatSeats(newSeatCount); 
+                }
+            } catch (NumberFormatException e) {
+            }
+            if (facultyName != null && !facultyName.isEmpty()) {
+                info5100.university.example.Persona.Faculty.FacultyDirectory fd = dept.getFacultyDirectory();
+                for (info5100.university.example.Persona.Faculty.FacultyProfile f : fd.getTeacherList()) {
+                    if (facultyName.equals(f.getPerson().getName())) {
+                        co.assignFaculty(f);
+                        break;
+                    }
+                }
+            }
+        }
 
-    }//GEN-LAST:event_btnAssignActionPerformed
+        JOptionPane.showMessageDialog(this, "Schedule times saved successfully!");
+        
+    }//GEN-LAST:event_btnSaveActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAssign;
     private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnSave;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JTable tableCourse;
