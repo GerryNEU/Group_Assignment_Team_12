@@ -33,6 +33,8 @@ public class ProfileWorkAreaMainFrame extends javax.swing.JFrame {
     public ProfileWorkAreaMainFrame() {
         initComponents();
         business = ConfigureABusiness.initialize();
+        setSize(1000, 640);
+        setLocationRelativeTo(null);
     }
 
     public void insert(JPanel jpanel) {
@@ -163,8 +165,8 @@ public class ProfileWorkAreaMainFrame extends javax.swing.JFrame {
         }
 
         if (r.equals("Faculty")) {
-            FacultyProfile fp = business.getDepartment().getFacultyDirectory().findFaculty(person.getPersonId());
-            
+            FacultyProfile fp = business.getDepartment().getFacultyDirectory().findFacultyByPersonId(person.getPersonId());
+                     
             facultyworkarea = new FacultyWorkAreaJPanel(business, fp, CardSequencePanel); 
             CardSequencePanel.add("faculty", facultyworkarea);
         }   
