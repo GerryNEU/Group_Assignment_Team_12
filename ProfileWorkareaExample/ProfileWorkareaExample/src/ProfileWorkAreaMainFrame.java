@@ -166,7 +166,7 @@ public class ProfileWorkAreaMainFrame extends javax.swing.JFrame {
 
         if (r.equals("Faculty")) {
             FacultyProfile fp = business.getDepartment().getFacultyDirectory().findFacultyByPersonId(person.getPersonId());
-            
+                     
             facultyworkarea = new FacultyWorkAreaJPanel(business, fp, CardSequencePanel); 
             CardSequencePanel.add("faculty", facultyworkarea);
         }   
