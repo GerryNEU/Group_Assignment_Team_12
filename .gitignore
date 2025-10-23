@@ -1,13 +1,33 @@
-# add gitignore rules below
-/.idea/
-*.DS_store
-
-/ProfileWorkareaExample/ProfileWorkareaExample/dist/
-
-# build outputs
-ProfileWorkareaExample/ProfileWorkareaExample/build/
+/ProfileWorkareaExample/ProfileWorkareaExample/build/
+build/
+dist/
+out/
+target/
+bin/
+.gradle/
+.nb-gradle/
 *.class
-*.rs
 *.jar
 *.war
-built-jar.properties
+*.ear
+*.log
+# IDE
+nbproject/private/
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+.vscode/
+# OS
+.DS_Store
+AppleDouble
+LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+# Temp
+*.tmp
+*.swp
+*.swo
