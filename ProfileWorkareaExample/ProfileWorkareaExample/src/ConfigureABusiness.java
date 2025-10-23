@@ -46,19 +46,20 @@ class ConfigureABusiness {
         FacultyProfile[] faculties = new FacultyProfile[10];
         for (int i = 0; i < 10; i++) {
             Person facultyPerson = pd.newPerson("F00" + (i + 1));
-            facultyPerson.setName("Faculty " + (i + 1));
+            facultyPerson.setName(i == 0 ? "Kal Faculty" : "Faculty " + (i + 1));
             faculties[i] = fd.newFacultyProfile(facultyPerson);
             // Create Faculty User Account 
-            uad.newUserAccount(facultyPerson, "prof" + (i + 1), "****", "Faculty");
+            uad.newUserAccount(facultyPerson, "prof" + (i + 1), "1234", "Faculty");
+        }
+        System.out.println("Faculty accounts created:");
+        for (UserAccount ua : uad.getUserAccountList()) {
+            System.out.println("  Username=" + ua.getUserLoginName() 
+                + "  ->  PersonID=" + ua.getAssociatedPerson().getPersonId() 
+                + ", Name=" + ua.getAssociatedPerson().getName());
         }
         // Assign the original "Kal Faculty" name to the first faculty for consistency
         faculties[0].getPerson().setName("Kal Faculty");
-        UserAccount prof1Account = uad.findUserAccount("prof1");
-        if (prof1Account != null) {
-            prof1Account.getAssociatedPerson().setName("Kal Faculty");
-        } else {
-            System.out.println("Warning: prof1 account not found during initialization.");
-        }
+        
         
         // Studnets
         // Create 10 Students and Profiles

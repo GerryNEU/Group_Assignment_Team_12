@@ -40,9 +40,9 @@ public class UserAccountDirectory {
         return ua;
     }
 
-    public UserAccount findUserAccount(String id) {
+    public UserAccount findUserAccount(String username) {
         for (UserAccount ua : userAccountList) {
-            if (ua.isMatch(id)) {
+            if (ua.getUserLoginName().equalsIgnoreCase(username)) {
                 return ua;
             }
         }

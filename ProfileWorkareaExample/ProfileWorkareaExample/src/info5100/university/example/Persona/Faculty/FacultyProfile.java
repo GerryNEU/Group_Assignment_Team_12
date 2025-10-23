@@ -13,11 +13,16 @@ public class FacultyProfile {
 
     private final Person person;
     private final ArrayList<FacultyAssignment> facultyAssignments;
-
+    
+    private String name;
+    private String office;
+    private String phone;
+    private String bio;
+    
     public FacultyProfile(Person p) {
 
         person = p;
-        facultyAssignments = new ArrayList();
+        facultyAssignments = new ArrayList<FacultyAssignment>();
     }
     
     public  double getProfAverageOverallRating(){
@@ -26,14 +31,11 @@ public class FacultyProfile {
         //for each facultyassignment extract class rating
         //add them up and divide by the number of teaching assignmnet;
         for(FacultyAssignment fa: facultyAssignments){
-            
             sum = sum + fa.getRating();
             
         }
         //divide by the total number of faculty assignments
-        
-        return sum/(facultyAssignments.size()*1.0); //this ensure we have double/double
-        
+        return sum/(facultyAssignments.size()*1.0); //this ensure we have double/double       
     }
 
     /**
@@ -52,13 +54,9 @@ public class FacultyProfile {
         return facultyAssignments;
     }
 
- 
-    
     public Person getPerson() {
         return person;
     }
-
- 
 
     /** Utility method to check if a person ID matches this faculty */
     public boolean isMatch(String id) {
@@ -69,5 +67,37 @@ public class FacultyProfile {
     @Override
     public String toString() {
         return (person == null ? "N/A" : person.getName());
+    }
+    public String getOffice() {
+        return office == null ? "" : office;
+    }
+
+    public String getPhone() {
+        return phone == null ? "" : phone;
+    }
+
+    public String getBio() {
+        return bio == null ? "" : bio;
+    }
+
+    public void updateProfile(String name, String office, String phone, String bio) {
+        if (person != null && name != null && !name.trim().isEmpty()) {
+        person.setName(name.trim());
+    }
+        this.office = office;
+        this.phone = phone;
+        this.bio = bio;
+    }
+
+    public void setOffice(String office) {
+        this.office = office;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 }
