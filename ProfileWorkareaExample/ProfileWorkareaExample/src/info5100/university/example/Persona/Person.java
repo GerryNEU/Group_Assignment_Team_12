@@ -36,8 +36,8 @@ public class Person {
         return false;
     }
 
-    public void setName(String admin_User) {
-        this.name = name;
+    public void setName(String newName) {
+        this.name = newName;
     }
     
     public String getName() {
