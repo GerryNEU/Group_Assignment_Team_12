@@ -21,6 +21,9 @@ public class CourseOffer {
     private ArrayList<Seat> seatlist;
     private CourseSchedule courseSchedule;
     private FacultyAssignment facultyAssignment;
+    private String scheduleTime;
+    private String syllabus;
+    private boolean enrollmentOpen = true;
 
     public CourseOffer(CourseSchedule cs, Course c) {
         this.course = c;
@@ -28,6 +31,14 @@ public class CourseOffer {
         this.seatlist = new ArrayList();
     }
      
+    public String getScheduleTime() {
+        return scheduleTime == null ? "TBD" : scheduleTime;
+    }
+
+    public void setScheduleTime(String scheduleTime) {
+        this.scheduleTime = scheduleTime;
+    }
+    
     public FacultyProfile getFacultyProfile() {
         if (facultyAssignment == null) {
             return null;
@@ -111,5 +122,23 @@ public class CourseOffer {
         }
         return count;
     }
+    public String getSyllabus() {
+        return syllabus == null ? "No syllabus uploaded" : syllabus;
+    }
 
+    public void setSyllabus(String syllabus) {
+        this.syllabus = syllabus;
+    }
+
+    public boolean isEnrollmentOpen() {
+        return enrollmentOpen;
+    }
+
+    public void openEnrollment() {
+        this.enrollmentOpen = true;
+    }
+
+    public void closeEnrollment() {
+        this.enrollmentOpen = false;
+    }
 }
