@@ -22,13 +22,14 @@ public class AdministerPersonJPanel extends javax.swing.JPanel {
      * Creates new form ManageSuppliersJPanel
      */
     JPanel CardSequencePanel;
-
     Business business;
+    ManagePersonsJPanel managePersonsJPanel; // To refresh table when backing
 
-    public AdministerPersonJPanel(Business bz, JPanel jp) {
+    public AdministerPersonJPanel(Business bz, JPanel jp, ManagePersonsJPanel mpp) {
 
         CardSequencePanel = jp;
         this.business = bz;
+        this.managePersonsJPanel = mpp;
         
         initComponents();
         

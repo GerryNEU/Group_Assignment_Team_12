@@ -148,8 +148,8 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         // TODO add your handling code here:
         
-        AdministerPersonJPanel mppd = new AdministerPersonJPanel(business, CardSequencePanel);
-        CardSequencePanel.add(mppd);
+        AdministerPersonJPanel mppd = new AdministerPersonJPanel(business, CardSequencePanel, this);
+        CardSequencePanel.add("AdministerPersonJPanel", mppd);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 
     }//GEN-LAST:event_btnCreateActionPerformed
