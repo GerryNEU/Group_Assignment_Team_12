@@ -42,8 +42,8 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
 
         Back = new javax.swing.JButton();
         Next = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblRegisterPersons = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(0, 153, 153));
         setLayout(null);
@@ -55,7 +55,7 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
             }
         });
         add(Back);
-        Back.setBounds(20, 260, 76, 32);
+        Back.setBounds(20, 260, 80, 23);
 
         Next.setText("Next >>");
         Next.addActionListener(new java.awt.event.ActionListener() {
@@ -64,16 +64,16 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
             }
         });
         add(Next);
-        Next.setBounds(500, 260, 80, 32);
+        Next.setBounds(500, 260, 80, 23);
 
-        jLabel1.setText("Name");
-        add(jLabel1);
-        jLabel1.setBounds(20, 60, 190, 16);
+        lblRegisterPersons.setText("Name");
+        add(lblRegisterPersons);
+        lblRegisterPersons.setBounds(20, 60, 190, 17);
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        jLabel2.setText("Manage Personnel (HR)");
-        add(jLabel2);
-        jLabel2.setBounds(21, 20, 550, 29);
+        lblTitle.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        lblTitle.setText("Manage Personnel (HR)");
+        add(lblTitle);
+        lblTitle.setBounds(21, 20, 550, 28);
     }// </editor-fold>//GEN-END:initComponents
 
     private void BackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackActionPerformed
@@ -97,8 +97,8 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Back;
     private javax.swing.JButton Next;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel lblRegisterPersons;
+    private javax.swing.JLabel lblTitle;
     // End of variables declaration//GEN-END:variables
 
 }

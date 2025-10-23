@@ -6,6 +6,9 @@
 package UserInterface.WorkAreas.AdminRole.ManagePersonnelWorkResp;
 
 import Business.Business;
+import info5100.university.example.Persona.Person;
+import info5100.university.example.Persona.PersonDirectory;
+import javax.swing.JOptionPane;
 
 import javax.swing.JPanel;
 
@@ -26,7 +29,11 @@ public class AdministerPersonJPanel extends javax.swing.JPanel {
 
         CardSequencePanel = jp;
         this.business = bz;
+        
         initComponents();
+        
+        fieldId.setText("0000");
+        fieldId.setEditable(false);
 
 
     }
@@ -45,7 +52,14 @@ public class AdministerPersonJPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         Back = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
+        lblName = new javax.swing.JLabel();
+        lblEmail = new javax.swing.JLabel();
+        fieldName = new javax.swing.JTextField();
+        fieldEmail = new javax.swing.JTextField();
+        btnRegister = new javax.swing.JButton();
+        lblId = new javax.swing.JLabel();
+        fieldId = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(0, 153, 153));
         setLayout(null);
@@ -57,26 +71,105 @@ public class AdministerPersonJPanel extends javax.swing.JPanel {
             }
         });
         add(Back);
-        Back.setBounds(30, 290, 76, 32);
+        Back.setBounds(30, 290, 80, 23);
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        jLabel2.setText("Manage Person Profile");
-        add(jLabel2);
-        jLabel2.setBounds(21, 20, 550, 29);
+        lblTitle.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        lblTitle.setText("Manage Person Profile");
+        add(lblTitle);
+        lblTitle.setBounds(21, 20, 550, 28);
+
+        lblName.setText("Personal Name");
+        add(lblName);
+        lblName.setBounds(30, 100, 88, 17);
+
+        lblEmail.setText("Email");
+        add(lblEmail);
+        lblEmail.setBounds(30, 130, 90, 17);
+        add(fieldName);
+        fieldName.setBounds(130, 100, 160, 23);
+
+        fieldEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fieldEmailActionPerformed(evt);
+            }
+        });
+        add(fieldEmail);
+        fieldEmail.setBounds(130, 130, 160, 23);
+
+        btnRegister.setText("Register");
+        btnRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegisterActionPerformed(evt);
+            }
+        });
+        add(btnRegister);
+        btnRegister.setBounds(100, 180, 78, 23);
+
+        lblId.setText("Person ID");
+        add(lblId);
+        lblId.setBounds(30, 70, 90, 17);
+        add(fieldId);
+        fieldId.setBounds(130, 70, 160, 23);
     }// </editor-fold>//GEN-END:initComponents
 
     private void BackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackActionPerformed
         // TODO add your handling code here:
         CardSequencePanel.remove(this);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
-
-
     }//GEN-LAST:event_BackActionPerformed
+
+    private void fieldEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldEmailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldEmailActionPerformed
+
+    private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
+        // TODO add your handling code here:
+        String name = fieldName.getText().trim();
+        String email = fieldEmail.getText().trim();
+        
+        if (name.isEmpty() || email.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Person Name and Email cannot be empty.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        PersonDirectory pd = business.getDepartment().getPersonDirectory();
+        Person existingPerson = pd.findPersonByEmail(email);
+        
+        if (existingPerson != null) {
+            JOptionPane.showMessageDialog(this, "A person with this email address already exists.", "Duplicate Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Auto-generate unique university ID
+        // Use "P" + (PersonList + 1) to keep Uniqueness
+        String uniqueId = "P" + (pd.getPersonlist().size() + 1);
+        
+        // 4. Create and save person
+        Person person = pd.newPerson(uniqueId);
+        person.setName(name);
+        person.setEmail(email);
+        
+        //fieldId.setText(uniqueId);
+        
+        JOptionPane.showMessageDialog(this, "Person registered successfully with ID: " + uniqueId, "Success", JOptionPane.INFORMATION_MESSAGE);
+        
+        
+        fieldName.setText("");
+        fieldEmail.setText("");
+        
+    }//GEN-LAST:event_btnRegisterActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Back;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton btnRegister;
+    private javax.swing.JTextField fieldEmail;
+    private javax.swing.JTextField fieldId;
+    private javax.swing.JTextField fieldName;
+    private javax.swing.JLabel lblEmail;
+    private javax.swing.JLabel lblId;
+    private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblTitle;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -169,6 +169,7 @@ public class ProfileWorkAreaMainFrame extends javax.swing.JFrame {
             CardSequencePanel.add("faculty", facultyworkarea);
         }   
 
+        PasswordTextField.setText("");
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_LoginButtonActionPerformed
 

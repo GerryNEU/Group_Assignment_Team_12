@@ -55,4 +55,14 @@ public class PersonDirectory {
         return null; // Not found
     }
     
+    public void deletePerson(Person person) {
+        if (person != null) {
+            personlist.remove(person);
+        }
+    }
+
+    public ArrayList<Person> getPersonlist() {
+        return personlist;
+    }
+
 }
