@@ -36,7 +36,7 @@ public class Transcript {
 
     public CourseLoad newCourseLoad(String sem) {
 
-        currentcourseload = new CourseLoad(sem);
+        currentcourseload = new CourseLoad(sem, student);
         courseloadlist.put(sem, currentcourseload);
         return currentcourseload;
     }
