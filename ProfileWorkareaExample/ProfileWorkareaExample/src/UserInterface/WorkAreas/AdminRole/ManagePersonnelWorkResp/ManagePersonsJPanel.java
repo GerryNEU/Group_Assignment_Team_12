@@ -41,7 +41,7 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
 
     }
     
-    private void populateTable() {
+    public void populateTable() {
         DefaultTableModel model = (DefaultTableModel) tblPersons.getModel();
         model.setRowCount(0); // Clear existing rows
 

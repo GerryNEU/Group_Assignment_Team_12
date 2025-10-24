@@ -144,7 +144,7 @@ public class ManageUserAccountsJPanel extends javax.swing.JPanel {
     private void NextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextActionPerformed
         // TODO add your handling code here:
         if(selecteduseraccount==null) return;
-        AdminUserAccount mppd = new AdminUserAccount(selecteduseraccount, CardSequencePanel);
+        AdminUserAccount mppd = new AdminUserAccount(business, CardSequencePanel, null);
         CardSequencePanel.add(mppd);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 

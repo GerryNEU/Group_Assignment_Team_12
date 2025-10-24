@@ -6,9 +6,24 @@
 package UserInterface.WorkAreas.AdminRole.ManagePersonnelWorkResp;
 
 import Business.Business;
+import info5100.university.example.Department.Department;
+import info5100.university.example.Persona.Faculty.FacultyDirectory;
+import info5100.university.example.Persona.Faculty.FacultyProfile;
 import info5100.university.example.Persona.Person;
+import info5100.university.example.Persona.PersonDirectory;
+import info5100.university.example.Persona.StudentDirectory;
+import info5100.university.example.Persona.StudentProfile;
 
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import java.awt.CardLayout;
+import java.awt.Component; // For refreshing previous panel
+import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -21,20 +36,48 @@ public class AdministerPersonJPanel extends javax.swing.JPanel {
      */
     JPanel CardSequencePanel;
     Business business;
-    Person selectedPerson;
+    Person personToEdit; // Stores the person being edited, null if adding new
+    private final boolean isEditMode;
 
     public AdministerPersonJPanel(Business bz, JPanel jp, Person p) {
 
         CardSequencePanel = jp;
         this.business = bz;
-        this.selectedPerson = p;
+        this.personToEdit = p;
+        this.isEditMode = (p != null);
         initComponents();
 
+        populateFields(); // Populate fiedls if in edit mode
 
     }
 
-    public void refreshTable() {
-
+    private void populateFields() {
+        if (isEditMode && personToEdit != null) {
+            txtPersonId.setText(personToEdit.getPersonId());
+            txtName.setText(personToEdit.getName());
+            txtEmail.setText(personToEdit.getEmail());
+            
+            // Determine and set the role
+            Department department = business.getDepartment();
+            StudentDirectory sd = department.getStudentDirectory();
+            FacultyDirectory fd = department.getFacultyDirectory();
+            if (sd.findStudent(personToEdit.getPersonId()) != null) {
+                cmbRole.setSelectedItem("Student");
+            } else if (fd.findFacultyByPersonId(personToEdit.getPersonId()) != null) {
+                cmbRole.setSelectedItem("Faculty");
+            } else {
+                // Handle cases where the person might have another role or no profile yet
+                 cmbRole.setSelectedItem(null); // Or set to a default/placeholder
+            }
+             // Optional: Disable role changing during edit if complex profile migration isn't implemented
+             // cmbRole.setEnabled(false);
+        } else {
+            txtPersonId.setText("(Auto-generated)");
+            txtName.setText("");
+            txtEmail.setText("");
+            cmbRole.setSelectedIndex(0);
+            cmbRole.setEnabled(true); // Ensure role can be selected when adding
+        }
     }
 
     /**
@@ -48,6 +91,15 @@ public class AdministerPersonJPanel extends javax.swing.JPanel {
 
         Back = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        btnSave = new javax.swing.JButton();
+        lblID = new javax.swing.JLabel();
+        lblName = new javax.swing.JLabel();
+        lblEmail = new javax.swing.JLabel();
+        txtPersonId = new javax.swing.JTextField();
+        txtName = new javax.swing.JTextField();
+        txtEmail = new javax.swing.JTextField();
+        lblRole = new javax.swing.JLabel();
+        cmbRole = new javax.swing.JComboBox<>();
 
         setBackground(new java.awt.Color(0, 153, 153));
         setLayout(null);
@@ -59,26 +111,155 @@ public class AdministerPersonJPanel extends javax.swing.JPanel {
             }
         });
         add(Back);
-        Back.setBounds(30, 290, 76, 32);
+        Back.setBounds(30, 290, 80, 23);
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         jLabel2.setText("Manage Person Profile");
         add(jLabel2);
-        jLabel2.setBounds(21, 20, 550, 29);
+        jLabel2.setBounds(150, 20, 250, 28);
+
+        btnSave.setText("Save");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+        add(btnSave);
+        btnSave.setBounds(190, 220, 150, 23);
+
+        lblID.setText("ID");
+        add(lblID);
+        lblID.setBounds(120, 70, 50, 17);
+
+        lblName.setText("Name");
+        add(lblName);
+        lblName.setBounds(120, 100, 40, 17);
+
+        lblEmail.setText("Email");
+        add(lblEmail);
+        lblEmail.setBounds(120, 130, 80, 17);
+        add(txtPersonId);
+        txtPersonId.setBounds(230, 70, 200, 23);
+        add(txtName);
+        txtName.setBounds(230, 100, 200, 23);
+        add(txtEmail);
+        txtEmail.setBounds(230, 130, 200, 23);
+
+        lblRole.setText("Role");
+        add(lblRole);
+        lblRole.setBounds(120, 160, 90, 17);
+
+        add(cmbRole);
+        cmbRole.setBounds(230, 160, 120, 23);
     }// </editor-fold>//GEN-END:initComponents
 
     private void BackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackActionPerformed
         // TODO add your handling code here:
         CardSequencePanel.remove(this);
-        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+        ((CardLayout) CardSequencePanel.getLayout()).previous(CardSequencePanel);
 
-
+        // Refresh the table in ManagePersonsJPanel
+        refreshPreviousTable();
     }//GEN-LAST:event_BackActionPerformed
 
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        // TODO add your handling code here:
+        // 1. Get input
+        String name = txtName.getText().trim();
+        String email = txtEmail.getText().trim();
+        String selectedRole = (String) cmbRole.getSelectedItem();
+        
+        // 2. Validate input
+                if (name.isEmpty() || email.isEmpty() || selectedRole == null) {
+            JOptionPane.showMessageDialog(this, "Name, Email, and Role cannot be empty.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
+        Department department = business.getDepartment();
+        PersonDirectory personDirectory = department.getPersonDirectory();
+        
+        // 3. Check for duplicate email (excluding self in edit mode)
+        Person existingPersonWithEmail = personDirectory.findPersonByEmail(email);
+        if (existingPersonWithEmail != null && (!isEditMode || !existingPersonWithEmail.getPersonId().equals(personToEdit.getPersonId()))) {
+            JOptionPane.showMessageDialog(this, "This email address is already registered to another person.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // --- Perform Add or Update ---
+        if (isEditMode) {
+            // --- Update existing person ---
+             if (personToEdit == null) { // Should not happen if isEditMode is true, but good practice to check
+                 JOptionPane.showMessageDialog(this, "Error: No person selected for editing.", "Internal Error", JOptionPane.ERROR_MESSAGE);
+                 return;
+             }
+            personToEdit.setName(name);
+            personToEdit.setEmail(email);
+
+            // !! Role Change Handling (Simplified - assumes profile update or ignore) !!
+            // A real application might need complex logic here: delete old profile, create new one.
+            // For now, we just update the Person details. The role displayed in ManagePersonsJPanel
+            // depends on profile existence, so changing cmbRole here might not automatically change the profile.
+            // We could attempt to update/recreate profile, or prevent role changes in edit mode.
+            // Let's assume for now we only update Person info.
+
+            JOptionPane.showMessageDialog(this, "Person information updated successfully.", "Update Success", JOptionPane.INFORMATION_MESSAGE);
+
+        } else {
+            // --- Add new person ---
+            String uniqueID = UUID.randomUUID().toString().substring(0, 8); // Generate ID
+            Person newPerson = personDirectory.newPerson(uniqueID);
+             if (newPerson == null) { // Check if ID generation failed or person wasn't added
+                JOptionPane.showMessageDialog(this, "Failed to create new person record (possibly duplicate ID).", "Creation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            newPerson.setName(name);
+            newPerson.setEmail(email);
+
+            // Create Profile object based on role
+            if ("Student".equals(selectedRole)) {
+                StudentDirectory studentDirectory = department.getStudentDirectory();
+                StudentProfile studentProfile = studentDirectory.newStudentProfile(newPerson);
+                 // Check if profile creation was successful if method returns null on failure
+            } else if ("Faculty".equals(selectedRole)) {
+                FacultyDirectory facultyDirectory = department.getFacultyDirectory();
+                FacultyProfile facultyProfile = facultyDirectory.newFacultyProfile(newPerson);
+                 // Check if profile creation was successful
+            }
+            
+            // else { Handle other roles or errors }
+
+            JOptionPane.showMessageDialog(this, "Person registered successfully!\nID: " + uniqueID + "\nName: " + name, "Registration Success", JOptionPane.INFORMATION_MESSAGE);   
+        }
+        
+        // --- Navigate back after save ---
+        CardSequencePanel.remove(this);
+        ((CardLayout) CardSequencePanel.getLayout()).previous(CardSequencePanel);
+        refreshPreviousTable(); // Refresh the list view
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void refreshPreviousTable() {
+                Component[] components = CardSequencePanel.getComponents();
+        for (Component component : components) {
+            if (component instanceof ManagePersonsJPanel) {
+                ((ManagePersonsJPanel) component).populateTable(); // Call the populateTable method
+                break;
+            }
+        }
+    }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Back;
+    private javax.swing.JButton btnSave;
+    private javax.swing.JComboBox<String> cmbRole;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel lblEmail;
+    private javax.swing.JLabel lblID;
+    private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblRole;
+    private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtName;
+    private javax.swing.JTextField txtPersonId;
     // End of variables declaration//GEN-END:variables
 
 }
