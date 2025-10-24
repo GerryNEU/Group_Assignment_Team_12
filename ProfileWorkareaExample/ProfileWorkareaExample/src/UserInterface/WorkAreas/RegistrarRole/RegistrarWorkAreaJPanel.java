@@ -4,17 +4,27 @@
  */
 package UserInterface.WorkAreas.RegistrarRole;
 
+import Business.*;
+import javax.swing.JPanel;
+
 /**
  *
  * @author ouyangkairui
  */
 public class RegistrarWorkAreaJPanel extends javax.swing.JPanel {
-
+    
+    private JPanel CardSequencePanel;
+    private Business business;
+    // private RegistrarProfile registrarProfile;
+    
     /**
      * Creates new form RegistrarWorkAreaJPanel
      */
-    public RegistrarWorkAreaJPanel() {
+    public RegistrarWorkAreaJPanel(Business bz, JPanel clp) {
         initComponents();
+        this.business = bz;
+        this.CardSequencePanel = clp;
+        // this.registrarProfile = rp;
     }
 
     /**
@@ -32,8 +42,10 @@ public class RegistrarWorkAreaJPanel extends javax.swing.JPanel {
         btnTuitionFinancial = new javax.swing.JButton();
         btnReportingAnalytics = new javax.swing.JButton();
 
+        btnManageCourseOfferings.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnManageCourseOfferings.setText("Course Offering Management");
 
+        btnManageStudentReg.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnManageStudentReg.setText("Student Registration");
         btnManageStudentReg.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -41,10 +53,13 @@ public class RegistrarWorkAreaJPanel extends javax.swing.JPanel {
             }
         });
 
+        btnManageProfile.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnManageProfile.setText("Manage own profile");
 
+        btnTuitionFinancial.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnTuitionFinancial.setText("Tuition & Financial Reconciliation");
 
+        btnReportingAnalytics.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnReportingAnalytics.setText("Reporting & Analytics");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -67,12 +82,12 @@ public class RegistrarWorkAreaJPanel extends javax.swing.JPanel {
                         .addComponent(btnTuitionFinancial)
                         .addGap(128, 128, 128)
                         .addComponent(btnReportingAnalytics)))
-                .addContainerGap(181, Short.MAX_VALUE))
+                .addContainerGap(56, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(230, Short.MAX_VALUE)
+                .addContainerGap(212, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnManageCourseOfferings)
