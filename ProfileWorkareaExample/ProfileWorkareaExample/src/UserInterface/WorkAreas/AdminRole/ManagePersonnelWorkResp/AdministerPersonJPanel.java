@@ -6,6 +6,7 @@
 package UserInterface.WorkAreas.AdminRole.ManagePersonnelWorkResp;
 
 import Business.Business;
+import info5100.university.example.Persona.Person;
 
 import javax.swing.JPanel;
 
@@ -19,13 +20,14 @@ public class AdministerPersonJPanel extends javax.swing.JPanel {
      * Creates new form ManageSuppliersJPanel
      */
     JPanel CardSequencePanel;
-
     Business business;
+    Person selectedPerson;
 
-    public AdministerPersonJPanel(Business bz, JPanel jp) {
+    public AdministerPersonJPanel(Business bz, JPanel jp, Person p) {
 
         CardSequencePanel = jp;
         this.business = bz;
+        this.selectedPerson = p;
         initComponents();
 
 
