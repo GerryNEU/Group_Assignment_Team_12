@@ -6,6 +6,7 @@
 package info5100.university.example.Persona;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  *
@@ -38,5 +39,30 @@ public class PersonDirectory {
         }
             return null; //not found after going through the whole list
          }
+
+    public ArrayList<Person> getPersonList() {
+        return personlist;
+    }
+    
+        // Method to remove a person by Person object
+    public boolean removePerson(Person personToRemove) {
+        if (personToRemove == null) return false;
+        return personlist.remove(personToRemove);
+    }
+
+    // Method to remove a person by ID
+    public boolean removePersonById(String id) {
+         if (id == null || id.isEmpty()) return false;
+         // Use Iterator to safely remove while iterating
+         Iterator<Person> iterator = personlist.iterator();
+         while (iterator.hasNext()) {
+             Person p = iterator.next();
+             if (p.isMatch(id)) {
+                 iterator.remove();
+                 return true; // Found and removed
+             }
+         }
+         return false; // Not found
+    }
     
 }

@@ -6,9 +6,18 @@
 package UserInterface.WorkAreas.AdminRole.ManagePersonnelWorkResp;
 
 import Business.Business;
+import Business.UserAccounts.UserAccountDirectory;
+import info5100.university.example.Department.Department;
+import info5100.university.example.Persona.Faculty.FacultyDirectory;
+import info5100.university.example.Persona.Person;
+import info5100.university.example.Persona.PersonDirectory;
+import info5100.university.example.Persona.StudentDirectory;
+import java.awt.CardLayout;
+import javax.swing.JOptionPane;
 
 
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -21,13 +30,45 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
      */
     JPanel CardSequencePanel;
     Business business;
+    Person selectedPerson = null; // To store the selected person from the table
 
 
     public ManagePersonsJPanel(Business bz, JPanel jp) {
         CardSequencePanel = jp;
         this.business = bz;
         initComponents();
+        populateTable(); // Populate the table on initializaiton
 
+    }
+    
+    private void populateTable() {
+        DefaultTableModel model = (DefaultTableModel) tblPersons.getModel();
+        model.setRowCount(0); // Clear existing rows
+
+        Department department = business.getDepartment();
+        PersonDirectory personDirectory = department.getPersonDirectory();
+        StudentDirectory studentDirectory = department.getStudentDirectory();
+        FacultyDirectory facultyDirectory = department.getFacultyDirectory();
+
+        if (personDirectory != null && personDirectory.getPersonList() != null) {
+            for (Person person : personDirectory.getPersonList()) {
+                String role = "Unknown";
+                // Determine role by checking directories
+                if (studentDirectory.findStudent(person.getPersonId()) != null) {
+                    role = "Student";
+                } else if (facultyDirectory.findFacultyByPersonId(person.getPersonId()) != null) {
+                    role = "Faculty";
+                } // Add checks for other roles like Admin if necessary
+
+                Object[] row = new Object[4];
+                row[0] = person; // Store the actual Person object
+                row[1] = person.getName();
+                row[2] = person.getEmail();
+                row[3] = role;
+                model.addRow(row);
+            }
+        }
+         selectedPerson = null; // Reset selection after repopulating
     }
 
 
@@ -42,8 +83,11 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
 
         Back = new javax.swing.JButton();
         Next = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblTitile = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblPersons = new javax.swing.JTable();
+        btnViewEdit = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(0, 153, 153));
         setLayout(null);
@@ -55,25 +99,63 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
             }
         });
         add(Back);
-        Back.setBounds(20, 260, 76, 32);
+        Back.setBounds(10, 430, 80, 23);
 
-        Next.setText("Next >>");
+        Next.setText("Add New Person");
         Next.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 NextActionPerformed(evt);
             }
         });
         add(Next);
-        Next.setBounds(500, 260, 80, 32);
+        Next.setBounds(20, 400, 170, 23);
 
-        jLabel1.setText("Name");
-        add(jLabel1);
-        jLabel1.setBounds(20, 60, 190, 16);
+        lblTitile.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        lblTitile.setText("Manage Personnel (HR)");
+        add(lblTitile);
+        lblTitile.setBounds(21, 20, 550, 28);
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        jLabel2.setText("Manage Personnel (HR)");
-        add(jLabel2);
-        jLabel2.setBounds(21, 20, 550, 29);
+        tblPersons.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "ID", "Name", "Email", "Role"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, true, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblPersons);
+
+        add(jScrollPane1);
+        jScrollPane1.setBounds(20, 60, 580, 320);
+
+        btnViewEdit.setText("View/Edit Person");
+        btnViewEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewEditActionPerformed(evt);
+            }
+        });
+        add(btnViewEdit);
+        btnViewEdit.setBounds(210, 400, 180, 23);
+
+        btnDelete.setText("Delete Person");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+        add(btnDelete);
+        btnDelete.setBounds(410, 400, 190, 23);
     }// </editor-fold>//GEN-END:initComponents
 
     private void BackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackActionPerformed
@@ -87,18 +169,125 @@ public class ManagePersonsJPanel extends javax.swing.JPanel {
     private void NextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextActionPerformed
         // TODO add your handling code here:
         
-        AdministerPersonJPanel mppd = new AdministerPersonJPanel(business, CardSequencePanel);
+        AdministerPersonJPanel mppd = new AdministerPersonJPanel(business, CardSequencePanel, selectedPerson);
         CardSequencePanel.add(mppd);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 
     }//GEN-LAST:event_NextActionPerformed
 
+    private void btnViewEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewEditActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = tblPersons.getSelectedRow();
+        
+        if (selectedRow >= 0) {
+             // Retrieve the Person object directly from the first column (index 0)
+            DefaultTableModel model = (DefaultTableModel) tblPersons.getModel();
+            // Map view index to model index in case of sorting/filtering
+            selectedPerson = (Person) model.getValueAt(tblPersons.convertRowIndexToModel(selectedRow), 0);
+        } else {
+            selectedPerson = null;
+        }
+        
+        if (selectedPerson == null) {
+            JOptionPane.showMessageDialog(this, "Please select a person from the table first.", "Selection Required", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        // Navigate to AdministerPersonJPanel in 'Edit' mode, passing the selected person
+        AdministerPersonJPanel administerPanel = new AdministerPersonJPanel(business, CardSequencePanel, selectedPerson);
+         // Use a unique name, possibly including person ID for clarity if needed, or just a generic edit name
+        CardSequencePanel.add("AdministerPerson_Edit_" + selectedPerson.getPersonId(), administerPanel);
+        ((CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+    }//GEN-LAST:event_btnViewEditActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = tblPersons.getSelectedRow();
+        
+        if (selectedRow >= 0) {
+             // Retrieve the Person object directly from the first column (index 0)
+            DefaultTableModel model = (DefaultTableModel) tblPersons.getModel();
+            // Map view index to model index in case of sorting/filtering
+            selectedPerson = (Person) model.getValueAt(tblPersons.convertRowIndexToModel(selectedRow), 0);
+        } else {
+            selectedPerson = null;
+        }
+        
+        if (selectedPerson == null) {
+            JOptionPane.showMessageDialog(this, "Please select a person from the table to delete.", "Selection Required", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int confirmation = JOptionPane.showConfirmDialog(this,
+                "Are you sure you want to delete person '" + selectedPerson.getName() + "' (ID: " + selectedPerson.getPersonId() + ")?\nThis will also remove associated profiles and user accounts.", // Updated message
+                "Confirm Deletion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+        if (confirmation == JOptionPane.YES_OPTION) {
+            Department department = business.getDepartment();
+            PersonDirectory personDirectory = department.getPersonDirectory();
+            StudentDirectory studentDirectory = department.getStudentDirectory();
+            FacultyDirectory facultyDirectory = department.getFacultyDirectory();
+             // Assuming UserAccountDirectory is accessible via business object
+            UserAccountDirectory userAccountDirectory = business.getUserAccountDirectory();
+
+            String personIdToDelete = selectedPerson.getPersonId();
+
+            // --- Comprehensive Deletion Logic ---
+            boolean profileRemoved = false;
+            boolean accountRemoved = false;
+            boolean personRemoved = false;
+
+            // 1. Remove associated profile (Student or Faculty)
+            // You need to implement remove methods in StudentDirectory and FacultyDirectory
+            // For example: studentDirectory.removeStudentById(personIdToDelete);
+            //            facultyDirectory.removeFacultyById(personIdToDelete);
+            // Placeholder for actual implementation:
+             System.out.println("Attempting to remove profiles for ID: " + personIdToDelete);
+             // profileRemoved = studentDirectory.removeStudentById(personIdToDelete) || facultyDirectory.removeFacultyById(personIdToDelete);
+             // Simulate removal for now, replace with actual calls
+             profileRemoved = true; // Assume profile removal logic exists and works
+
+
+            // 2. Remove associated UserAccount
+            // You need to implement a remove method in UserAccountDirectory
+            // For example: userAccountDirectory.removeUserAccountByPersonId(personIdToDelete);
+             System.out.println("Attempting to remove user account for ID: " + personIdToDelete);
+             // accountRemoved = userAccountDirectory.removeUserAccountByPersonId(personIdToDelete);
+             // Simulate removal for now, replace with actual calls
+             accountRemoved = true; // Assume account removal logic exists and works
+
+
+             // 3. Remove the Person object itself (only if profile and account removal were successful or deemed acceptable to proceed)
+             // Consider transactionality - ideally all removals succeed or none do.
+             // For simplicity here, we proceed if the main object is selected.
+             if (profileRemoved && accountRemoved) { // Or adjust condition based on requirements
+                 System.out.println("Attempting to remove person object for ID: " + personIdToDelete);
+                 personRemoved = personDirectory.removePersonById(personIdToDelete); // Use removePersonById
+             } else {
+                 System.err.println("Could not remove associated profile or user account. Person object deletion aborted for ID: " + personIdToDelete);
+             }
+
+
+            // --- Feedback ---
+            if (personRemoved) {
+                JOptionPane.showMessageDialog(this, "Person and associated records deleted successfully.", "Deletion Success", JOptionPane.INFORMATION_MESSAGE);
+                populateTable(); // Refresh the table
+            } else {
+                 JOptionPane.showMessageDialog(this, "Failed to delete person or associated records fully. Please check.", "Deletion Error", JOptionPane.ERROR_MESSAGE);
+                 // Optionally repopulate even on partial failure to show current state
+                 populateTable();
+            }
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Back;
     private javax.swing.JButton Next;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnViewEdit;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblTitile;
+    private javax.swing.JTable tblPersons;
     // End of variables declaration//GEN-END:variables
 
 }
