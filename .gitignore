@@ -31,4 +31,5 @@ $RECYCLE.BIN/
 *.tmp
 *.swp
 *.swo
+*.properties
 
