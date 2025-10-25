@@ -16,15 +16,19 @@ import java.util.ArrayList;
  */
 public class StudentProfile {
 
-    Person person;
+    private Person person;
     Transcript transcript;
     EmploymentHistroy employmenthistory;
 
-    public StudentProfile(Person p) {
+    public StudentProfile(Person person) {
 
-        person = p;
+        this.person = person;
         transcript = new Transcript(this);
         employmenthistory = new EmploymentHistroy();
+    }
+    
+    public Person getPerson(){
+        return person;
     }
 
     public boolean isMatch(String id) {
@@ -55,7 +59,5 @@ public class StudentProfile {
         return transcript.getCourseList();
 
     }
-    public Person getPerson() {
-        return person;
-    }
+   
 }

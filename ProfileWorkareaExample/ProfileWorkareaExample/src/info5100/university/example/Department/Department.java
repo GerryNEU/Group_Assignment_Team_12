@@ -48,7 +48,9 @@ public class Department {
         degree.addCoreCourse(c);
         
     }
-    
+    public java.util.List<info5100.university.example.CourseSchedule.CourseSchedule> getAllCourseSchedules() {
+        return new java.util.ArrayList<>(mastercoursecatalog.values());
+    }
     public void addElectiveCourse(Course c){
         degree.addElectiveCourse(c);
         
