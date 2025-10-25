@@ -33,7 +33,7 @@
                       <Group type="102" attributes="0">
                           <Component id="btnMyProfile" min="-2" pref="164" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
-                          <Component id="jButton11" min="-2" pref="164" max="-2" attributes="0"/>
+                          <Component id="btnPerformance" min="-2" pref="164" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Component id="jLabel1" min="-2" pref="306" max="-2" attributes="0"/>
@@ -55,7 +55,7 @@
               <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnMyProfile" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="jButton11" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="btnPerformance" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="233" max="32767" attributes="0"/>
           </Group>
@@ -156,7 +156,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMyProfileIdentifyEventsActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton11">
+    <Component class="javax.swing.JButton" name="btnPerformance">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="99" red="66" type="rgb"/>
@@ -184,7 +184,7 @@
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton11ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPerformanceActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
