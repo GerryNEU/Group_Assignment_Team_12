@@ -16,6 +16,7 @@ import info5100.university.example.Persona.Faculty.FacultyProfile;
 import UserInterface.WorkAreas.AdminRole.AdminRoleWorkAreaJPanel;
 import UserInterface.WorkAreas.FacultyRole.FacultyWorkAreaJPanel;
 import UserInterface.WorkAreas.StudentRole.StudentWorkAreaJPanel;
+import UserInterface.WorkAreas.RegistrarRole.RegistrarWorkAreaJPanel;
 import javax.swing.JPanel;
 
 /**
@@ -170,7 +171,13 @@ public class ProfileWorkAreaMainFrame extends javax.swing.JFrame {
             facultyworkarea = new FacultyWorkAreaJPanel(business, fp, CardSequencePanel); 
             CardSequencePanel.add("faculty", facultyworkarea);
         }   
-
+        
+        if (r.equals("Registrar")) {
+            RegistrarWorkAreaJPanel registrarWorkArea = new RegistrarWorkAreaJPanel(business, CardSequencePanel);
+            CardSequencePanel.add("Registrar", registrarWorkArea);
+        }
+        
+        
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_LoginButtonActionPerformed
 
