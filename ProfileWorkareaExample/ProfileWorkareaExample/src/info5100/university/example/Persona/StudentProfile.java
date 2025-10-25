@@ -26,6 +26,10 @@ public class StudentProfile {
         transcript = new Transcript(this);
         employmenthistory = new EmploymentHistroy();
     }
+    
+    public Person getPerson(){
+        return person;
+    }
 
     public boolean isMatch(String id) {
         return person.getPersonId().equals(id);
@@ -55,7 +59,5 @@ public class StudentProfile {
         return transcript.getCourseList();
 
     }
-    public Person getPerson() {
-        return person;
-    }
+   
 }
