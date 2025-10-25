@@ -6,6 +6,7 @@ package UserInterface.WorkAreas.RegistrarRole;
 
 import Business.*;
 import javax.swing.JPanel;
+import UserInterface.WorkAreas.RegistrarRole.ManageCourseOfferingsJPanel;
 
 /**
  *
@@ -44,6 +45,11 @@ public class RegistrarWorkAreaJPanel extends javax.swing.JPanel {
 
         btnManageCourseOfferings.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnManageCourseOfferings.setText("Course Offering Management");
+        btnManageCourseOfferings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnManageCourseOfferingsActionPerformed(evt);
+            }
+        });
 
         btnManageStudentReg.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnManageStudentReg.setText("Student Registration");
@@ -107,6 +113,13 @@ public class RegistrarWorkAreaJPanel extends javax.swing.JPanel {
     private void btnManageStudentRegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageStudentRegActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnManageStudentRegActionPerformed
+
+    private void btnManageCourseOfferingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageCourseOfferingsActionPerformed
+        // TODO add your handling code here:
+        ManageCourseOfferingsJPanel manageCourseOfferingsPanel = new ManageCourseOfferingsJPanel(business, CardSequencePanel);
+        CardSequencePanel.add("ManageCourseOfferings", manageCourseOfferingsPanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+    }//GEN-LAST:event_btnManageCourseOfferingsActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
