@@ -65,4 +65,18 @@ public class PersonDirectory {
          return false; // Not found
     }
     
+    public Person findPersonByEmail(String email) {
+        if (email == null || email.isEmpty()) return null;
+        // Use Iterator to safely remove while iterating
+         Iterator<Person> iterator = personlist.iterator();
+         while (iterator.hasNext()) {
+             Person p = iterator.next();
+             if (p.isMatch(email)) {
+                 iterator.remove();
+                 return p; // Found and removed
+             }
+         }
+         return null; // Not found
+    }
+    
 }
