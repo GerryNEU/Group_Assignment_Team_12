@@ -147,7 +147,7 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(249, 249, 249)
+                .addGap(255, 255, 255)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTittle, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
@@ -159,12 +159,12 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnRegistration, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnGraduationAudit, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(306, Short.MAX_VALUE))
+                .addContainerGap(300, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(80, 80, 80)
+                .addGap(120, 120, 120)
                 .addComponent(lblTittle)
                 .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -176,7 +176,7 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
                     .addComponent(btnGraduationAudit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(43, 43, 43)
                 .addComponent(btnTranscript, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(223, Short.MAX_VALUE))
+                .addContainerGap(183, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
