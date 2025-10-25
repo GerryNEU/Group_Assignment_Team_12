@@ -30,19 +30,280 @@ public class GraduationAuditJPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnBack = new javax.swing.JButton();
+        lblTittle = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        lblCoreTittle = new javax.swing.JLabel();
+        lblCoreStatus = new javax.swing.JLabel();
+        lblCoreResult = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        lblProgressTitle = new javax.swing.JLabel();
+        lblProgressText = new javax.swing.JLabel();
+        progressBar = new javax.swing.JProgressBar();
+        jPanel3 = new javax.swing.JPanel();
+        lblCoreCreditsLabel = new javax.swing.JLabel();
+        lblCoreCredits = new javax.swing.JLabel();
+        lblElectiveCreditsLabel = new javax.swing.JLabel();
+        lblElectiveCredits = new javax.swing.JLabel();
+        lblTotalCreditsLabel = new javax.swing.JLabel();
+        lblTotalCredits = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        lblGPALabel = new javax.swing.JLabel();
+        lblGPA = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        lblStatusTitle = new javax.swing.JLabel();
+        lblStatus = new javax.swing.JLabel();
+        lblStatusDetail = new javax.swing.JLabel();
+
+        btnBack.setText("< < Back");
+
+        lblTittle.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        lblTittle.setText("MSIS Graduation Requirements");
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        lblCoreTittle.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        lblCoreTittle.setText("Core Course(Required):");
+
+        lblCoreStatus.setText("INFO 5100  - Application Engineering( 4 credits )  ");
+
+        lblCoreResult.setText("Status : Not Completed");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblCoreResult)
+                    .addComponent(lblCoreStatus)
+                    .addComponent(lblCoreTittle))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addComponent(lblCoreTittle)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblCoreStatus)
+                .addGap(12, 12, 12)
+                .addComponent(lblCoreResult)
+                .addContainerGap(13, Short.MAX_VALUE))
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        lblProgressTitle.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        lblProgressTitle.setText("Credits Progress:");
+
+        lblProgressText.setText("0/32 credits completed");
+
+        progressBar.setMaximum(32);
+        progressBar.setStringPainted(true);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(lblProgressTitle)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 129, Short.MAX_VALUE)
+                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(94, 94, 94)
+                .addComponent(lblProgressText)
+                .addGap(54, 54, 54))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblProgressTitle)
+                    .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblProgressText))
+                .addContainerGap(19, Short.MAX_VALUE))
+        );
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        lblCoreCreditsLabel.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        lblCoreCreditsLabel.setText("Core Credits:");
+
+        lblCoreCredits.setText("0/4");
+
+        lblElectiveCreditsLabel.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        lblElectiveCreditsLabel.setText("Elective Credits:");
+
+        lblElectiveCredits.setText("0/28");
+
+        lblTotalCreditsLabel.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        lblTotalCreditsLabel.setText("Total Credits:");
+
+        lblTotalCredits.setText("0/32");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(lblCoreCreditsLabel)
+                .addGap(18, 18, 18)
+                .addComponent(lblCoreCredits)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblElectiveCreditsLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblElectiveCredits)
+                .addGap(175, 175, 175)
+                .addComponent(lblTotalCreditsLabel)
+                .addGap(39, 39, 39)
+                .addComponent(lblTotalCredits)
+                .addGap(57, 57, 57))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblCoreCreditsLabel)
+                    .addComponent(lblCoreCredits)
+                    .addComponent(lblElectiveCreditsLabel)
+                    .addComponent(lblElectiveCredits)
+                    .addComponent(lblTotalCreditsLabel)
+                    .addComponent(lblTotalCredits))
+                .addContainerGap(22, Short.MAX_VALUE))
+        );
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        lblGPALabel.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        lblGPALabel.setText("Overal GPA : ");
+
+        lblGPA.setText("0.00");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(lblGPALabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblGPA)
+                .addGap(53, 53, 53))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblGPALabel)
+                    .addComponent(lblGPA))
+                .addContainerGap(14, Short.MAX_VALUE))
+        );
+
+        jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        lblStatusTitle.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        lblStatusTitle.setText("Graduation Status : ");
+
+        lblStatus.setText("x Not Ready to Graduate");
+
+        lblStatusDetail.setText("(Missing requirements)");
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(lblStatusTitle)
+                .addGap(77, 77, 77)
+                .addComponent(lblStatus)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblStatusDetail)
+                .addGap(48, 48, 48))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap(27, Short.MAX_VALUE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblStatusTitle)
+                    .addComponent(lblStatus)
+                    .addComponent(lblStatusDetail))
+                .addGap(24, 24, 24))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(71, 71, 71)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnBack)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(347, 347, 347)
+                        .addComponent(lblTittle)))
+                .addContainerGap(88, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(btnBack)
+                .addGap(24, 24, 24)
+                .addComponent(lblTittle)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(67, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBack;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JLabel lblCoreCredits;
+    private javax.swing.JLabel lblCoreCreditsLabel;
+    private javax.swing.JLabel lblCoreResult;
+    private javax.swing.JLabel lblCoreStatus;
+    private javax.swing.JLabel lblCoreTittle;
+    private javax.swing.JLabel lblElectiveCredits;
+    private javax.swing.JLabel lblElectiveCreditsLabel;
+    private javax.swing.JLabel lblGPA;
+    private javax.swing.JLabel lblGPALabel;
+    private javax.swing.JLabel lblProgressText;
+    private javax.swing.JLabel lblProgressTitle;
+    private javax.swing.JLabel lblStatus;
+    private javax.swing.JLabel lblStatusDetail;
+    private javax.swing.JLabel lblStatusTitle;
+    private javax.swing.JLabel lblTittle;
+    private javax.swing.JLabel lblTotalCredits;
+    private javax.swing.JLabel lblTotalCreditsLabel;
+    private javax.swing.JProgressBar progressBar;
     // End of variables declaration//GEN-END:variables
 }
