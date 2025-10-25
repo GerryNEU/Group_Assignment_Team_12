@@ -147,24 +147,24 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(101, 101, 101)
+                .addGap(249, 249, 249)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTittle, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(btnTranscript, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(btnCourseWork, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
-                            .addComponent(btnManageProfile, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                            .addComponent(btnCourseWork, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                            .addComponent(btnManageProfile, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(75, 75, 75)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnRegistration, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnGraduationAudit, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(354, Short.MAX_VALUE))
+                .addContainerGap(306, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(51, 51, 51)
+                .addGap(80, 80, 80)
                 .addComponent(lblTittle)
                 .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -176,46 +176,66 @@ public class StudentWorkAreaJPanel extends javax.swing.JPanel {
                     .addComponent(btnGraduationAudit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(43, 43, 43)
                 .addComponent(btnTranscript, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(252, Short.MAX_VALUE))
+                .addContainerGap(223, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCourseWorkIdentifyResourceAssetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCourseWorkIdentifyResourceAssetsActionPerformed
+    CardSequencePanel.removeAll();
     CardSequencePanel.add("StudentMenu", this);
-    CourseworkJPanel courseworkPanel = new CourseworkJPanel(student);
+    
+    CourseworkJPanel courseworkPanel = new CourseworkJPanel(student, CardSequencePanel);
     CardSequencePanel.add("Coursework", courseworkPanel);
-    ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+    
+    ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "Coursework");
     }//GEN-LAST:event_btnCourseWorkIdentifyResourceAssetsActionPerformed
 
     private void btnManageProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageProfileActionPerformed
 // TODO add your handling code here:
+    // 1. 移除所有旧的面板
+    CardSequencePanel.removeAll();
+    
+    // 2. 重新添加StudentMenu
     CardSequencePanel.add("StudentMenu", this);
-    ProfileJPanel profilePanel = new ProfileJPanel(student,CardSequencePanel);
+    
+    // 3. 添加ProfileJPanel
+    ProfileJPanel profilePanel = new ProfileJPanel(student, CardSequencePanel);
     CardSequencePanel.add("Profile", profilePanel);
-    ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+    
+    // 4. 显示ProfileJPanel
+    ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "Profile");
 }//GEN-LAST:event_btnManageProfileActionPerformed
 
     private void btnGraduationAuditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGraduationAuditActionPerformed
         // TODO add your handling code here:
+    CardSequencePanel.removeAll();
     CardSequencePanel.add("StudentMenu", this);
-    GraduationAuditJPanel graduationPanel = new GraduationAuditJPanel(student);
+    
+    GraduationAuditJPanel graduationPanel = new GraduationAuditJPanel(student, CardSequencePanel);
     CardSequencePanel.add("Graduation", graduationPanel);
-    ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+    
+    ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "Graduation");
     }//GEN-LAST:event_btnGraduationAuditActionPerformed
 
     private void btnRegistrationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrationActionPerformed
+    CardSequencePanel.removeAll();
     CardSequencePanel.add("StudentMenu", this);
-    CourseRegistrationJPanel registrationPanel = new CourseRegistrationJPanel(business, student);
+    
+    CourseRegistrationJPanel registrationPanel = new CourseRegistrationJPanel(business, student, CardSequencePanel);
     CardSequencePanel.add("Registration", registrationPanel);
-    ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);   
+    
+    ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "Registration");
 }//GEN-LAST:event_btnRegistrationActionPerformed
 
     private void btnTranscriptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTranscriptActionPerformed
         // TODO add your handling code here:
+    CardSequencePanel.removeAll();
     CardSequencePanel.add("StudentMenu", this);
-    TranscriptJPanel transcriptPanel = new TranscriptJPanel(student);
+    
+    TranscriptJPanel transcriptPanel = new TranscriptJPanel(student, CardSequencePanel);
     CardSequencePanel.add("Transcript", transcriptPanel);
-    ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+    
+    ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "Transcript");
     }//GEN-LAST:event_btnTranscriptActionPerformed
 
 

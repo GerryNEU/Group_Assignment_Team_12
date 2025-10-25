@@ -11,6 +11,7 @@ import info5100.university.example.CourseCatalog.Course;
 import info5100.university.example.CourseSchedule.CourseLoad;
 import info5100.university.example.CourseSchedule.CourseOffer;
 import info5100.university.example.CourseSchedule.CourseSchedule;
+import info5100.university.example.CourseSchedule.SeatAssignment;
 import info5100.university.example.Department.Department;
 import info5100.university.example.Persona.Person;
 import info5100.university.example.Persona.PersonDirectory;
@@ -120,26 +121,37 @@ class ConfigureABusiness {
         // Student 1 takes 2 courses
         // Student 1 (Adam) takes 2 courses (8 credits)
         CourseLoad cl_s1 = students[0].newCourseLoad("Fall 2025");
-        cl_s1.newSeatAssignment(co1); // INFO 5100
-        cl_s1.newSeatAssignment(co2); // INFO 6100
-
+        SeatAssignment seat1 = cl_s1.newSeatAssignment(co1); // INFO 5100
+        SeatAssignment seat2 = cl_s1.newSeatAssignment(co2); // INFO 6100
+        
+        seat1.setGrade(4.0f);   // A (INFO 5100)
+        seat2.setGrade(3.3f);   // B+ (INFO 6100)
+        
         // Student 2 takes 1 course (4 credits)
         CourseLoad cl_s2 = students[1].newCourseLoad("Fall 2025");
-        cl_s2.newSeatAssignment(co1); // INFO 5100
+        SeatAssignment seat3 = cl_s2.newSeatAssignment(co1);
+        seat3.setGrade(3.7f);   // A-
 
         // Student 3 takes 2 courses (8 credits)
         CourseLoad cl_s3 = students[2].newCourseLoad("Fall 2025");
-        cl_s3.newSeatAssignment(co3); // INFO 6210
-        cl_s3.newSeatAssignment(co4); // INFO 5200
+        SeatAssignment seat4 = cl_s3.newSeatAssignment(co3);
+        SeatAssignment seat5 = cl_s3.newSeatAssignment(co4);
+
+        seat4.setGrade(3.3f);   // B+
+        seat5.setGrade(3.0f);   // B
 
         // Student 4 takes 1 course (4 credits)
         CourseLoad cl_s4 = students[3].newCourseLoad("Fall 2025");
-        cl_s4.newSeatAssignment(co5); // INFO 6300
+        SeatAssignment seat6 = cl_s4.newSeatAssignment(co5);
+        seat6.setGrade(2.7f);   // 
 
         // Student 5 takes 2 courses (8 credits)
         CourseLoad cl_s5 = students[4].newCourseLoad("Fall 2025");
-        cl_s5.newSeatAssignment(co1); // INFO 5100
-        cl_s5.newSeatAssignment(co3); // INFO 6210
+        SeatAssignment seat7 = cl_s5.newSeatAssignment(co1);
+        SeatAssignment seat8 = cl_s5.newSeatAssignment(co3);
+        
+        seat7.setGrade(2.3f);   // 
+        seat8.setGrade(2.0f);   // 
 
         // Student 6 takes 1 course
         CourseLoad cl_s6 = students[5].newCourseLoad("Fall 2025");
@@ -209,5 +221,7 @@ class ConfigureABusiness {
         cl_s20.newSeatAssignment(co3); // INFO 6210
 
         return business;
+       
     }
+    
 }

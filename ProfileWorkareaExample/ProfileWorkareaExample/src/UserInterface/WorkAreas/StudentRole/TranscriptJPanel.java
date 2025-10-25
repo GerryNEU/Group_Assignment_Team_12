@@ -12,6 +12,7 @@ import info5100.university.example.Persona.StudentProfile;
 import info5100.university.example.Persona.Transcript;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
@@ -32,50 +33,42 @@ public class TranscriptJPanel extends javax.swing.JPanel {
         initComponents();
         this.studentProfile = studentProfile;
         this.CardSequencePanel = cardSequencePanel;
-        
-        initGradeMap();    // 初始化成绩映射
+     
         loadSemesters();   // 加载学期列表到ComboBox
         loadTranscript();  // 加载成绩单数据
-    }
-    
-    // ==================== 初始化成绩映射表 ====================
-    /**
-     * 创建成绩到GPA分数的映射
-     */
-    private void initGradeMap() {
-        gradeMap = new HashMap<>();
-        gradeMap.put("A", 4.0);
-        gradeMap.put("A-", 3.7);
-        gradeMap.put("B+", 3.3);
-        gradeMap.put("B", 3.0);
-        gradeMap.put("B-", 2.7);
-        gradeMap.put("C+", 2.3);
-        gradeMap.put("C", 2.0);
-        gradeMap.put("C-", 1.7);
-        gradeMap.put("F", 0.0);
     }
     
     // ==================== 加载学期列表 ====================
     /**
      * 加载学期到ComboBox
      */
-    private void loadSemesters() {
+   private void loadSemesters() {
         cbxSelectSemster.removeAllItems();
-        
-        // 添加"All Semesters"选项
         cbxSelectSemster.addItem("All Semesters");
         
         try {
             Transcript transcript = studentProfile.getTranscript();
-            ArrayList<CourseLoad> courseLoads = transcript.getCourseLoadList();
             
-            // 添加所有学期
-            for (CourseLoad load : courseLoads) {
-                String term = load.getTerm();
+            // 直接访问courseloadlist的keys（这些就是学期名称）
+            // 通过getCourseLoadBySemester方法来推断有哪些学期
+            // 或者遍历getCourseList()来收集学期
+            
+            ArrayList<SeatAssignment> allCourses = transcript.getCourseList();
+            HashSet<String> semesters = new HashSet<>();
+            
+            for (SeatAssignment seat : allCourses) {
+                CourseLoad courseLoad = seat.getCourseLoad();  // 直接访问属性
+                if (courseLoad != null) {
+                    String semester = courseLoad.getTerm();  // 直接访问semester属性
+                    semesters.add(semester);
+                }
+            }
+            
+            for (String term : semesters) {
                 cbxSelectSemster.addItem(term);
             }
             
-            System.out.println("Loaded " + courseLoads.size() + " semesters");
+            System.out.println("Loaded " + semesters.size() + " semesters");
             
         } catch (Exception e) {
             System.err.println("Error loading semesters: " + e.getMessage());
@@ -88,72 +81,70 @@ public class TranscriptJPanel extends javax.swing.JPanel {
      * 加载成绩单数据到表格
      */
     private void loadTranscript() {
-        // 获取表格模型
         DefaultTableModel model = (DefaultTableModel) tblTranscriptTable.getModel();
-        model.setRowCount(0);  // 清空表格
+        model.setRowCount(0);
         
         try {
-            // 获取选中的学期
             String selectedSemester = (String) cbxSelectSemster.getSelectedItem();
-            
-            // 获取成绩单
             Transcript transcript = studentProfile.getTranscript();
-            ArrayList<CourseLoad> courseLoads = transcript.getCourseLoadList();
+            ArrayList<SeatAssignment> allCourses = transcript.getCourseList();
             
-            // 计算Overall GPA（用于所有行）
+            if (allCourses == null || allCourses.isEmpty()) {
+                System.out.println("No courses found");
+                return;
+            }
+            
+            // 计算Overall GPA
             double overallGPA = calculateOverallGPA();
             
-            // 遍历每个学期
-            for (CourseLoad load : courseLoads) {
-                String term = load.getTerm();
+            // 按学期分组
+            HashMap<String, ArrayList<SeatAssignment>> coursesBySemester = new HashMap<>();
+            
+            for (SeatAssignment seat : allCourses) {
+                CourseLoad courseLoad = seat.getCourseLoad();
+                if (courseLoad == null) continue;
                 
-                // 如果选择了特定学期，只显示该学期
+                String term = courseLoad.getTerm();  // 直接访问semester属性
+               
+                if (!coursesBySemester.containsKey(term)) {
+                    coursesBySemester.put(term, new ArrayList<>());
+                }
+                coursesBySemester.get(term).add(seat);
+            }
+            
+            // 遍历每个学期
+            for (String term : coursesBySemester.keySet()) {
+                // 过滤学期
                 if (selectedSemester != null && 
                     !selectedSemester.equals("All Semesters") && 
                     !term.equals(selectedSemester)) {
-                    continue;  // 跳过其他学期
-                }
-                
-                // 计算该学期的GPA
-                double termGPA = calculateTermGPA(load);
-                
-                // 判断Academic Standing
-                String academicStanding = determineAcademicStanding(termGPA, overallGPA);
-                
-                // 获取该学期的所有课程
-                ArrayList<SeatAssignment> seats = load.getSeatAssignments();
-                
-                if (seats == null || seats.isEmpty()) {
-                    System.out.println("No courses in term: " + term);
                     continue;
                 }
                 
-                // 遍历每门课程
-                for (SeatAssignment seat : seats) {
+                ArrayList<SeatAssignment> semesterCourses = coursesBySemester.get(term);
+                double termGPA = calculateTermGPA(semesterCourses);
+                String academicStanding = determineAcademicStanding(termGPA, overallGPA);
+                
+                // 添加每门课程到表格
+                for (SeatAssignment seat : semesterCourses) {
                     CourseOffer offer = seat.getCourseOffer();
-                    Course course = offer.getCoursesubject();
+                    Course course = seat.getAssociatedCourse();  // 使用getAssociatedCourse()
                     
-                    String courseId = course.getCourseNumber();    // "INFO 5100"
-                    String courseName = course.getName();          // "Application Engineering"
-                    String grade = seat.getGrade();                // "A"
+                    String courseId = course.getCourseNumber();
+                    String courseName = course.getName();
                     
-                    // 如果没有成绩，显示"N/A"
-                    if (grade == null || grade.isEmpty()) {
-                        grade = "N/A";
-                    }
+                    // getGrade()返回float，需要转换成字母成绩
+                    float gradeValue = seat.getGrade();
+                    String letterGrade = convertGradeToLetter(gradeValue);
                     
-                    // 格式化GPA（保留2位小数）
-                    String termGPAStr = String.format("%.2f", termGPA);
-                    String overallGPAStr = String.format("%.2f", overallGPA);
-                    
-                    // 添加到表格
                     Object[] row = {
                         term,
                         academicStanding,
-                        courseId + " - " + courseName,  // 合并Course ID和Name
-                        grade,
-                        termGPAStr,
-                        overallGPAStr
+                        courseId,
+                        courseName,
+                        letterGrade,
+                        String.format("%.2f", termGPA),
+                        String.format("%.2f", overallGPA)
                     };
                     
                     model.addRow(row);
@@ -165,57 +156,48 @@ public class TranscriptJPanel extends javax.swing.JPanel {
         } catch (Exception e) {
             System.err.println("Error loading transcript: " + e.getMessage());
             e.printStackTrace();
-            
-            // 显示错误消息
-            JOptionPane.showMessageDialog(this,
-                "Error loading transcript: " + e.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
         }
+    }
+    // ==================== 成绩转换 ====================
+    /**
+     * 将数字成绩转换为字母成绩
+     * float (4.0, 3.7, etc.) → String ("A", "A-", etc.)
+     */
+    private String convertGradeToLetter(float gradeValue) {
+        if (gradeValue >= 4.0) return "A";
+        if (gradeValue >= 3.7) return "A-";
+        if (gradeValue >= 3.3) return "B+";
+        if (gradeValue >= 3.0) return "B";
+        if (gradeValue >= 2.7) return "B-";
+        if (gradeValue >= 2.3) return "C+";
+        if (gradeValue >= 2.0) return "C";
+        if (gradeValue >= 1.7) return "C-";
+        if (gradeValue > 0) return "F";
+        return "N/A";  // 0.0 或没有成绩
     }
     
     // ==================== GPA 计算 ====================
     /**
      * 计算学期GPA
      */
-    private double calculateTermGPA(CourseLoad courseLoad) {
-        double totalQualityPoints = 0.0;  // 总质量分
-        int totalCredits = 0;              // 总学分
+   private double calculateTermGPA(ArrayList<SeatAssignment> seats) {
+        double totalQualityPoints = 0.0;
+        int totalCredits = 0;
         
-        try {
-            ArrayList<SeatAssignment> seats = courseLoad.getSeatAssignments();
+        for (SeatAssignment seat : seats) {
+            float gradeValue = seat.getGrade();  // 直接是GPA值
             
-            for (SeatAssignment seat : seats) {
-                // 获取成绩
-                String grade = seat.getGrade();
-                
-                // 如果没有成绩，跳过
-                if (grade == null || grade.isEmpty() || !gradeMap.containsKey(grade)) {
-                    continue;
-                }
-                
-                // 获取学分
-                Course course = seat.getCourseOffer().getCoursesubject();
-                int credits = course.getCredits();
-                
-                // 获取成绩分数
-                double gradePoints = gradeMap.get(grade);
-                
-                // 累加质量分
-                totalQualityPoints += gradePoints * credits;
-                totalCredits += credits;
+            if (gradeValue <= 0) {
+                continue;  // 跳过没有成绩的课程
             }
             
-            // 计算GPA
-            if (totalCredits > 0) {
-                return totalQualityPoints / totalCredits;
-            }
+            int credits = seat.getCreditHours();
             
-        } catch (Exception e) {
-            System.err.println("Error calculating term GPA: " + e.getMessage());
+            totalQualityPoints += gradeValue * credits;
+            totalCredits += credits;
         }
         
-        return 0.0;
+        return totalCredits > 0 ? totalQualityPoints / totalCredits : 0.0;
     }
     
     /**
@@ -227,37 +209,27 @@ public class TranscriptJPanel extends javax.swing.JPanel {
         
         try {
             Transcript transcript = studentProfile.getTranscript();
-            ArrayList<CourseLoad> courseLoads = transcript.getCourseLoadList();
+            ArrayList<SeatAssignment> allCourses = transcript.getCourseList();
             
-            // 遍历所有学期
-            for (CourseLoad load : courseLoads) {
-                ArrayList<SeatAssignment> seats = load.getSeatAssignments();
+            for (SeatAssignment seat : allCourses) {
+                float gradeValue = seat.getGrade();
                 
-                for (SeatAssignment seat : seats) {
-                    String grade = seat.getGrade();
-                    
-                    if (grade == null || grade.isEmpty() || !gradeMap.containsKey(grade)) {
-                        continue;
-                    }
-                    
-                    Course course = seat.getCourseOffer().getCoursesubject();
-                    int credits = course.getCredits();
-                    double gradePoints = gradeMap.get(grade);
-                    
-                    totalQualityPoints += gradePoints * credits;
-                    totalCredits += credits;
+                if (gradeValue <= 0) {
+                    continue;
                 }
+                
+                int credits = seat.getCreditHours();
+                
+                totalQualityPoints += gradeValue * credits;
+                totalCredits += credits;
             }
             
-            if (totalCredits > 0) {
-                return totalQualityPoints / totalCredits;
-            }
+            return totalCredits > 0 ? totalQualityPoints / totalCredits : 0.0;
             
         } catch (Exception e) {
             System.err.println("Error calculating overall GPA: " + e.getMessage());
+            return 0.0;
         }
-        
-        return 0.0;
     }
     
     // ==================== Academic Standing 判定 ====================
@@ -279,6 +251,7 @@ public class TranscriptJPanel extends javax.swing.JPanel {
         }
         return "Unknown";
     }
+    
     
 
     /**
@@ -306,8 +279,18 @@ public class TranscriptJPanel extends javax.swing.JPanel {
         cbxSelectSemster.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnBack.setText("< < Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         btnRefresh.setText("Refresh");
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
 
         tblTranscriptTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -349,7 +332,7 @@ public class TranscriptJPanel extends javax.swing.JPanel {
                                 .addComponent(cbxSelectSemster, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(442, 442, 442)
                                 .addComponent(btnRefresh)))))
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addContainerGap(164, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -369,12 +352,33 @@ public class TranscriptJPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+         ((java.awt.CardLayout) CardSequencePanel.getLayout()).show(CardSequencePanel, "StudentMenu");
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        // TODO add your handling code here:
+         loadTranscript();
+        JOptionPane.showMessageDialog(this,
+            "Transcript refreshed!",
+            "Success",
+            JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    /**
+     * 学期选择ComboBox - 按学期过滤
+     */
+    private void cbxSelectSemsterActionPerformed(java.awt.event.ActionEvent evt) {
+        // 当选择不同学期时，重新加载成绩单
+        loadTranscript();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JComboBox<String> cbxSelectSemster;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblSelectSemster;
     private javax.swing.JLabel lblTittle;

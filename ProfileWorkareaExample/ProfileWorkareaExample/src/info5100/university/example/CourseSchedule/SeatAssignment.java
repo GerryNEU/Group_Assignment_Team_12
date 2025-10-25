@@ -20,6 +20,7 @@ public class SeatAssignment {
         seat = s;
         courseload = cl;
     }
+    
      
     public boolean getLike(){
         return like;
@@ -48,6 +49,13 @@ public class SeatAssignment {
     }
     public float getGrade() {
         return grade;
+    }
+    public void setGrade(float g) {
+        this.grade = g;
+    }
+    
+    public CourseLoad getCourseLoad() {
+        return courseload;
     }
     
     
