@@ -11,8 +11,11 @@ package info5100.university.example.Persona;
  */
 public class Person {
     
+
     private String personId;
     private String name;
+    String email;
+
     
     public Person (String id){
         
@@ -34,6 +37,17 @@ public class Person {
     public String getName() {
         return name;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
     
-    
+    @Override
+    public String toString() {
+        return id;
+    }
 }
