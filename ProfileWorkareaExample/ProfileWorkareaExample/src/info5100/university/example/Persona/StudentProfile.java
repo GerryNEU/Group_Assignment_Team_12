@@ -59,7 +59,5 @@ public class StudentProfile {
         return transcript.getCourseList();
 
     }
-    public Person getPerson() {
-        return person;
-    }
+   
 }
