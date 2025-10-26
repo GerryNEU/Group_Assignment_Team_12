@@ -34,6 +34,10 @@ public class ViewEditStudentJPanel extends javax.swing.JPanel {
         initComponents();
         
         populateDetails();
+        txtStudentId.setEditable(false); // ID should not be editable
+        txtName.setEditable(false); // Name should not be editable
+        txtAcademicStatus.setEditable(false); // Calculated field
+        txtOverallGpa.setEditable(false); // Calculated field
     }
     
     private void populateDetails() {

@@ -303,6 +303,11 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
         studentScrollPane.setViewportView(tblStudents);
 
         btnViewEditStudent.setText("View / Edit Details");
+        btnViewEditStudent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewEditStudentActionPerformed(evt);
+            }
+        });
 
         btnDeleteStudent.setText("Delete Record");
         btnDeleteStudent.addActionListener(new java.awt.event.ActionListener() {
@@ -679,6 +684,32 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
         CardSequencePanel.add("ViewEditFacultyJPanel", viewEditPanel);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);        
     }//GEN-LAST:event_btnViewEditFacultyActionPerformed
+
+    private void btnViewEditStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewEditStudentActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = tblStudents.getSelectedRow();
+        
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a student from the table to view/edit.", "No Student Selected", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // 2. Get the Student ID from the table (column 0)
+        String studentId = (String) tblStudents.getValueAt(selectedRow, 0);
+        
+        // 3. Find the StudentProfile object
+        StudentProfile studentProfile = department.getStudentDirectory().findStudent(studentId);
+        
+        if (studentProfile == null) {
+            JOptionPane.showMessageDialog(this, "Could not find the selected student. Please refresh.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // 4. Create and navigate to the new panel
+        ViewEditStudentJPanel viewEditPanel = new ViewEditStudentJPanel(business, CardSequencePanel, studentProfile);
+        CardSequencePanel.add("ViewEditStudentJPanel", viewEditPanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);        
+    }//GEN-LAST:event_btnViewEditStudentActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -43,6 +43,8 @@ public class ViewEditFacultyJPanel extends javax.swing.JPanel {
             txtEmail.setText(person.getEmail());
             txtContactInfo.setText(person.getPhoneNumber()); // Use getPhoneNumber()
         }
+        txtFacultyId.setEditable(false);
+        txtName.setEditable(false);
     }    
 
     /**
