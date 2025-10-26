@@ -41,48 +41,54 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
         populateFacultyTable();
     }
     
-        public void populateFacultyTable() {
-        DefaultTableModel model = (DefaultTableModel) tblFaculty.getModel();
+    public void populateFacultyTable() {
+        DefaultTableModel model = (DefaultTableModel) tblFaculty.getModel(); // Assuming your faculty table is named tblFaculty
         model.setRowCount(0);
 
         FacultyDirectory facultyDirectory = department.getFacultyDirectory();
 
         if (facultyDirectory != null && facultyDirectory.getTeacherList() != null) {
             for (FacultyProfile fp : facultyDirectory.getTeacherList()) {
-                Person person = fp.getPerson();
+                Person person = fp.getPerson(); // FacultyProfile should have an associated Person
                 if (person != null) {
                     Object[] row = new Object[4];
-                    row[0] = fp;
+                    // --- MODIFIED HERE ---
+                    // Store the Person ID string for display, instead of the whole object
+                    row[0] = person.getPersonId(); 
+                    // --- END MODIFICATION ---
                     row[1] = person.getName();
                     row[2] = person.getEmail();
-                    row[3] = department.getName();
+                    row[3] = department.getName(); // Assuming they are all in this department
                     model.addRow(row);
                 }
             }
         }
     }
 
-        public void populateStudentTable() {
-        DefaultTableModel model = (DefaultTableModel) tblStudents.getModel();
+    public void populateStudentTable(ArrayList<StudentProfile> studentList) {
+        DefaultTableModel model = (DefaultTableModel) tblStudents.getModel(); // Assuming your student table is named tblStudents
         model.setRowCount(0);
 
-        StudentDirectory studentDirectory = department.getStudentDirectory();
+        if (studentList == null) {
+            return; // No students in the list
+        }
 
-        if (studentDirectory != null && studentDirectory.getStudentlist() != null) {
-            for (StudentProfile sp : studentDirectory.getStudentlist()) {
-                Person person = sp.getPerson();
-                if (person != null) {
-                    Object[] row = new Object[5];
-                    row[0] = sp;
-                    row[1] = person.getName();
-                    row[2] = person.getEmail();
-                    row[3] = sp.getTranscript().getAcademicStatus();
-                    row[4] = String.format("%.2f", sp.getTranscript().calculateOverallGPA());
-                    model.addRow(row);
-                }
+        for (StudentProfile sp : studentList) {
+            Person person = sp.getPerson(); // StudentProfile should have an associated Person
+            if (person != null) {
+                Object[] row = new Object[5];
+                // --- MODIFIED HERE ---
+                // Store the Person ID string for display, instead of the whole object
+                row[0] = person.getPersonId(); 
+                // --- END MODIFICATION ---
+                row[1] = person.getName();
+                row[2] = person.getEmail();
+                row[3] = sp.getTranscript().getAcademicStatus(); // Assignment requirement [source: 36]
+                row[4] = String.format("%.2f", sp.getTranscript().calculateOverallGPA()); // Format GPA
+                model.addRow(row);
             }
         }
-    }    
+    }  
         
     /**
      * This method is called from within the constructor to initialize the form.
@@ -131,9 +137,17 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Title 1", "Name", "Email", "Dept Name"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         facultyScrollPane.setViewportView(tblFaculty);
 
         btnViewEditFaculty.setText("View / Edit Details");
@@ -206,15 +220,23 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
 
         tblStudents.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Title 1", "Title 2", "Title 3", "Title 4", "GPA"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         studentScrollPane.setViewportView(tblStudents);
 
         btnViewEditStudent.setText("View / Edit Details");
