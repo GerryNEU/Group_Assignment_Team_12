@@ -32,6 +32,7 @@ public class ManageCourseOfferingsJPanel extends javax.swing.JPanel {
         initComponents();
         this.business = bz;
         this.CardSequencePanel = clp;
+        populateTable();
     }
 
 public void populateTable() {
@@ -137,7 +138,7 @@ public void populateTable() {
             }
         });
 
-        btnBack.setText("《〈Back");
+        btnBack.setText("<<Back");
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBackActionPerformed(evt);
@@ -154,13 +155,13 @@ public void populateTable() {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(109, 109, 109)
+                        .addGap(124, 124, 124)
                         .addComponent(btnCreate)
-                        .addGap(68, 68, 68)
+                        .addGap(72, 72, 72)
                         .addComponent(btnViewEdit)
-                        .addGap(73, 73, 73)
+                        .addGap(86, 86, 86)
                         .addComponent(btnDelete)
-                        .addGap(43, 43, 43)
+                        .addGap(62, 62, 62)
                         .addComponent(btnBack))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(46, 46, 46)
@@ -257,7 +258,7 @@ public void populateTable() {
         String selectedCourseNumber = (String) model.getValueAt(selectedRowIndex, 0); // Assuming Course Number is in column 0
 
         Department department = business.getDepartment();
-        CourseSchedule courseSchedule = department.getCourseSchedule("Fall 2025"); // Assuming Fall 2025
+        CourseSchedule courseSchedule = department.getCourseSchedule("Fall 2025"); 
         if (courseSchedule == null) {
              JOptionPane.showMessageDialog(this, "Course schedule not found.", "Error", JOptionPane.ERROR_MESSAGE);
              return;
