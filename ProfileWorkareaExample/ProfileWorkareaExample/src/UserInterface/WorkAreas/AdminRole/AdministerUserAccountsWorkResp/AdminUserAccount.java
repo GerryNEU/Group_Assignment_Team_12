@@ -6,6 +6,7 @@
 package UserInterface.WorkAreas.AdminRole.AdministerUserAccountsWorkResp;
 
 import Business.Business;
+import Business.UserAccounts.UserAccount;
 import info5100.university.example.Department.Department;
 import info5100.university.example.Persona.Faculty.FacultyDirectory;
 import info5100.university.example.Persona.Faculty.FacultyProfile;
@@ -37,14 +38,14 @@ public class AdminUserAccount extends javax.swing.JPanel {
      */
     JPanel CardSequencePanel;
     Business business;
-    Person personToEdit; // Stores the person being edited, null if adding new
+    UserAccount userAccount;
     private final boolean isEditMode;
 
-    public AdminUserAccount(Business bz, JPanel jp, Person person) {
+    public AdminUserAccount(Business bz, JPanel jp, UserAccount userAccount) {
 
         CardSequencePanel = jp;
         this.business = bz;
-        this.isEditMode = (person != null); // Determin if it's Add or Edit mode
+        this.isEditMode = (userAccount != null); // Determin if it's Add or Edit mode
         initComponents();
 
     }
