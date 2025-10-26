@@ -51,6 +51,14 @@ public class CourseOffer {
         this.courseSchedule = cs;
         this.seatlist = new ArrayList();
     }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
      
     public String getScheduleTime() {
         return scheduleTime == null ? "TBD" : scheduleTime;

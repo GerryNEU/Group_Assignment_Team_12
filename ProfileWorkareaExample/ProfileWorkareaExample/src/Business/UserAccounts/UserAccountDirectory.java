@@ -33,6 +33,24 @@ public class UserAccountDirectory {
         }
         return null;
     }
+    
+    public boolean removeUserAccountByPersonId(String personId) {
+        UserAccount accountToRemove = null;
+        for (UserAccount ua : userAccountList) {
+            // Check if the associated Person object is not null before getting the ID
+            if (ua.getAssociatedPerson() != null && ua.getAssociatedPerson().getPersonId().equals(personId)) {
+                accountToRemove = ua;
+                break; // Found the account
+            }
+        }
+
+        if (accountToRemove != null) {
+            userAccountList.remove(accountToRemove);
+            return true; // Successfully removed
+        } else {
+            return false; // Account not found
+        }
+    }
 
     public UserAccount newUserAccount(Person person, String un, String pw, String role) {
         UserAccount ua = new UserAccount(person, un, pw, role);

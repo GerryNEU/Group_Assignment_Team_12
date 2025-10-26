@@ -13,6 +13,7 @@ package UserInterface.WorkAreas.AdminRole;
 import Business.Business;
 import UserInterface.WorkAreas.AdminRole.AdministerUserAccountsWorkResp.ManageUserAccountsJPanel;
 import UserInterface.WorkAreas.AdminRole.ManagePersonnelWorkResp.ManagePersonsJPanel;
+import UserInterface.WorkAreas.AdminRole.ManageRecords.ManageRecordsJPanel;
 
 import javax.swing.JPanel;
 
@@ -71,7 +72,7 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
         jButton9.setBackground(new java.awt.Color(102, 153, 255));
         jButton9.setFont(getFont());
         jButton9.setForeground(new java.awt.Color(255, 255, 255));
-        jButton9.setText("Manage Faculty");
+        jButton9.setText("Manage Faculty&Student");
         jButton9.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton9.setMaximumSize(new java.awt.Dimension(200, 40));
         jButton9.setMinimumSize(new java.awt.Dimension(20, 20));
@@ -113,7 +114,7 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
         jButton8.setBackground(new java.awt.Color(102, 153, 255));
         jButton8.setFont(getFont());
         jButton8.setForeground(new java.awt.Color(255, 255, 255));
-        jButton8.setText("Manage Students");
+        jButton8.setText("Analytics Dashboard");
         jButton8.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton8.setMaximumSize(new java.awt.Dimension(200, 40));
         jButton8.setMinimumSize(new java.awt.Dimension(20, 20));
@@ -185,9 +186,13 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton6IdentifyEventsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6IdentifyEventsActionPerformed
+
     }//GEN-LAST:event_jButton6IdentifyEventsActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        ManageRecordsJPanel manageRecordsPanel = new ManageRecordsJPanel(business, CardSequencePanel);
+        CardSequencePanel.add("ManageRecordsPanel", manageRecordsPanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_jButton9ActionPerformed
 
 
