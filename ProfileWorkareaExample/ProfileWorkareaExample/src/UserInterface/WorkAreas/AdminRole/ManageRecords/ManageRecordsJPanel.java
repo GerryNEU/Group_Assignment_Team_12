@@ -4,19 +4,86 @@
  */
 package UserInterface.WorkAreas.AdminRole.ManageRecords;
 
+import Business.Business;
+import info5100.university.example.Department.Department;
+import info5100.university.example.Persona.Person;
+import info5100.university.example.Persona.PersonDirectory;
+import info5100.university.example.Persona.Faculty.FacultyDirectory;
+import info5100.university.example.Persona.Faculty.FacultyProfile;
+import info5100.university.example.Persona.StudentDirectory;
+import info5100.university.example.Persona.StudentProfile;
+
+import javax.swing.JPanel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
+
 /**
  *
  * @author gerrysu
  */
 public class ManageRecordsJPanel extends javax.swing.JPanel {
+    
+    JPanel CardSequencePanel;
+    Business business;
+    Department department;
 
     /**
      * Creates new form ManageRecordsJPanel
      */
-    public ManageRecordsJPanel() {
+    public ManageRecordsJPanel(Business b, JPanel clp) {
+        this.business = b;
+        this.CardSequencePanel = clp;
+        this.department = b.getDepartment();
+        
         initComponents();
+        
+        populateFacultyTable();
+    }
+    
+        public void populateFacultyTable() {
+        DefaultTableModel model = (DefaultTableModel) tblFaculty.getModel(); // 假设你的教职工表格叫 tblFaculty
+        model.setRowCount(0);
+
+        FacultyDirectory facultyDirectory = department.getFacultyDirectory();
+
+        if (facultyDirectory != null && facultyDirectory.getTeacherList() != null) {
+            for (FacultyProfile fp : facultyDirectory.getTeacherList()) {
+                Person person = fp.getPerson(); // FacultyProfile 应该有关联的 Person
+                if (person != null) {
+                    Object[] row = new Object[4];
+                    row[0] = fp; // 存储 FacultyProfile 对象
+                    row[1] = person.getName();
+                    row[2] = person.getEmail();
+                    row[3] = department.getName(); // 假设他们都在这个系
+                    model.addRow(row);
+                }
+            }
+        }
     }
 
+        public void populateStudentTable() {
+        DefaultTableModel model = (DefaultTableModel) tblStudents.getModel(); // 假设你的学生表格叫 tblStudents
+        model.setRowCount(0);
+
+        StudentDirectory studentDirectory = department.getStudentDirectory();
+
+        if (studentDirectory != null && studentDirectory.getStudentlist() != null) {
+            for (StudentProfile sp : studentDirectory.getStudentlist()) {
+                Person person = sp.getPerson(); // StudentProfile 应该有关联的 Person
+                if (person != null) {
+                    Object[] row = new Object[5];
+                    row[0] = sp; // 存储 StudentProfile 对象
+                    row[1] = person.getName();
+                    row[2] = person.getEmail();
+                    row[3] = sp.getTranscript().getAcademicStatus(); // 作业要求 [source: 36]
+                    row[4] = String.format("%.2f", sp.getTranscript().calculateOverallGPA()); // 格式化GPA
+                    model.addRow(row);
+                }
+            }
+        }
+    }    
+        
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
