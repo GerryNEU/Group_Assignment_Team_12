@@ -44,7 +44,7 @@ public class AssignFacultyJPanel extends javax.swing.JPanel {
         // A more robust app would have a semester selector.
         
         // This path is based on the available files (Department -> CourseSchedule)
-        CourseSchedule cs = department.getCourseSchedule("Fall2025"); // Assuming "Fall2025" is the current semester
+        CourseSchedule cs = department.getCourseSchedule("Fall 2025"); // Assuming "Fall2025" is the current semester
         
         if (cs == null) {
             JOptionPane.showMessageDialog(this, "No course schedule found for Fall2025. Cannot assign faculty.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -114,21 +114,21 @@ public class AssignFacultyJPanel extends javax.swing.JPanel {
                         .addGap(166, 166, 166)
                         .addComponent(lblTitle))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(170, 170, 170)
+                        .addComponent(btnConfirmAssignment))
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(31, 31, 31)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblFacultyName)
-                            .addComponent(lblFacultyLabel)
+                            .addComponent(btnBack)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblAssignTo)
-                                .addGap(142, 142, 142)
-                                .addComponent(cmbCourseOfferings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(btnBack))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(109, 109, 109)
-                        .addComponent(btnConfirmAssignment)))
-                .addContainerGap(103, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(lblFacultyLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(lblAssignTo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblFacultyName)
+                                    .addComponent(cmbCourseOfferings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -136,18 +136,18 @@ public class AssignFacultyJPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(lblTitle)
                 .addGap(18, 18, 18)
-                .addComponent(lblFacultyLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblFacultyName)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblFacultyLabel)
+                    .addComponent(lblFacultyName))
+                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblAssignTo)
                     .addComponent(cmbCourseOfferings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
+                .addGap(46, 46, 46)
                 .addComponent(btnConfirmAssignment)
-                .addGap(126, 126, 126)
+                .addGap(38, 38, 38)
                 .addComponent(btnBack)
-                .addContainerGap())
+                .addContainerGap(44, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

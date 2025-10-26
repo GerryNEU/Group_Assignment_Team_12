@@ -204,6 +204,11 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
         });
 
         btnAssignFaculty.setText("Assign to Course/Dept");
+        btnAssignFaculty.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAssignFacultyActionPerformed(evt);
+            }
+        });
 
         btnRefreshFacultyList.setText("Refresh Table");
         btnRefreshFacultyList.addActionListener(new java.awt.event.ActionListener() {
@@ -710,6 +715,29 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
         CardSequencePanel.add("ViewEditStudentJPanel", viewEditPanel);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);        
     }//GEN-LAST:event_btnViewEditStudentActionPerformed
+
+    private void btnAssignFacultyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAssignFacultyActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = tblFaculty.getSelectedRow();
+
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a faculty from the table to assign.", "No Faculty Selected", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String facultyId = (String) tblFaculty.getValueAt(selectedRow, 0);
+
+        FacultyProfile facultyProfile = department.getFacultyDirectory().findFacultyByPersonId(facultyId);
+
+        if (facultyProfile == null) {
+            JOptionPane.showMessageDialog(this, "Could not find the selected faculty. Please refresh.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        AssignFacultyJPanel assignPanel = new AssignFacultyJPanel(business, CardSequencePanel, facultyProfile);
+        CardSequencePanel.add("AssignFacultyJPanel", assignPanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);        
+    }//GEN-LAST:event_btnAssignFacultyActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
