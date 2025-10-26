@@ -58,6 +58,7 @@ public class Person {
         return name;
     }
 
+
     public String getContactInfo() {
         return contactInfo;
     }
@@ -76,3 +77,10 @@ public class Person {
     
     
 }
+
+    @Override
+    public String toString() {
+        return personId;
+    }
+}
+

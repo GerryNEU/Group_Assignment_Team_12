@@ -13,6 +13,9 @@ import UserInterface.WorkAreas.RegistrarRole.ManageCourseOfferingsJPanel;
 import UserInterface.WorkAreas.RegistrarRole.ManageRegistrarProfileJPanel;
 import javax.swing.JOptionPane;
 
+import UserInterface.WorkAreas.RegistrarRole.ManageCourseOfferingsJPanel;
+
+
 /**
  *
  * @author ouyangkairui
@@ -55,6 +58,13 @@ public class RegistrarWorkAreaJPanel extends javax.swing.JPanel {
                 btnManageCourseOfferingsActionPerformed(evt);
             }
         });
+
+        btnManageCourseOfferings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnManageCourseOfferingsActionPerformed(evt);
+            }
+        });
+
 
         btnManageStudentReg.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnManageStudentReg.setText("Student Registration");
