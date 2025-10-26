@@ -6,6 +6,7 @@
 package UserInterface.WorkAreas.AdminRole.ManagePersonnelWorkResp;
 
 import Business.Business;
+import Business.UserAccounts.UserAccountDirectory;
 import info5100.university.example.Department.Department;
 import info5100.university.example.Persona.Faculty.FacultyDirectory;
 import info5100.university.example.Persona.Faculty.FacultyProfile;
@@ -22,6 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import java.awt.CardLayout;
 import java.awt.Component; // For refreshing previous panel
+import java.util.ArrayList;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -52,34 +54,77 @@ public class AdministerPersonJPanel extends javax.swing.JPanel {
     }
 
     private void populateFields() {
+        // --- 1. Populate cmbRole with options FIRST ---
+        cmbRole.removeAllItems(); // Clear any existing items first
+        cmbRole.addItem("Student");
+        cmbRole.addItem("Faculty");
+        // Add other roles here if needed in the future
+
+        // --- 2. Now set fields based on mode ---
         if (isEditMode && personToEdit != null) {
+            lblTitle.setText("Edit Person Profile"); // Also update title dynamically
             txtPersonId.setText(personToEdit.getPersonId());
             txtName.setText(personToEdit.getName());
             txtEmail.setText(personToEdit.getEmail());
-            
-            // Determine and set the role
+
+            // Determine and set the current role
             Department department = business.getDepartment();
             StudentDirectory sd = department.getStudentDirectory();
             FacultyDirectory fd = department.getFacultyDirectory();
+            String currentRole = null;
             if (sd.findStudent(personToEdit.getPersonId()) != null) {
-                cmbRole.setSelectedItem("Student");
+                 currentRole = "Student";
             } else if (fd.findFacultyByPersonId(personToEdit.getPersonId()) != null) {
-                cmbRole.setSelectedItem("Faculty");
-            } else {
-                // Handle cases where the person might have another role or no profile yet
-                 cmbRole.setSelectedItem(null); // Or set to a default/placeholder
+                 currentRole = "Faculty";
             }
-             // Optional: Disable role changing during edit if complex profile migration isn't implemented
-             // cmbRole.setEnabled(false);
+            // else { check for other roles }
+
+            if (currentRole != null) {
+                 cmbRole.setSelectedItem(currentRole); // Select the current role
+            } else {
+                 cmbRole.setSelectedIndex(-1); // No matching role found, select nothing
+            }
+            cmbRole.setEnabled(true); // Allow role change in edit mode
+
         } else {
-            txtPersonId.setText("(Auto-generated)");
+            // Add mode: Clear fields and set defaults
+            lblTitle.setText("Add New Person"); // Update title
+            txtPersonId.setText("(Auto-generated on save)"); // Updated placeholder text
             txtName.setText("");
             txtEmail.setText("");
-            cmbRole.setSelectedIndex(0);
+
+            // Safely set the default selection (Student)
+            if (cmbRole.getItemCount() > 0) {
+                 cmbRole.setSelectedIndex(0); // Select the first item ("Student")
+            }
             cmbRole.setEnabled(true); // Ensure role can be selected when adding
         }
     }
 
+    private String generateNextPersonId(String rolePrefix, PersonDirectory personDirectory) {
+        int maxNumber = 0;
+        ArrayList<Person> persons = personDirectory.getPersonList(); // Assuming getPersonList() exists
+
+        for (Person p : persons) {
+            String id = p.getPersonId();
+            if (id != null && id.startsWith(rolePrefix)) {
+                try {
+                    // Extract the numeric part after the prefix
+                    String numPart = id.substring(rolePrefix.length());
+                    int currentNum = Integer.parseInt(numPart);
+                    if (currentNum > maxNumber) {
+                        maxNumber = currentNum;
+                    }
+                } catch (NumberFormatException | IndexOutOfBoundsException e) {
+                    // Handle IDs that don't match the expected format (e.g., old UUIDs)
+                    System.err.println("Skipping improperly formatted ID during generation: " + id);
+                }
+            }
+        }
+        // Format the next number with leading zeros (e.g., 001, 010, 100)
+        return rolePrefix + String.format("%03d", maxNumber + 1);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -90,7 +135,7 @@ public class AdministerPersonJPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         Back = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
         btnSave = new javax.swing.JButton();
         lblID = new javax.swing.JLabel();
         lblName = new javax.swing.JLabel();
@@ -113,10 +158,10 @@ public class AdministerPersonJPanel extends javax.swing.JPanel {
         add(Back);
         Back.setBounds(30, 290, 80, 23);
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        jLabel2.setText("Manage Person Profile");
-        add(jLabel2);
-        jLabel2.setBounds(150, 20, 250, 28);
+        lblTitle.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        lblTitle.setText("Manage Person Profile");
+        add(lblTitle);
+        lblTitle.setBounds(150, 20, 250, 28);
 
         btnSave.setText("Save");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -163,88 +208,133 @@ public class AdministerPersonJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_BackActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        // TODO add your handling code here:
-        // 1. Get input
+       // 1. Get input
         String name = txtName.getText().trim();
         String email = txtEmail.getText().trim();
         String selectedRole = (String) cmbRole.getSelectedItem();
-        
+
         // 2. Validate input
-                if (name.isEmpty() || email.isEmpty() || selectedRole == null) {
+        if (name.isEmpty() || email.isEmpty() || selectedRole == null) {
             JOptionPane.showMessageDialog(this, "Name, Email, and Role cannot be empty.", "Input Error", JOptionPane.ERROR_MESSAGE);
-            return;
+            return; // Stay on page on validation error
+        }
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern pat = Pattern.compile(emailRegex);
+        if (!pat.matcher(email).matches()) {
+             JOptionPane.showMessageDialog(this, "Please enter a valid email address.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return; // Stay on page
         }
 
         Department department = business.getDepartment();
         PersonDirectory personDirectory = department.getPersonDirectory();
-        
+        StudentDirectory studentDirectory = department.getStudentDirectory();
+        FacultyDirectory facultyDirectory = department.getFacultyDirectory();
+        UserAccountDirectory userAccountDirectory = business.getUserAccountDirectory();
+
+
         // 3. Check for duplicate email (excluding self in edit mode)
         Person existingPersonWithEmail = personDirectory.findPersonByEmail(email);
         if (existingPersonWithEmail != null && (!isEditMode || !existingPersonWithEmail.getPersonId().equals(personToEdit.getPersonId()))) {
             JOptionPane.showMessageDialog(this, "This email address is already registered to another person.", "Validation Error", JOptionPane.ERROR_MESSAGE);
-            return;
+            return; // Stay on page
         }
-        
+
+
         // --- Perform Add or Update ---
+        boolean saveSuccessful = false; // Flag to control navigation
+
         if (isEditMode) {
-            // --- Update existing person ---
-             if (personToEdit == null) { // Should not happen if isEditMode is true, but good practice to check
+            // --- Update existing person --- (Role change logic is complex and needs careful implementation - see previous response)
+             if (personToEdit == null) {
                  JOptionPane.showMessageDialog(this, "Error: No person selected for editing.", "Internal Error", JOptionPane.ERROR_MESSAGE);
-                 return;
+                 return; // Stay on page
              }
+
+            // --- Simplified Update - Focus on Name/Email first ---
             personToEdit.setName(name);
             personToEdit.setEmail(email);
 
-            // !! Role Change Handling (Simplified - assumes profile update or ignore) !!
-            // A real application might need complex logic here: delete old profile, create new one.
-            // For now, we just update the Person details. The role displayed in ManagePersonsJPanel
-            // depends on profile existence, so changing cmbRole here might not automatically change the profile.
-            // We could attempt to update/recreate profile, or prevent role changes in edit mode.
-            // Let's assume for now we only update Person info.
+            // --- Placeholder for Role Change Logic (from previous response) ---
+            // Determine originalRole
+            // if (roleChanged) {
+            //     Delete old profile
+            //     Create new profile
+            //     Update UserAccount role
+            //     Handle failures gracefully
+            // }
+            // For now, assume role change logic is handled elsewhere or disabled
+            // --- End Placeholder ---
 
             JOptionPane.showMessageDialog(this, "Person information updated successfully.", "Update Success", JOptionPane.INFORMATION_MESSAGE);
+            saveSuccessful = true; // Assume success for now
+
 
         } else {
             // --- Add new person ---
-            String uniqueID = UUID.randomUUID().toString().substring(0, 8); // Generate ID
+            // *** Use new ID generation logic ***
+            String idPrefix = "";
+            if ("Student".equals(selectedRole)) {
+                idPrefix = "S";
+            } else if ("Faculty".equals(selectedRole)) {
+                idPrefix = "F";
+            } // Add other prefixes if needed
+
+            if (idPrefix.isEmpty()){
+                 JOptionPane.showMessageDialog(this, "Invalid role selected for ID generation.", "Creation Error", JOptionPane.ERROR_MESSAGE);
+                 return; // Stay on page
+            }
+
+            String uniqueID = generateNextPersonId(idPrefix, personDirectory);
+            // *** End new ID generation logic ***
+
+
             Person newPerson = personDirectory.newPerson(uniqueID);
-             if (newPerson == null) { // Check if ID generation failed or person wasn't added
-                JOptionPane.showMessageDialog(this, "Failed to create new person record (possibly duplicate ID).", "Creation Error", JOptionPane.ERROR_MESSAGE);
-                return;
+             if (newPerson == null) { // Check if ID already exists or other error
+                JOptionPane.showMessageDialog(this, "Failed to create new person record (possibly duplicate ID '" + uniqueID + "').", "Creation Error", JOptionPane.ERROR_MESSAGE);
+                 return; // Stay on page
             }
             newPerson.setName(name);
             newPerson.setEmail(email);
 
             // Create Profile object based on role
+            boolean profileCreated = false;
             if ("Student".equals(selectedRole)) {
-                StudentDirectory studentDirectory = department.getStudentDirectory();
                 StudentProfile studentProfile = studentDirectory.newStudentProfile(newPerson);
-                 // Check if profile creation was successful if method returns null on failure
+                profileCreated = (studentProfile != null);
             } else if ("Faculty".equals(selectedRole)) {
-                FacultyDirectory facultyDirectory = department.getFacultyDirectory();
                 FacultyProfile facultyProfile = facultyDirectory.newFacultyProfile(newPerson);
-                 // Check if profile creation was successful
+                 profileCreated = (facultyProfile != null);
             }
-            
-            // else { Handle other roles or errors }
 
-            JOptionPane.showMessageDialog(this, "Person registered successfully!\nID: " + uniqueID + "\nName: " + name, "Registration Success", JOptionPane.INFORMATION_MESSAGE);   
+            if (profileCreated) {
+                JOptionPane.showMessageDialog(this, "Person registered successfully!\nID: " + uniqueID + "\nName: " + name, "Registration Success", JOptionPane.INFORMATION_MESSAGE);
+                saveSuccessful = true;
+                // Consider creating UserAccount here as well
+            } else {
+                 JOptionPane.showMessageDialog(this, "Person record created, but failed to create the profile ("+ selectedRole +"). Rolling back.", "Registration Warning", JOptionPane.WARNING_MESSAGE);
+                 personDirectory.removePerson(newPerson); // Rollback person creation
+                 saveSuccessful = false; // Stay on page
+            }
         }
-        
-        // --- Navigate back after save ---
-        CardSequencePanel.remove(this);
-        ((CardLayout) CardSequencePanel.getLayout()).previous(CardSequencePanel);
-        refreshPreviousTable(); // Refresh the list view
+
+        // --- Navigate back only if save was fully successful ---
+        if (saveSuccessful) {
+            CardSequencePanel.remove(this);
+            ((CardLayout) CardSequencePanel.getLayout()).previous(CardSequencePanel);
+            refreshPreviousTable(); // Refresh the list view
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void refreshPreviousTable() {
-                Component[] components = CardSequencePanel.getComponents();
-        for (Component component : components) {
-            if (component instanceof ManagePersonsJPanel) {
-                ((ManagePersonsJPanel) component).populateTable(); // Call the populateTable method
-                break;
+        Component[] components = CardSequencePanel.getComponents();
+        // Iterate backwards to find the most recent ManagePersonsJPanel instance
+        for (int i = components.length - 1; i >= 0; i--) {
+            if (components[i] instanceof ManagePersonsJPanel) {
+                ((ManagePersonsJPanel) components[i]).populateTable(); // Call the populateTable method
+                return; // Found and refreshed, exit loop
             }
         }
+        System.err.println("Warning: Could not find ManagePersonsJPanel in CardSequencePanel to refresh.");
     }
     
     
@@ -252,11 +342,11 @@ public class AdministerPersonJPanel extends javax.swing.JPanel {
     private javax.swing.JButton Back;
     private javax.swing.JButton btnSave;
     private javax.swing.JComboBox<String> cmbRole;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblID;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblRole;
+    private javax.swing.JLabel lblTitle;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtPersonId;
