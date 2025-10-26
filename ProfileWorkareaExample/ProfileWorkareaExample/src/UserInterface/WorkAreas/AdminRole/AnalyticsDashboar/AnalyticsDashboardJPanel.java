@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package UserInterface.WorkAreas.AdminRole.AnalyticsDashboar;
+package UserInterface.WorkAreas.AdminRole.AnalyticsDashboard;
 
 import Business.Business;
 import Business.UserAccounts.UserAccount;
@@ -27,6 +27,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// --- MODIFICATION: Added imports for listeners ---
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 /**
  *
  * @author gerrysu
@@ -36,11 +41,6 @@ public class AnalyticsDashboardJPanel extends javax.swing.JPanel {
     private JPanel CardSequencePanel;
     private Business business;
     private Department department;
-
-    private JTable tblUsersByRole;
-    private JTable tblCoursesPerSemester;
-    private JTable tblEnrollmentPerCourse;
-    private JTable tblTuitionRevenue;    
     
     /**
      * Creates new form AnalyticsDashboardJPanel
@@ -51,12 +51,32 @@ public class AnalyticsDashboardJPanel extends javax.swing.JPanel {
         this.department = b.getDepartment(); // Assuming Admin works within one department context        
         
         initComponents();
+        setupTableModelsAndViews();
+        
+        // --- MODIFICATION: Add listeners after initComponents() ---
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+        
+        tabbedPaneReports.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                tabbedPaneReportsStateChanged(evt);
+            }
+        });
+    }
+    
+    private void setupTableModelsAndViews() {
+        populateCoursesPerSemesterTable();
+        populateEnrollmentPerCourseTable();
+        populateTuitionRevenueTable();
         populateUsersByRoleTable();
     }
      
     private void populateCoursesPerSemesterTable() {
         // TODO: Implement logic to count courses per semester
-        DefaultTableModel model = (DefaultTableModel) tblCoursesPerSemester.getModel();
+        DefaultTableModel model = (DefaultTableModel) tableCoursesPerSemester.getModel();
         model.setRowCount(0);
         System.out.println("Populating Courses per Semester table..."); // Debug print
 
@@ -81,7 +101,7 @@ public class AnalyticsDashboardJPanel extends javax.swing.JPanel {
 
     private void populateEnrollmentPerCourseTable() {
         // TODO: Implement logic to count enrollment per course
-        DefaultTableModel model = (DefaultTableModel) tblEnrollmentPerCourse.getModel();
+        DefaultTableModel model = (DefaultTableModel) tableEnrollmentPerCourse.getModel();
         model.setRowCount(0);
         System.out.println("Populating Enrollment per Course table..."); // Debug print
 
@@ -115,7 +135,7 @@ public class AnalyticsDashboardJPanel extends javax.swing.JPanel {
 
     private void populateTuitionRevenueTable() {
         // TODO: Implement logic to calculate tuition revenue
-        DefaultTableModel model = (DefaultTableModel) tblTuitionRevenue.getModel();
+        DefaultTableModel model = (DefaultTableModel) tableTuitionRevenue.getModel();
         model.setRowCount(0);
         System.out.println("Populating Tuition Revenue table..."); // Debug print
 
@@ -165,7 +185,7 @@ public class AnalyticsDashboardJPanel extends javax.swing.JPanel {
     
     private void populateUsersByRoleTable() {
         // TODO: Implement logic to count users by role
-        DefaultTableModel model = (DefaultTableModel) tblUsersByRole.getModel();
+        DefaultTableModel model = (DefaultTableModel) tableUsersByRole.getModel();
         model.setRowCount(0); // Clear existing data
         System.out.println("Populating Users by Role table..."); // Debug print
 
@@ -220,6 +240,11 @@ public class AnalyticsDashboardJPanel extends javax.swing.JPanel {
         lblTitle.setText("University Analytics Dashboard");
 
         btnBack.setText("<< Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         tableUsersByRole.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -346,6 +371,32 @@ public class AnalyticsDashboardJPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        CardSequencePanel.remove(this);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).previous(CardSequencePanel);        
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void tabbedPaneReportsStateChanged(javax.swing.event.ChangeEvent evt) {                                               
+        // When the user changes tabs, populate the corresponding table
+        int selectedIndex = tabbedPaneReports.getSelectedIndex();
+        switch (selectedIndex) {
+            case 0: // Users by Role
+                populateUsersByRoleTable();
+                break;
+            case 1: // Courses per Semester
+                populateCoursesPerSemesterTable();
+                break;
+            case 2: // Enrollment per Course
+                populateEnrollmentPerCourseTable();
+                break;
+            case 3: // Tuition Revenue
+                populateTuitionRevenueTable();
+                break;
+            default:
+                break;
+        }
+    } 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
