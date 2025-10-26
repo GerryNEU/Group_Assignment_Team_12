@@ -90,5 +90,100 @@ public class Transcript {
         return temp2;
 
     }
+    
+    public double calculateOverallGPA() {
+        double totalQualityPoints = 0.0;
+        int totalCreditHours = 0;
+
+        // getCourseList() returns SeatAssignments from all semesters
+        ArrayList<SeatAssignment> allAssignments = getCourseList(); 
+
+        if (allAssignments == null) {
+            return 0.0;
+        }
+
+        for (SeatAssignment sa : allAssignments) {
+            // 1. Get grade point (e.g., 4.0, 3.7)
+            // We assume sa.getGrade() already stores the grade point
+            double gradePoint = sa.getGrade(); 
+
+            // 2. Get course credits
+            if (sa.getCourseOffer() != null && sa.getCourseOffer().getCourse() != null) {
+                int credits = sa.getCourseOffer().getCourse().getCredits();
+                
+                // 3. Calculate quality points
+                totalQualityPoints += (gradePoint * credits);
+                
+                // 4. Accumulate total credit hours
+                totalCreditHours += credits;
+            }
+        }
+
+        // 5. Avoid division by zero
+        if (totalCreditHours == 0) {
+            return 0.0;
+        }
+
+        // 6. Return Overall GPA
+        return totalQualityPoints / totalCreditHours;
+    }
+
+    /**
+     * Private helper method to calculate GPA for a single CourseLoad (semester).
+     * @param cl The CourseLoad to calculate
+     * @return The Term GPA for that semester
+     */
+    private double calculateTermGPA(CourseLoad cl) {
+        if (cl == null || cl.getSeatassignments() == null) {
+            return 0.0;
+        }
+        
+        double totalQualityPoints = 0.0;
+        int totalCreditHours = 0;
+        
+        for (SeatAssignment sa : cl.getSeatassignments()) { // Iterate only through courses for this term
+            if (sa.getCourseOffer() != null && sa.getCourseOffer().getCourse() != null) {
+                double gradePoint = sa.getGrade();
+                int credits = sa.getCourseOffer().getCourse().getCredits();
+                
+                totalQualityPoints += (gradePoint * credits);
+                totalCreditHours += credits;
+            }
+        }
+        
+        if (totalCreditHours == 0) {
+            return 0.0; // Avoid division by zero
+        }
+        
+        return totalQualityPoints / totalCreditHours;
+    }
+
+    /**
+     * Gets the student's academic standing.
+     * Rules from assignment PDF [source: 86-88]:
+     * - Academic Probation: Overall GPA < 3.0
+     * - Academic Warning: Term GPA < 3.0 (even if Overall >= 3.0)
+     * - Good Standing: Overall GPA >= 3.0 AND Term GPA >= 3.0
+     * @return "Good Standing", "Academic Warning", or "Academic Probation"
+     */
+    public String getAcademicStatus() {
+        double overallGPA = calculateOverallGPA();
+        
+        // 'currentcourseload' variable points to the last added semester
+        double termGPA = calculateTermGPA(currentcourseload); 
+
+        // Check for Academic Probation first
+        if (overallGPA < 3.0) {
+            return "Academic Probation";
+        }
+        
+        // Then check for Academic Warning
+        if (termGPA < 3.0) {
+            return "Academic Warning";
+        }
+        
+        // If both checks pass
+        return "Good Standing";
+    }
 
 }
