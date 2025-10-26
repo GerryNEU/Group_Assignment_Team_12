@@ -81,8 +81,33 @@ public class AnalyticsDashboardJPanel extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) tblEnrollmentPerCourse.getModel();
         model.setRowCount(0);
         System.out.println("Populating Enrollment per Course table..."); // Debug print
-        // Example Row
-        // model.addRow(new Object[]{"Fall 2025", "INFO5100", "App Eng", 15});
+
+         if (department == null || department.getCourseScheduleMap() == null) {
+             System.err.println("Department or CourseScheduleMap is null.");
+            return;
+        }
+
+        // Iterate through each semester's course schedule
+        for (Map.Entry<String, CourseSchedule> entry : department.getCourseScheduleMap().entrySet()) {
+            String semester = entry.getKey();
+            CourseSchedule schedule = entry.getValue();
+
+            if (schedule != null && schedule.getSchedule() != null) {
+                // Iterate through each course offered in that semester
+                for (CourseOffer co : schedule.getSchedule()) {
+                    if (co != null && co.getCourse() != null) {
+                        Course course = co.getCourse();
+                        String courseId = course.getCourseNumber();
+                        String courseName = course.getName();
+                        
+                        // Get the number of registered students (size of SeatAssignment list)
+                        int enrollmentCount = co.getSeatassignments() != null ? co.getSeatassignments().size() : 0; 
+                        
+                        model.addRow(new Object[]{semester, courseId, courseName, enrollmentCount});
+                    }
+                }
+            }
+        }
     }
 
     private void populateTuitionRevenueTable() {
