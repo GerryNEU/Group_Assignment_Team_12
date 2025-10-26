@@ -204,11 +204,17 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Search by Name"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSearchFacultyByNameActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnSearchFacultyByDept">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Search by Dept"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSearchFacultyByDeptActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnAssignFaculty">
               <Properties>

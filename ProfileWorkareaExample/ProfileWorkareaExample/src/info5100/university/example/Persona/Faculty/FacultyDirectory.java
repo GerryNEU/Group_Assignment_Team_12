@@ -81,6 +81,26 @@ public class FacultyDirectory {
         }
         return bestProfessor;
     }
+    
+    public ArrayList<FacultyProfile> searchFacultyByName(String name) {
+        ArrayList<FacultyProfile> foundFaculty = new ArrayList<>();
+        String searchNameLower = name.trim().toLowerCase();
+
+        if (searchNameLower.isEmpty()) {
+            return foundFaculty; // Return empty list if search term is empty
+        }
+
+        for (FacultyProfile fp : teacherList) {
+            Person person = fp.getPerson();
+            if (person != null && person.getName() != null) {
+                // Use .contains() for partial matches
+                if (person.getName().toLowerCase().contains(searchNameLower)) {
+                    foundFaculty.add(fp);
+                }
+            }
+        }
+        return foundFaculty; // Return the list of matches
+    }
 
     @Override
     public String toString() {

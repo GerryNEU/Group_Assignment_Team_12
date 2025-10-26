@@ -41,27 +41,32 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
         populateFacultyTable();
     }
     
-    public void populateFacultyTable() {
-        DefaultTableModel model = (DefaultTableModel) tblFaculty.getModel(); // Assuming your faculty table is named tblFaculty
+    public void populateFacultyTable(ArrayList<FacultyProfile> facultyList) {
+        DefaultTableModel model = (DefaultTableModel) tblFaculty.getModel();
         model.setRowCount(0);
 
-        FacultyDirectory facultyDirectory = department.getFacultyDirectory();
-
-        if (facultyDirectory != null && facultyDirectory.getTeacherList() != null) {
-            for (FacultyProfile fp : facultyDirectory.getTeacherList()) {
-                Person person = fp.getPerson(); // FacultyProfile should have an associated Person
-                if (person != null) {
-                    Object[] row = new Object[4];
-                    // --- MODIFIED HERE ---
-                    // Store the Person ID string for display, instead of the whole object
-                    row[0] = person.getPersonId(); 
-                    // --- END MODIFICATION ---
-                    row[1] = person.getName();
-                    row[2] = person.getEmail();
-                    row[3] = department.getName(); // Assuming they are all in this department
-                    model.addRow(row);
-                }
+        if (facultyList == null) {
+            return; // No faculty in the list
+        }
+        
+        for (FacultyProfile fp : facultyList) {
+            Person person = fp.getPerson();
+            if (person != null) {
+                Object[] row = new Object[4];
+                row[0] = person.getPersonId();
+                row[1] = person.getName();
+                row[2] = person.getEmail();
+                row[3] = department.getName(); 
+                model.addRow(row);
             }
+        }
+    }
+    
+    public void populateFacultyTable() {
+        // --- MODIFIED TO USE THE OVERLOADED METHOD ---
+        FacultyDirectory facultyDirectory = department.getFacultyDirectory();
+        if (facultyDirectory != null) {
+            populateFacultyTable(facultyDirectory.getTeacherList());
         }
     }
 
@@ -173,8 +178,18 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
         });
 
         btnSearchFacultyByName.setText("Search by Name");
+        btnSearchFacultyByName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchFacultyByNameActionPerformed(evt);
+            }
+        });
 
         btnSearchFacultyByDept.setText("Search by Dept");
+        btnSearchFacultyByDept.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchFacultyByDeptActionPerformed(evt);
+            }
+        });
 
         btnAssignFaculty.setText("Assign to Course/Dept");
 
@@ -361,6 +376,26 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
 
     private void btnSearchFacultyByIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchFacultyByIdActionPerformed
         // TODO add your handling code here:
+        String searchId = txtFacultySearch.getText().trim();
+        if (searchId.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a Faculty ID to search.", "Input Required", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Use the existing findFacultyByPersonId method
+        FacultyProfile foundFaculty = department.getFacultyDirectory().findFacultyByPersonId(searchId);
+
+        ArrayList<FacultyProfile> searchResults = new ArrayList<>();
+        if (foundFaculty != null) {
+            searchResults.add(foundFaculty); // Found, add to list
+        }
+
+        // Refresh the table using the new populate method
+        populateFacultyTable(searchResults);
+
+        if (searchResults.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No faculty found with ID: " + searchId, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_btnSearchFacultyByIdActionPerformed
 
     private void btnSearchStudentByIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchStudentByIdActionPerformed
@@ -449,6 +484,49 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "No students found for department: " + searchDept, "Search Result", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnSearchStudentByDeptActionPerformed
+
+    private void btnSearchFacultyByNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchFacultyByNameActionPerformed
+        // TODO add your handling code here:
+                String searchName = txtFacultySearch.getText().trim();
+        if (searchName.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a name to search.", "Input Required", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Call the new method we just added to FacultyDirectory.java
+        ArrayList<FacultyProfile> searchResults = department.getFacultyDirectory().searchFacultyByName(searchName);
+
+        // Use the overloaded populate method to refresh the table
+        populateFacultyTable(searchResults);
+
+        if (searchResults.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No faculty found with name matching: " + searchName, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btnSearchFacultyByNameActionPerformed
+
+    private void btnSearchFacultyByDeptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchFacultyByDeptActionPerformed
+        // TODO add your handling code here:
+                String searchDept = txtFacultySearch.getText().trim();
+        if (searchDept.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a department name to search.", "Input Required", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        ArrayList<FacultyProfile> searchResults = new ArrayList<>();
+
+        // Check if the search term matches the current department's name (case-insensitive)
+        if (department.getName().equalsIgnoreCase(searchDept)) {
+            // If it matches, return all faculty from this department
+            searchResults = department.getFacultyDirectory().getTeacherList();
+        }
+        // If it doesn't match, searchResults remains empty.
+
+        populateFacultyTable(searchResults);
+
+        if (searchResults.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No faculty found for department: " + searchDept, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btnSearchFacultyByDeptActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
