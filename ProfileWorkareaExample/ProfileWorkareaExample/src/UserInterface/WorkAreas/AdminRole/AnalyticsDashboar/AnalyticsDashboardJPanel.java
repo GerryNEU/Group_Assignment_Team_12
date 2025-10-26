@@ -82,13 +82,32 @@ public class AnalyticsDashboardJPanel extends javax.swing.JPanel {
         // TODO: Implement logic to count users by role
         DefaultTableModel model = (DefaultTableModel) tblUsersByRole.getModel();
         model.setRowCount(0); // Clear existing data
-         System.out.println("Populating Users by Role table..."); // Debug print
-        // Example Row (Replace with actual logic)
-        // model.addRow(new Object[]{"Student", 10});
-        // model.addRow(new Object[]{"Faculty", 5});
-        // model.addRow(new Object[]{"Admin", 1});
+        System.out.println("Populating Users by Role table..."); // Debug print
 
-    }
+        UserAccountDirectory uad = business.getUserAccountDirectory();
+        if (uad == null || uad.getUserAccountList() == null) {
+            System.err.println("UserAccountDirectory or UserAccountList is null.");
+            return;
+        }
+
+        // Use a Map to store counts for each role
+        Map<String, Integer> roleCounts = new HashMap<>();
+        roleCounts.put("Student", 0);
+        roleCounts.put("Faculty", 0);
+        roleCounts.put("Admin", 0);
+        roleCounts.put("Registrar", 0);
+        // Add other roles if they exist
+
+        // Iterate through all user accounts and count roles
+        for (UserAccount ua : uad.getUserAccountList()) {
+            String role = ua.getRole();
+            roleCounts.put(role, roleCounts.getOrDefault(role, 0) + 1);
+        }
+
+        // Add the counts to the table model
+        for (Map.Entry<String, Integer> entry : roleCounts.entrySet()) {
+             model.addRow(new Object[]{entry.getKey(), entry.getValue()});
+        }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -118,30 +137,46 @@ public class AnalyticsDashboardJPanel extends javax.swing.JPanel {
 
         tableUsersByRole.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Role", "Total Active Users"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         usersByRoleScrollPane.setViewportView(tableUsersByRole);
 
         tabbedPaneReports.addTab("Users by Role", usersByRoleScrollPane);
 
         tableCoursesPerSemester.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Semester", "Total Courses Offered"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         coursesPerSemesterScrollPane.setViewportView(tableCoursesPerSemester);
 
         tabbedPaneReports.addTab("Courses per Semester", coursesPerSemesterScrollPane);
@@ -154,24 +189,40 @@ public class AnalyticsDashboardJPanel extends javax.swing.JPanel {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Semester", "Course ID", "Course Name", "Total Enrolled Students"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, true, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         enrollmentPerCourseScrollPane.setViewportView(tableEnrollmentPerCourse);
 
         tabbedPaneReports.addTab("Enrollment per Course", enrollmentPerCourseScrollPane);
 
         tableTuitionRevenue.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Metric", "Value"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tuitionRevenueScrollPane.setViewportView(tableTuitionRevenue);
 
         tabbedPaneReports.addTab("Tuition Revenue Summary", tuitionRevenueScrollPane);
