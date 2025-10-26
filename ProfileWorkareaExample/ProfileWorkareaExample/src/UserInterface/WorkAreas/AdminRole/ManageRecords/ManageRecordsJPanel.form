@@ -60,6 +60,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="&lt;&lt; Back"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBackActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JTabbedPane" name="tabbedPane">
 
@@ -216,6 +219,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Refresh Table"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRefreshFacultyListActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -368,6 +374,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Refresh Table"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRefreshStudentListActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

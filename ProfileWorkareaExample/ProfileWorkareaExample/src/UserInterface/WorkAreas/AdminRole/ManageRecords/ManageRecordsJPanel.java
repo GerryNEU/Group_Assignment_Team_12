@@ -88,7 +88,14 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
                 model.addRow(row);
             }
         }
-    }  
+    }
+    
+    public void populateStudentTable() {
+        StudentDirectory studentDirectory = department.getStudentDirectory();
+        if (studentDirectory != null) {
+            populateStudentTable(studentDirectory.getStudentlist());
+        }
+    }
         
     /**
      * This method is called from within the constructor to initialize the form.
@@ -128,6 +135,11 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
         lblTitle.setText("Manage Student & Faculty Records");
 
         btnBack.setText("<< Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         tblFaculty.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -168,6 +180,11 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
         btnAssignFaculty.setText("Assign to Course/Dept");
 
         btnRefreshFacultyList.setText("Refresh Table");
+        btnRefreshFacultyList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshFacultyListActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout facultyPanelLayout = new javax.swing.GroupLayout(facultyPanel);
         facultyPanel.setLayout(facultyPanelLayout);
@@ -254,6 +271,11 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
         btnDeleteStudent.setText("Delete Record");
 
         btnRefreshStudentList.setText("Refresh Table");
+        btnRefreshStudentList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshStudentListActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout studentPanelLayout = new javax.swing.GroupLayout(studentPanel);
         studentPanel.setLayout(studentPanelLayout);
@@ -356,6 +378,25 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "No student found with ID: " + searchId, "Search Result", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnSearchStudentByIdActionPerformed
+
+    private void btnRefreshFacultyListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshFacultyListActionPerformed
+        // TODO add your handling code here:
+        txtFacultySearch.setText("");
+        populateFacultyTable(); // Reload all faculty
+    }//GEN-LAST:event_btnRefreshFacultyListActionPerformed
+
+    private void btnRefreshStudentListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshStudentListActionPerformed
+        // TODO add your handling code here:
+        txtStudentSearch.setText("");
+        populateStudentTable(); // Reload all students
+    }//GEN-LAST:event_btnRefreshStudentListActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        // Go back to the previous panel
+        CardSequencePanel.remove(this);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).previous(CardSequencePanel);
+    }//GEN-LAST:event_btnBackActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
