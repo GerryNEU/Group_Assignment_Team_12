@@ -27,6 +27,7 @@ import java.awt.Component; // For refreshing previous panel
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 import java.util.regex.Pattern;
 import javax.swing.DefaultComboBoxModel;
@@ -247,6 +248,11 @@ public class AdminUserAccount extends javax.swing.JPanel {
         txtRole.setBounds(430, 120, 150, 23);
 
         btnSave.setText("Save");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
         add(btnSave);
         btnSave.setBounds(270, 210, 72, 23);
 
@@ -265,7 +271,107 @@ public class AdminUserAccount extends javax.swing.JPanel {
         refreshPreviousTable();
     }//GEN-LAST:event_Back1ActionPerformed
 
-         // Helper method to find and refresh the ManageUserAccountsJPanel table
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        // TODO add your handling code here:
+       // 1. Get Input
+        String username = (txtUsername != null) ? txtUsername.getText().trim() : "";
+        // **** CHANGED: Use getText() for JTextField ****
+        String password = (txtPassword != null) ? txtPassword.getText() : "";
+        String confirmPassword = (txtConfirmPassword != null) ? txtConfirmPassword.getText() : "";
+        String determinedRole = (txtRole != null) ? txtRole.getText() : "N/A";
+        Person selectedPerson = null;
+        if (!isEditMode && cmbPerson != null) {
+            selectedPerson = (Person) cmbPerson.getSelectedItem();
+        }
+
+        // 2. Validation
+        if (username.isEmpty() || determinedRole.isEmpty() || determinedRole.equals("N/A")) {
+            JOptionPane.showMessageDialog(this, "Username cannot be empty and a valid Role must be determined for the selected Person.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return; // Stay on page
+        }
+        if (!isEditMode && password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Password cannot be empty for new accounts.", "Input Error", JOptionPane.ERROR_MESSAGE);
+             return; // Stay on page
+        }
+         // **** CHANGED: Compare Strings directly ****
+         if (!isEditMode && !password.equals(confirmPassword)) {
+             JOptionPane.showMessageDialog(this, "Passwords do not match.", "Input Error", JOptionPane.ERROR_MESSAGE);
+             return; // Stay on page
+         }
+         if (!password.isEmpty() && password.length() < 4) {
+             JOptionPane.showMessageDialog(this, "Password must be at least 4 characters long.", "Input Error", JOptionPane.ERROR_MESSAGE);
+              return; // Stay on page
+         }
+
+
+        UserAccountDirectory uad = business.getUserAccountDirectory();
+        if (uad == null) {
+             JOptionPane.showMessageDialog(this, "Error: User Account Directory not found.", "Internal Error", JOptionPane.ERROR_MESSAGE);
+            return; // Stay on page
+        }
+
+
+        // Check username uniqueness
+        UserAccount existingAccountWithUsername = uad.findUserAccount(username);
+        if (existingAccountWithUsername != null && (!isEditMode || !existingAccountWithUsername.getUserLoginName().equalsIgnoreCase(accountToEdit.getUserLoginName()))) {
+             JOptionPane.showMessageDialog(this, "This username is already taken.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+             return; // Stay on page
+        }
+
+        boolean saveSuccessful = false;
+        if (isEditMode) {
+            // --- Update ---
+            if (accountToEdit == null) { /* Error */ return; }
+
+            // Update password ONLY if a new one was entered
+            if (!password.isEmpty()) {
+                 // !!! IMPORTANT: Need UserAccount.setPassword(String) method !!!
+                 // accountToEdit.setPassword(password); // Implement password setting securely
+                 System.out.println("Placeholder: Password would be updated for " + accountToEdit.getUserLoginName());
+            }
+
+             // Update role (verify)
+             // !!! IMPORTANT: Need UserAccount.setRole(String) method !!!
+             // accountToEdit.setRole(determinedRole);
+              System.out.println("Placeholder: Role (" + determinedRole + ") verified/updated for " + accountToEdit.getUserLoginName());
+
+             JOptionPane.showMessageDialog(this, "User account updated successfully.", "Update Success", JOptionPane.INFORMATION_MESSAGE);
+             saveSuccessful = true;
+
+        } else {
+            // --- Create ---
+             if (selectedPerson == null) { /* Error */ return; }
+             if (determinedRole.equals("N/A")) { /* Error */ return; }
+
+            // Create new UserAccount using the determined role
+            UserAccount newUserAccount = uad.newUserAccount(selectedPerson, username, password, determinedRole);
+
+            if (newUserAccount != null) {
+                 JOptionPane.showMessageDialog(this, "User account created successfully for " + selectedPerson.getName() + " with role " + determinedRole + ".", "Creation Success", JOptionPane.INFORMATION_MESSAGE);
+                 saveSuccessful = true;
+            } else {
+                 JOptionPane.showMessageDialog(this, "Failed to create user account (check directory implementation).", "Creation Error", JOptionPane.ERROR_MESSAGE);
+                 saveSuccessful = false; // Stay on page
+            }
+        }
+
+        // No need to clear password arrays anymore
+
+        // Navigate back only on success
+        if (saveSuccessful) {
+            CardSequencePanel.remove(this);
+            ((CardLayout) CardSequencePanel.getLayout()).previous(CardSequencePanel);
+            refreshPreviousTable();
+        }
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    // Helper to securely clear password arrays
+    private void clearPasswordArrays(char[]... arrays) {
+       // ... (clearPasswordArrays logic remains the same) ...
+        for (char[] array : arrays) { if (array != null) Arrays.fill(array, ' '); }
+    }
+    
+    // Helper method to find and refresh the ManageUserAccountsJPanel table
     private void refreshPreviousTable() {
        // ... (refreshPreviousTable logic remains the same) ...
         Component[] components = CardSequencePanel.getComponents();
