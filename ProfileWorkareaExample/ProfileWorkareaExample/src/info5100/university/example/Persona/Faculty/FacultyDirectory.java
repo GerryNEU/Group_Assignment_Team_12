@@ -101,6 +101,23 @@ public class FacultyDirectory {
         }
         return foundFaculty; // Return the list of matches
     }
+    
+    public boolean removeFacultyById(String id) {
+        FacultyProfile facultyToRemove = null;
+        for (FacultyProfile fp : teacherList) {
+            if (fp.getPerson().getPersonId().equals(id)) {
+                facultyToRemove = fp;
+                break; // Found the faculty
+            }
+        }
+
+        if (facultyToRemove != null) {
+            teacherList.remove(facultyToRemove);
+            return true; // Successfully removed
+        } else {
+            return false; // Faculty not found
+        }
+    }    
 
     @Override
     public String toString() {
