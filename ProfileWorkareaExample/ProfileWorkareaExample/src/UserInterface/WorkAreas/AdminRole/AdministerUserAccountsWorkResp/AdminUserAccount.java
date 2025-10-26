@@ -52,6 +52,7 @@ public class AdminUserAccount extends javax.swing.JPanel {
         this.isEditMode = (ua != null);
         
         initComponents();
+        addPersonSelectionListener(); // Add listener to determine role automatically
         populateFields(); // Populate fields based on mode
 
     }
@@ -156,6 +157,19 @@ public class AdminUserAccount extends javax.swing.JPanel {
         if(txtRole != null) txtRole.setText(determinedRole);
     }
     
+        // Add ActionListener to cmbPerson to auto-set the role field
+    private void addPersonSelectionListener() {
+         if (cmbPerson != null) {
+            cmbPerson.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Person selectedPerson = (Person) cmbPerson.getSelectedItem();
+                    determineAndSetRole(selectedPerson);
+                }
+            });
+        }
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -246,8 +260,6 @@ public class AdminUserAccount extends javax.swing.JPanel {
         // Navigate back to the ManagePersonsJPanel
         CardSequencePanel.remove(this);
         ((CardLayout) CardSequencePanel.getLayout()).previous(CardSequencePanel);
-
-
     }//GEN-LAST:event_Back1ActionPerformed
 
 
