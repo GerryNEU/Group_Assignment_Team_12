@@ -7,6 +7,7 @@ package UserInterface.WorkAreas.AdminRole.AnalyticsDashboar;
 import Business.Business;
 import Business.UserAccounts.UserAccount;
 import Business.UserAccounts.UserAccountDirectory;
+import info5100.university.example.CourseCatalog.Course;
 import info5100.university.example.CourseSchedule.CourseLoad;
 import info5100.university.example.CourseSchedule.CourseOffer;
 import info5100.university.example.CourseSchedule.CourseSchedule;
@@ -14,6 +15,8 @@ import info5100.university.example.CourseSchedule.SeatAssignment;
 import info5100.university.example.Department.Department;
 import info5100.university.example.Persona.StudentDirectory;
 import info5100.university.example.Persona.StudentProfile;
+import info5100.university.example.Persona.Transcript;
+import java.text.NumberFormat;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -57,13 +60,13 @@ public class AnalyticsDashboardJPanel extends javax.swing.JPanel {
         model.setRowCount(0);
         System.out.println("Populating Courses per Semester table..."); // Debug print
 
-        if (department == null || department.getCourseScheduleMap() == null) {
+        if (department == null || department.getMastercoursecatalog() == null) {
              System.err.println("Department or CourseScheduleMap is null.");
             return;
         }
 
         // Iterate through the map of course schedules (Key: Semester Name, Value: CourseSchedule object)
-        for (Map.Entry<String, CourseSchedule> entry : department.getCourseScheduleMap().entrySet()) {
+        for (Map.Entry<String, CourseSchedule> entry : department.getMastercoursecatalog().entrySet()) {
             String semester = entry.getKey();
             CourseSchedule schedule = entry.getValue();
             
@@ -82,13 +85,13 @@ public class AnalyticsDashboardJPanel extends javax.swing.JPanel {
         model.setRowCount(0);
         System.out.println("Populating Enrollment per Course table..."); // Debug print
 
-         if (department == null || department.getCourseScheduleMap() == null) {
+         if (department == null || department.getMastercoursecatalog() == null) {
              System.err.println("Department or CourseScheduleMap is null.");
             return;
         }
 
         // Iterate through each semester's course schedule
-        for (Map.Entry<String, CourseSchedule> entry : department.getCourseScheduleMap().entrySet()) {
+        for (Map.Entry<String, CourseSchedule> entry : department.getMastercoursecatalog().entrySet()) {
             String semester = entry.getKey();
             CourseSchedule schedule = entry.getValue();
 
@@ -101,7 +104,7 @@ public class AnalyticsDashboardJPanel extends javax.swing.JPanel {
                         String courseName = course.getName();
                         
                         // Get the number of registered students (size of SeatAssignment list)
-                        int enrollmentCount = co.getSeatassignments() != null ? co.getSeatassignments().size() : 0; 
+                        int enrollmentCount = co.getSeatAssignments() != null ? co.getSeatAssignments().size() : 0; 
                         
                         model.addRow(new Object[]{semester, courseId, courseName, enrollmentCount});
                     }
@@ -114,11 +117,52 @@ public class AnalyticsDashboardJPanel extends javax.swing.JPanel {
         // TODO: Implement logic to calculate tuition revenue
         DefaultTableModel model = (DefaultTableModel) tblTuitionRevenue.getModel();
         model.setRowCount(0);
-         System.out.println("Populating Tuition Revenue table..."); // Debug print
-        // Example Row
-        // model.addRow(new Object[]{"Total Tuition Revenue", "$50000"});
+        System.out.println("Populating Tuition Revenue table..."); // Debug print
 
+        // Get the Student Directory from the department
+        StudentDirectory studentDirectory = department.getStudentDirectory();
+        if (studentDirectory == null || studentDirectory.getStudentlist() == null) {
+             System.err.println("StudentDirectory or Student List is null.");
+             model.addRow(new Object[]{"Total Tuition Revenue", "Error calculating"}); // Provide feedback in the table
+            return;
+        }
+
+        double totalRevenue = 0;
+
+        // Iterate through all students in the directory
+        for (StudentProfile sp : studentDirectory.getStudentlist()) {
+            if (sp != null) {
+                // Get the student's transcript
+                Transcript transcript = sp.getTranscript();
+                if (transcript != null) {
+                     // Get all seat assignments (course registrations) for the student across all semesters
+                     // Assuming transcript.getCourseList() returns ArrayList<SeatAssignment>
+                     ArrayList<SeatAssignment> allAssignments = transcript.getCourseList();
+                     if (allAssignments != null) {
+                         // Iterate through each course registration
+                         for (SeatAssignment sa : allAssignments) {
+                             // Check for nulls to prevent errors
+                             if (sa != null && sa.getCourseOffer() != null && sa.getCourseOffer().getCourse() != null) {
+                                 Course course = sa.getCourseOffer().getCourse();
+                                 // Add the price of the course to the total revenue
+                                 // Assuming Course has getCoursePrice() which returns the total price for the course
+                                 totalRevenue += course.getCoursePrice();
+                             }
+                         }
+                     }
+                }
+            }
+        }
+
+        // Format the total revenue as currency using the default locale (e.g., $)
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
+        String formattedRevenue = currencyFormatter.format(totalRevenue);
+
+        // Add the final calculated revenue to the table
+        model.addRow(new Object[]{"Total Tuition Revenue", formattedRevenue});
     }
+    
+    
     private void populateUsersByRoleTable() {
         // TODO: Implement logic to count users by role
         DefaultTableModel model = (DefaultTableModel) tblUsersByRole.getModel();
@@ -149,6 +193,7 @@ public class AnalyticsDashboardJPanel extends javax.swing.JPanel {
         for (Map.Entry<String, Integer> entry : roleCounts.entrySet()) {
              model.addRow(new Object[]{entry.getKey(), entry.getValue()});
         }
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
