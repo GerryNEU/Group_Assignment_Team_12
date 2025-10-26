@@ -46,4 +46,25 @@ public class StudentDirectory {
         return studentlist;
     }
     
+    public ArrayList<StudentProfile> searchStudentByName(String name) {
+        ArrayList<StudentProfile> foundStudents = new ArrayList<>();
+        String searchNameLower = name.trim().toLowerCase();
+
+        if (searchNameLower.isEmpty()) {
+            return foundStudents; // Return empty list if search term is empty
+        }
+
+        for (StudentProfile sp : studentlist) {
+            Person person = sp.getPerson();
+            if (person != null && person.getName() != null) {
+                // Use .contains() for partial matches
+                if (person.getName().toLowerCase().contains(searchNameLower)) {
+                    foundStudents.add(sp);
+                }
+            }
+        }
+        return foundStudents; // Return the list of matches
+        
+    }
+    
 }

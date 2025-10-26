@@ -242,6 +242,11 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
         });
 
         btnSearchStudentByName.setText("Search by Name");
+        btnSearchStudentByName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchStudentByNameActionPerformed(evt);
+            }
+        });
 
         btnSearchStudentByDept.setText("Search by Dept");
 
@@ -397,6 +402,25 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
         CardSequencePanel.remove(this);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).previous(CardSequencePanel);
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnSearchStudentByNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchStudentByNameActionPerformed
+        // TODO add your handling code here:
+        String searchName = txtStudentSearch.getText().trim();
+        if (searchName.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a name to search.", "Input Required", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // Call the new method we just added to StudentDirectory.java
+        ArrayList<StudentProfile> searchResults = department.getStudentDirectory().searchStudentByName(searchName);
+        
+        // Use the overloaded populate method to refresh the table
+        populateStudentTable(searchResults); 
+        
+        if (searchResults.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No student found with name matching: " + searchName, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btnSearchStudentByNameActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
