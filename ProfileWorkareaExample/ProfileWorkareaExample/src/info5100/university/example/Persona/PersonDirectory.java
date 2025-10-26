@@ -52,17 +52,20 @@ public class PersonDirectory {
 
     // Method to remove a person by ID
     public boolean removePersonById(String id) {
-         if (id == null || id.isEmpty()) return false;
-         // Use Iterator to safely remove while iterating
-         Iterator<Person> iterator = personlist.iterator();
-         while (iterator.hasNext()) {
-             Person p = iterator.next();
-             if (p.isMatch(id)) {
-                 iterator.remove();
-                 return true; // Found and removed
-             }
-         }
-         return false; // Not found
+        Person personToRemove = null;
+        for (Person p : personlist) {
+            if (p.getPersonId().equals(id)) {
+                personToRemove = p;
+                break; // Found the person
+            }
+        }
+
+        if (personToRemove != null) {
+            personlist.remove(personToRemove);
+            return true; // Successfully removed
+        } else {
+            return false; // Person not found
+        }
     }
     
     public Person findPersonByEmail(String email) {

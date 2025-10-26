@@ -12,7 +12,12 @@ package UserInterface.WorkAreas.AdminRole;
 
 import Business.Business;
 import UserInterface.WorkAreas.AdminRole.AdministerUserAccountsWorkResp.ManageUserAccountsJPanel;
+import UserInterface.WorkAreas.AdminRole.AnalyticsDashboard.AnalyticsDashboardJPanel;
+import UserInterface.WorkAreas.AdminRole.AnalyticsDashboard.AnalyticsDashboardJPanel;
 import UserInterface.WorkAreas.AdminRole.ManagePersonnelWorkResp.ManagePersonsJPanel;
+import UserInterface.WorkAreas.AdminRole.ManageRecords.ManageRecordsJPanel;
+import UserInterface.WorkAreas.AdminRole.MyProfile.AdminManageProfileJPanel;
+import info5100.university.example.Persona.Person;
 
 import javax.swing.JPanel;
 
@@ -24,15 +29,18 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
 
     javax.swing.JPanel CardSequencePanel;
     Business business;
+    Person loggedInPerson;
 
     /**
      * Creates new form UnitRiskWorkArea
      */
 
-    public AdminRoleWorkAreaJPanel(Business b, JPanel clp) {
+    public AdminRoleWorkAreaJPanel(Business b, JPanel clp, Person p) {
 
         business = b;
         this.CardSequencePanel = clp;
+        this.loggedInPerson = p;
+        
         initComponents();
 
     }
@@ -71,7 +79,7 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
         jButton9.setBackground(new java.awt.Color(102, 153, 255));
         jButton9.setFont(getFont());
         jButton9.setForeground(new java.awt.Color(255, 255, 255));
-        jButton9.setText("Manage Faculty");
+        jButton9.setText("Manage Faculty&Student");
         jButton9.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton9.setMaximumSize(new java.awt.Dimension(200, 40));
         jButton9.setMinimumSize(new java.awt.Dimension(20, 20));
@@ -113,7 +121,7 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
         jButton8.setBackground(new java.awt.Color(102, 153, 255));
         jButton8.setFont(getFont());
         jButton8.setForeground(new java.awt.Color(255, 255, 255));
-        jButton8.setText("Manage Students");
+        jButton8.setText("Analytics Dashboard");
         jButton8.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jButton8.setMaximumSize(new java.awt.Dimension(200, 40));
         jButton8.setMinimumSize(new java.awt.Dimension(20, 20));
@@ -181,13 +189,26 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
-
+        AnalyticsDashboardJPanel analyticsPanel = new AnalyticsDashboardJPanel(business, CardSequencePanel);
+        CardSequencePanel.add("AnalyticsDashboard", analyticsPanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton6IdentifyEventsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6IdentifyEventsActionPerformed
+        if (loggedInPerson != null) {
+            AdminManageProfileJPanel adminProfilePanel = new AdminManageProfileJPanel(CardSequencePanel, loggedInPerson);
+            CardSequencePanel.add("AdminProfilePanel", adminProfilePanel);
+            ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+        } else {
+            // This should ideally not happen if login logic is correct
+            javax.swing.JOptionPane.showMessageDialog(this, "Error: Logged in user information not found.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jButton6IdentifyEventsActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        ManageRecordsJPanel manageRecordsPanel = new ManageRecordsJPanel(business, CardSequencePanel);
+        CardSequencePanel.add("ManageRecordsPanel", manageRecordsPanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_jButton9ActionPerformed
 
 

@@ -7,6 +7,7 @@ package info5100.university.example.Persona;
 
 import info5100.university.example.CourseSchedule.CourseLoad;
 import info5100.university.example.CourseSchedule.SeatAssignment;
+import info5100.university.example.Department.Department;
 import info5100.university.example.Persona.EmploymentHistory.EmploymentHistroy;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,8 @@ public class StudentProfile {
     private List<String> paymentHistory = new ArrayList<>(); 
     
     
+    private Department department;
+
     public StudentProfile(Person person) {
 
         this.person = person;
@@ -129,4 +132,13 @@ public class StudentProfile {
           }
      }  
    
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+    
 }

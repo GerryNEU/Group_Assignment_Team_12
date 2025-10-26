@@ -124,4 +124,17 @@ public class Department {
             }
             return mastercoursecatalog.keySet();
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public HashMap<String, CourseSchedule> getMastercoursecatalog() {
+        return mastercoursecatalog;
+    }
+     
 }

@@ -153,7 +153,7 @@ public class ProfileWorkAreaMainFrame extends javax.swing.JFrame {
 
 
         if (r.equals("Admin")) {
-            adminworkarea = new AdminRoleWorkAreaJPanel(business, CardSequencePanel);
+            adminworkarea = new AdminRoleWorkAreaJPanel(business, CardSequencePanel, person);
             CardSequencePanel.add("Admin", adminworkarea);
         }
         
