@@ -24,6 +24,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import java.awt.CardLayout;
 import java.awt.Component; // For refreshing previous panel
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -157,7 +159,7 @@ public class AdminUserAccount extends javax.swing.JPanel {
         if(txtRole != null) txtRole.setText(determinedRole);
     }
     
-        // Add ActionListener to cmbPerson to auto-set the role field
+    // Add ActionListener to cmbPerson to auto-set the role field
     private void addPersonSelectionListener() {
          if (cmbPerson != null) {
             cmbPerson.addActionListener(new ActionListener() {
@@ -260,8 +262,21 @@ public class AdminUserAccount extends javax.swing.JPanel {
         // Navigate back to the ManagePersonsJPanel
         CardSequencePanel.remove(this);
         ((CardLayout) CardSequencePanel.getLayout()).previous(CardSequencePanel);
+        refreshPreviousTable();
     }//GEN-LAST:event_Back1ActionPerformed
 
+         // Helper method to find and refresh the ManageUserAccountsJPanel table
+    private void refreshPreviousTable() {
+       // ... (refreshPreviousTable logic remains the same) ...
+        Component[] components = CardSequencePanel.getComponents();
+        for (int i = components.length - 1; i >= 0; i--) {
+            if (components[i] instanceof ManageUserAccountsJPanel) {
+                ((ManageUserAccountsJPanel) components[i]).refreshTable();
+                return;
+            }
+        }
+        System.err.println("Warning: Could not find ManageUserAccountsJPanel in CardSequencePanel to refresh.");
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Back1;
