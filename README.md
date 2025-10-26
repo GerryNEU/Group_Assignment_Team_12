@@ -1,190 +1,238 @@
-# Group_Assignment_Team_12
-This repository is for group assignment of Team 12
-
-# Profile Workarea Example - Digital University
+# Group Assignment 1: Profile Workarea Example - Digital University
 
 ## 1. Project Title
-Profile Workarea Example - A Digital University Management System
+[cite_start]Profile Workarea Example - Implementing Access-Controlled Use Cases in a Digital University System [cite: 731]
 
 ## 2. Team Information
-* **Team:** Team 12
-* **Members & Roles:**
-    * [Member Name 1] - Role: [Role 1], Responsibilities: [Specific tasks], NUID: [NUID 1]
-    * [Member Name 2] - Role: [Role 2], Responsibilities: [Specific tasks], NUID: [NUID 2]
-    * [Member Name 3] - Role: [Role 3], Responsibilities: [Specific tasks], NUID: [NUID 3]
-    * [Member Name 4] - Role: [Role 4], Responsibilities: [Specific tasks], NUID: [NUID 4]
-    *(Please fill in the actual names, roles, responsibilities, and NUIDs)*
+* [cite_start]**Team:** Team 12 [cite: 733]
+* [cite_start]**Members & Roles:** [cite: 734]
+    * [cite_start][Member Name 1] - Role: [Role 1 assigned from PDF: Admin/Faculty/Student/Registrar], Responsibilities: [Specific features implemented, e.g., User Account Management, Course Management], NUID: [NUID 1] [cite: 735]
+    * [cite_start][Member Name 2] - Role: [Role 2 assigned from PDF], Responsibilities: [Specific features implemented], NUID: [NUID 2] [cite: 735]
+    * [cite_start][Member Name 3] - Role: [Role 3 assigned from PDF], Responsibilities: [Specific features implemented], NUID: [NUID 3] [cite: 735]
+    * [cite_start][Member Name 4 (if applicable)] - Role: [Role 4 assigned from PDF], Responsibilities: [Specific features implemented], NUID: [NUID 4] [cite: 735, 580]
+    *(请填写实际的姓名、角色、职责和 NUID)*
 
 ---
 
 ## 3. Project Overview
-This project simulates a **Digital University Management System** using Java Swing. It provides distinct work areas (portals) for different user roles within a university: **Admin**, **Faculty**, and **Student**, plus a **Registrar** role. The system allows users to manage profiles, courses, registration, academics, and administrative tasks based on their roles.
+[cite_start]**Purpose & Objectives:** [cite: 737]
+This project integrates a reference implementation of a Digital University System with an Access Control Layer. The primary objective is to enable proper user authentication and implement role-based access control for different university stakeholders (Admin, Faculty, Student, Registrar). [cite_start]Each role has a dedicated use case with specific functionalities reflecting their responsibilities within the university system[cite: 575, 576].
 
-**Key Features:**
-* Role-based access control.
-* User account management (Admin).
-* Personnel (Person) registration (Admin).
-* Faculty and Student record management (Admin).
-* Course offering management (Registrar, Faculty view).
-* Student course registration and viewing transcripts.
-* Faculty management of assigned courses and student grades.
-* Profile management for all roles.
-* Analytics dashboard for administrative overview.
-* Graduation audit for students.
-* Financial/Tuition management features for students and faculty insights.
+[cite_start]**Key Features Implemented:** [cite: 738]
+* [cite_start]**Role-Based Access Control:** Secure login and distinct interfaces/permissions for Admin, Faculty, Student, and Registrar roles[cite: 575].
+* [cite_start]**User & Personnel Management (Admin):** Creation, modification, and deletion of user accounts and person records (students, faculty, staff) with validation checks[cite: 595, 597, 601, 603].
+* [cite_start]**Academic Records Management (Admin):** Viewing, editing, deleting, and searching student/faculty records; assigning faculty to courses/departments[cite: 603, 608, 609, 610].
+* [cite_start]**Course Management (Faculty):** Viewing assigned courses, updating details, managing syllabi, and controlling enrollment status[cite: 628, 629, 630].
+* [cite_start]**Student Management (Faculty):** Grading assignments, viewing enrolled students, accessing transcripts, ranking students, and calculating class GPA[cite: 632, 633, 634, 635].
+* [cite_start]**Course Registration & Academics (Student):** Searching/registering for courses within credit limits, dropping courses, viewing transcripts with GPA/standing, tracking graduation progress, and managing tuition payments[cite: 647, 648, 650, 651, 654, 682].
+* [cite_start]**Course Offering Management (Registrar):** Creating and managing course offerings per semester, including assigning faculty and setting capacity[cite: 692, 693, 694].
+* [cite_start]**Profile Management:** All roles can view and update their personal profile information[cite: 612, 631, 681, 699].
+* [cite_start]**Analytics & Reporting:** Admins view a dashboard with user/course/enrollment/revenue summaries[cite: 613]. [cite_start]Faculty generate course performance reports[cite: 636]. [cite_start]Registrar generates institutional reports[cite: 705].
 
 ---
 
 ## 4. Installation & Setup Instructions
-**Prerequisites:**
-* **Java Development Kit (JDK):** Version 17 or higher.
-* **IDE:** NetBeans IDE (recommended, as the project uses NetBeans project structure and GUI builder). Version 16 or compatible.
+
+[cite_start]**Prerequisites:** [cite: 741]
+* **Java Development Kit (JDK):** Version 17 or higher (as specified in `project.properties`).
+* **IDE:** Apache NetBeans IDE (Version 16 or compatible recommended, project uses NetBeans GUI builder and project structure).
 * **Libraries:** Apache NetBeans AbsoluteLayout library (included in the `lib` folder).
 
-**Setup Instructions:**
-1.  **Clone Repository:** Clone the `Group_Assignment_Team_12` repository to your local machine.
+[cite_start]**Setup Instructions:** [cite: 742]
+1.  **Clone Repository:** Clone the `Group_Assignment_Team_12` repository to your local machine using Git.
     ```bash
     git clone [repository URL]
     ```
+    *(Replace `[repository URL]` with the actual URL)*
 2.  **Open in NetBeans:**
     * Launch NetBeans IDE.
     * Go to `File` > `Open Project`.
-    * Navigate to the cloned repository folder and select the `ProfileWorkareaExample` project folder.
+    * Navigate to the directory where you cloned the repository.
+    * Select the `ProfileWorkareaExample` folder within the repository.
     * Click `Open Project`.
 3.  **Build Project:**
-    * Right-click on the `ProfileWorkareaExample` project in the Projects window.
-    * Select `Clean and Build`.
+    * In the NetBeans `Projects` window, right-click on the `ProfileWorkareaExample` project.
+    * Select `Clean and Build`. Wait for the build process to complete successfully.
 4.  **Run Project:**
-    * Right-click on the `ProfileWorkareaExample` project.
-    * Select `Run`. This will launch the application's main login frame.
+    * Right-click on the `ProfileWorkareaExample` project again.
+    * Select `Run`. This will compile and launch the application, displaying the main login window (`ProfileWorkAreaMainFrame`).
 
 ---
 
 ## 5. Authentication & Access Control
-* **Authentication:** Users log in via the main application window (`ProfileWorkAreaMainFrame`) using a **Username** and **Password**. The system authenticates credentials against the `UserAccountDirectory`.
-* **Authorization:** Upon successful login, the system identifies the user's **role** (`Admin`, `Faculty`, `Student`, `Registrar`). Based on the role, the corresponding work area panel (e.g., `AdminRoleWorkAreaJPanel`, `FacultyWorkAreaJPanel`, `StudentWorkAreaJPanel`, `RegistrarWorkAreaJPanel`) is displayed, granting access only to functionalities relevant to that role.
+
+* [cite_start]**Authentication Process:** [cite: 744]
+    * Users initiate login through the `ProfileWorkAreaMainFrame` interface by entering their **Username** and **Password**.
+    * The `LoginButtonActionPerformed` method retrieves these credentials.
+    * It calls the `AuthenticateUser(un, pw)` method of the `UserAccountDirectory` (within the `Business` object).
+    * This method iterates through the `userAccountList`, checking for a match using `ua.IsValidUser(un, pw)`.
+    * If a match is found, the corresponding `UserAccount` object is returned; otherwise, `null` is returned, and login fails.
+    * Logout is implicitly handled by closing the application or could be added with a dedicated logout button returning to the login screen.
+
+* [cite_start]**Authorization Rules:** [cite: 745]
+    * Upon successful authentication, the system retrieves the user's **role** from the `UserAccount` object (e.g., "Admin", "Faculty", "Student", "Registrar").
+    * Based on this role string:
+        * [cite_start]**Admin:** Gains access to `AdminRoleWorkAreaJPanel`, enabling user/personnel management, records administration, analytics, and profile editing [cite: 594-622].
+        * [cite_start]**Faculty:** Gains access to `FacultyWorkAreaJPanel`, enabling management of assigned courses, student grading, performance reporting, profile editing, and tuition insights [cite: 624-643].
+        * [cite_start]**Student:** Gains access to `StudentWorkAreaJPanel`, enabling course registration, coursework interaction, graduation audit checks, transcript viewing, profile editing, and financial management [cite: 645-688].
+        * [cite_start]**Registrar:** Gains access to `RegistrarWorkAreaJPanel`, primarily enabling course offering management [cite: 690-708]. (Other features might be limited based on implementation).
+    * The `CardLayout` (`CardSequencePanel`) is used to display only the appropriate work area panel for the logged-in user's role, effectively restricting access to other roles' functionalities.
 
 ---
 
 ## 6. Features Implemented
 
-*(Note: Assign specific team members to each feature)*
+[cite_start]*(Note: Assign specific team members clearly for each main feature/responsibility as required by the grading criteria [cite: 748, 761])*
 
-**Admin Role** (`AdminRoleWorkAreaJPanel`):
-* **Administer User Accounts** (`ManageUserAccountsJPanel`): Create, view/edit, and delete user accounts. Assign roles to persons. *(Implemented by: [Member Name])*
-* **Register Persons (HR)** (`ManagePersonsJPanel`): Add new persons (potential students/faculty) to the system, view/edit basic details, and delete persons (with associated profiles/accounts). *(Implemented by: [Member Name])*
-* **Manage Faculty & Student Records** (`ManageRecordsJPanel`): View, search (by ID, Name, Dept), edit contact details, delete faculty/student records, and assign faculty to courses. *(Implemented by: [Member Name])*
-* **My Profile** (`AdminManageProfileJPanel`): View and edit own admin profile contact details (email, phone). *(Implemented by: [Member Name])*
-* **Analytics Dashboard** (`AnalyticsDashboardJPanel`): View summary reports on users by role, courses per semester, enrollment per course, and total tuition revenue. *(Implemented by: [Member Name])*
+**Admin Role** (`AdminRoleWorkAreaJPanel`): *(Implemented by: [Member Name(s)])*
+* **User Account Management** (`ManageUserAccountsJPanel`): Create, view/edit, delete user accounts. [cite_start]Assigns roles based on person's profile[cite: 595]. Requires `AdminUserAccount.java`.
+* [cite_start]**Person Registration (HR)** (`ManagePersonsJPanel`): Add new persons (Student/Faculty), prevents duplicates by email, auto-generates sequential ID (S###/F###), view/edit basic info, delete[cite: 597, 601, 602]. Requires `AdministerPersonJPanel.java`.
+* **Student and Faculty Records Management** (`ManageRecordsJPanel`): Tabbed view for Students and Faculty. [cite_start]Allows viewing details, searching by ID, Name, Dept (3 methods implemented) [cite: 610][cite_start], editing contact info (`ViewEditStudentJPanel`, `ViewEditFacultyJPanel`), deleting records [cite: 608][cite_start], and assigning faculty to courses (`AssignFacultyJPanel`)[cite: 609].
+* [cite_start]**My Profile** (`AdminManageProfileJPanel`): Allows logged-in admin to view/edit their own name, email, phone[cite: 612].
+* [cite_start]**Analytics Dashboard** (`AnalyticsDashboardJPanel`): Displays summary tables for: Users by Role, Courses per Semester, Enrollment per Course, Total Tuition Revenue [cite: 613, 617-620, 622].
 
-**Faculty Role** (`FacultyWorkAreaJPanel`):
-* **Manage Courses** (`ManageCoursesJPanel`): View assigned courses, update course details (name, seats, schedule), assign faculty (if permissions allowed, currently shows dropdown), manage syllabus, and toggle enrollment status. *(Implemented by: [Member Name])*
-* **Manage Students Profiles** (`ManageStudentsJPanel`): View students enrolled in selected courses, update student grades (scores 0-100), rank students by GPA, calculate class GPA, and view individual student transcripts. *(Implemented by: [Member Name])*
-* **My Profile** (`ManageProfileJPanel`): View and edit own faculty profile details (Name, Office, Phone, Bio). *(Implemented by: [Member Name])*
-* **Performance Reports** (`PerformanceReportsJPanel`): View performance metrics (average grade, enrollment, grade distribution) for selected courses and semesters, with an option to export to CSV. *(Implemented by: [Member Name])*
-* **Tuition Insight** (`TuitionInsightJPanel`): View tuition generated from enrolled students in assigned courses. *(Implemented by: [Member Name])*
+**Faculty Role** (`FacultyWorkAreaJPanel`): *(Implemented by: [Member Name(s)])*
+* **Manage Courses** (`ManageCoursesJPanel`): View assigned courses (Fall 2025 hardcoded). Update course name, seats, schedule. Upload/Modify syllabus (via file chooser or text input). [cite_start]Toggle enrollment open/closed[cite: 628, 629, 630].
+* **Manage Students Profiles** (`ManageStudentsJPanel`): Select course via dropdown. View enrolled students. [cite_start]Select student and update grade (0-100 score converted to GPA/Letter)[cite: 634]. [cite_start]View student transcript summary (`ViewTranscriptJPanel`)[cite: 633]. [cite_start]Rank students by GPA and show class average GPA[cite: 635].
+* [cite_start]**My Profile** (`ManageProfileJPanel`): View and update own profile: Name, Office, Phone, Bio[cite: 631].
+* **Performance Reports** (`PerformanceReportsJPanel`): Filter courses by semester. View report for selected course including Average Grade, Enrollment Count, Grade Distribution (A, B, C, D, F). [cite_start]Export report to CSV [cite: 636-641].
+* **Tuition Insight** (`TuitionInsightJPanel`): View table showing assigned courses, enrolled count, tuition per student, and total tuition generated per course. [cite_start]Displays overall total tuition[cite: 642, 643].
 
-**Student Role** (`StudentWorkAreaJPanel`):
-* **Course Work & Financial Management** (`CourseworkJPanel`): View tuition balance, course fee breakdown for the current semester, payment history, and pay tuition. (Coursework submission section is a placeholder). *(Implemented by: [Member Name])*
-* **Manage Profile** (`ProfileJPanel`): View and edit personal profile information (Name, Email, Phone). *(Implemented by: [Member Name])*
-* **Graduation Audit** (`GraduationAuditJPanel`): Check progress towards graduation requirements (total credits, core course completion, overall GPA) and view readiness status. *(Implemented by: [Member Name])*
-* **Registration** (`CourseRegistrationJPanel`): Search available courses (by ID, Teacher, Name), view course details (instructor, credits, seats, status), enroll in courses (up to credit limit), view currently enrolled courses, and drop courses. *(Implemented by: [Member Name])*
-* **Transcript** (`TranscriptJPanel`): View academic transcript, filter by semester, see course grades (letter), term GPA, overall GPA, and academic standing. *(Implemented by: [Member Name])*
+**Student Role** (`StudentWorkAreaJPanel`): *(Implemented by: [Member Name(s)])*
+* **Course Work & Financial Management** (`CourseworkJPanel`): Displays current tuition balance based on enrolled credits. Shows course fee breakdown. Allows paying tuition (simulated, updates balance and history). [cite_start]Tracks and displays payment history[cite: 682, 683, 684, 686, 688]. [cite_start](Assignment submission is a placeholder `JTextArea` [cite: 647]).
+* [cite_start]**Manage Profile** (`ProfileJPanel`): View and Edit Name, Email, Phone number with basic validation[cite: 681].
+* **Graduation Audit** (`GraduationAuditJPanel`): Calculates and displays progress towards 32-credit requirement. Checks for core course INFO 5100 completion. Calculates and displays Overall GPA. [cite_start]Shows "Ready to Graduate" status based on credits and core course[cite: 651, 652, 653].
+* [cite_start]**Registration** (`CourseRegistrationJPanel`): Search available courses by Course ID, Teacher, or Course Name (3 methods)[cite: 648]. [cite_start]Displays results in table showing ID, Name, Instructor, Credits, Seats (Available/Total), Status (Open/Full)[cite: 649]. [cite_start]Allows enrolling if seats available and within 8-credit limit[cite: 650]. Displays "My Courses" for the current semester. [cite_start]Allows dropping enrolled courses[cite: 647].
+* **Transcript** (`TranscriptJPanel`): Displays full academic history. [cite_start]Allows filtering by semester via dropdown[cite: 654]. [cite_start]Shows Term, Academic Standing (Good, Warning, Probation based on Term/Overall GPA) [cite: 659-665][cite_start], Course ID, Name, Letter Grade [cite: 668][cite_start], Term GPA, and Overall GPA [cite: 669, 670, 677-680]. [cite_start]GPA calculation follows standard rules (Grade Points * Credits) [cite: 672-676].
 
-**Registrar Role** (`RegistrarWorkAreaJPanel`):
-* **Course Offering Management** (`ManageCourseOfferingsJPanel`): View, create, edit, and delete course offerings for a specific semester (e.g., Fall 2025). *(Implemented by: [Member Name])*
-* *(Other buttons like Student Registration, Manage Profile, Tuition, Reporting are placeholders in this role's panel)*.
+**Registrar Role** (`RegistrarWorkAreaJPanel`): *(Implemented by: [Member Name(s)])*
+* [cite_start]**Course Offering Management** (`ManageCourseOfferingsJPanel`): View list of course offerings for the current semester (Fall 2025)[cite: 693]. (Create, Edit, Delete buttons are present but may have limited functionality) [cite_start][cite: 694].
+* [cite_start]*(Other buttons are placeholders as per the UI design)*[cite: 696, 698, 699, 700, 704].
 
 ---
 
 ## 7. Usage Instructions
-1.  **Launch:** Run the `ProfileWorkAreaMainFrame.java` file.
-2.  **Login:** Use the predefined credentials to log in as different roles:
-    * **Admin:** Username: `admin`, Password: `****`
-    * **Faculty:** Username: `prof1` (for Kal Faculty), `prof2`, etc., Password: `1234`
-    * **Student:** Username: `student1`, `student2`, etc., Password: `****`
-    * **Registrar:** Username: `registrar`, Password: `regpass`
-3.  **Navigate:** Once logged in, the respective work area panel will appear. Use the buttons within the panel to access different features.
-4.  **Admin Example:**
-    * Click `Register Persons (HR)` to add a new person. Fill in details and select a role (Student/Faculty).
-    * Click `Administer User Accounts` to create a login account for a person without one. Select the person, set username/password.
-    * Click `Manage Faculty & Student Records` to view lists, search, edit contact info, or delete records.
-5.  **Student Example:**
-    * Click `Registration` to search for and enroll in courses. Select a course from "Available Courses" and click "Enroll". Check credit limits.
-    * Click `Transcript` to view grades and GPA. Use the dropdown to filter by semester.
-    * Click `Graduation Audit` to see progress towards degree requirements.
-    * Click `Course Work` to view tuition and pay fees.
-6.  **Faculty Example:**
-    * Click `Manage Courses` to see assigned courses. Select a course to edit details or toggle enrollment.
-    * Click `Manage Students Profiles`. Select a course from the dropdown, then select a student to update their grade (0-100 score). Click `Rank Students` to sort by GPA.
-    * Click `Performance Reports` to view class statistics.
-7.  **Registrar Example:**
-    * Click `Course Offering Management` to view the list of courses offered for the semester. Use Create/View/Edit/Delete buttons (functionality might be partially implemented).
+
+1.  [cite_start]**Launch & Login:** [cite: 750]
+    * Run the application (`ProfileWorkAreaMainFrame`).
+    * Enter the username and password for the desired role (see credentials in Section 8). Click `Login`.
+2.  **Admin Workflow:**
+    * **Add Person:** Click `Register Persons (HR)` > `Add New Person`. Enter Name, Email, select Role (Student/Faculty). Click `Save`. Note the generated ID.
+    * **Create Account:** Click `Administer User Accounts` > `Create`. Select the newly added person from the dropdown. Enter Username, Password, Confirm Password. Role is auto-filled. Click `Save`.
+    * **Manage Records:** Click `Manage Faculty & Student Records`. Use search fields/buttons (by ID, Name, Dept). Select a record, click `View / Edit Details` to update email/phone, or click `Delete Record`. To assign faculty, select faculty, click `Assign to Course/Dept`, choose a course, click `Confirm Assignment`. Use `Refresh Table` after searching/deleting.
+    * **View Analytics:** Click `Analytics Dashboard`. Switch between tabs (Users by Role, Courses per Semester, Enrollment per Course, Tuition Revenue) to view summary data.
+3.  **Faculty Workflow:**
+    * **Manage Courses:** Click `Manage Courses`. View assigned courses. Select a row and modify Name, Seats, or Schedule in the table. Click `Save`. Click `Syllabus` to upload/enter text. Click `ToggleEnrollment` to open/close registration.
+    * **Grade Students:** Click `Manage Students Profiles`. Select a course from the dropdown. Select a student row. Enter a score (0-100) in the text field below, click `Update Grade`. Click `Rank Students` to sort and see class GPA. Click `ViewTranscript` for a student's summary.
+    * **Check Reports:** Click `Performance Reports`. Select Semester/Course. View metrics. Click `Export CSV` to save the report.
+    * **View Tuition:** Click `Tuition Insight` to see revenue generated by courses.
+4.  **Student Workflow:**
+    * **Register:** Click `Registration`. Use the search bar and type dropdown, click `Search`, or click `Show all Courses`. Select a course from "Available Courses" table, click `Enroll`. Check "My Courses" table and credit count. Select a course in "My Courses", click `Drop`.
+    * **View Academics:** Click `Transcript`. View all courses/grades. Use dropdown to select a specific semester. Note GPA and Academic Standing.
+    * **Check Graduation:** Click `Graduation Audit`. Review credit progress, core course status, GPA, and overall readiness.
+    * **Pay Tuition:** Click `Course Work`. View balance and fee breakdown. Click `Pay Tuition`, confirm amount, select method. View updated balance and payment history.
+5.  **Registrar Workflow:**
+    * Click `Course Offering Management`. View the list of courses for Fall 2025. (Further actions like Create/Edit depend on implementation).
 
 ---
 
 ## 8. Testing Guide
-* **Login:**
-    * Test logging in with valid credentials for each role (Admin, Faculty, Student, Registrar). Verify the correct work area panel appears.
-    * Test logging in with invalid credentials. Verify login fails.
-* **Authorization:**
-    * Log in as Student. Attempt to access Admin functions (e.g., user management). Verify access is denied (buttons/menus should not be visible).
-    * Log in as Faculty. Attempt to access Admin functions. Verify access is denied.
-    * Log in as Admin. Verify access to all administrative functions.
-* **Sample Test Cases:**
-    * **Admin:** Create a new Person (Student), then create a User Account for them. Log in as that student. Delete the student record via Admin panel and verify the user can no longer log in.
-    * **Student:** Enroll in 2 courses (total 8 credits). Attempt to enroll in a third course and verify the credit limit error appears. View transcript and verify courses appear. View Graduation Audit. Drop one course and verify it's removed from "My Courses".
-    * **Faculty:** Log in as `prof1`. Select `Manage Students Profiles`. Choose the INFO 5100 course. Select a student and update their grade to 85. Verify the grade updates in the table. Click `Rank Students` and verify sorting.
-    * **Registrar:** Log in. Access `Course Offering Management`. Verify the course list for Fall 2025 is displayed. (Test Create/Edit/Delete if fully implemented).
+
+* [cite_start]**Authentication & Authorization Verification:** [cite: 754]
+    * Log in using credentials for each role (Admin: `admin`/`****`, Faculty: `prof1`/`1234`, Student: `student1`/`****`, Registrar: `registrar`/`regpass`). Verify the correct main menu/work area appears.
+    * Attempt invalid logins (wrong password, wrong username). Verify login fails with no access granted.
+    * Log in as Student. Ensure Admin/Faculty/Registrar specific buttons (e.g., "Administer User Accounts", "Manage Courses", "Course Offering Management") are *not* visible or accessible. Repeat for Faculty (ensure Admin/Student buttons are inaccessible).
+* [cite_start]**Sample Test Cases:** [cite: 753]
+    * **Admin - User Cycle:**
+        1. Login as `admin`.
+        2. Go to `Register Persons (HR)` > `Add New Person`. Add "Test Student", email "test@uni.edu", role Student. Click Save. Note the generated ID (e.g., S021).
+        3. Go to `Administer User Accounts` > `Create`. Select "Test Student (S021)" from dropdown. Set username "teststudent", password "testpass". Click Save.
+        4. Logout/Relaunch application. Login as `teststudent`/`testpass`. Verify Student Work Area appears.
+        5. Login as `admin`. Go to `Manage Faculty & Student Records` > Student tab. Search for ID "S021". Select the row, click `Delete Record`. Confirm.
+        6. Logout/Relaunch. Attempt login as `teststudent`/`testpass`. Verify login fails.
+    * **Student - Registration & Academics:**
+        1. Login as `student1`/`****`.
+        2. Go to `Registration`. Search for Course ID "INFO 5100". Select it, click `Enroll`. Search for "INFO 6100", select, click `Enroll`. Verify "My Courses" shows both and Credits is 8/8.
+        3. Attempt to enroll in "INFO 6210". Verify credit limit error message.
+        4. Go to `Transcript`. Verify both courses appear with "N/A" or initial grades. Check Term/Overall GPA.
+        5. Go to `Graduation Audit`. Verify 8 credits completed, core course shown (may be incomplete if no grade yet), GPA updated.
+        6. Go back to `Registration`. Select "INFO 6100" in "My Courses". Click `Drop`. Confirm. Verify course removed and credits updated to 4/8.
+    * **Faculty - Grading & Reporting:**
+        1. Login as `prof1`/`1234` (Kal Faculty).
+        2. Go to `Manage Students Profiles`. Select course "INFO 5100" from dropdown.
+        3. Select "Student 1" (S001). Enter "95" in grade field below table. Click `Update Grade`. Verify table shows Score 95.0, GPA 4.0, Letter A.
+        4. Select "Student 2" (S002). Enter "88". Click `Update Grade`. Verify Score 88.0, GPA 3.3, Letter B+.
+        5. Click `Rank Students`. Verify students are sorted by GPA, and Class GPA is calculated.
+        6. Go to `Performance Reports`. Select Semester "Fall 2025", Course "INFO 5100". Verify report shows Avg Grade, Enrollment, Grade Distribution (1 A, 1 B+ etc.). Click `Export CSV`. Choose location, save. Verify CSV file contents.
+    * **Student - Financials:**
+        1. Login as `student1`/`****` (who has 4 credits enrolled).
+        2. Go to `Course Work`. Verify balance shows $6000 (4 * 1500). Verify Course Fees table shows INFO 5100 with $6000.
+        3. Click `Pay Tuition`. Confirm payment. Select "Credit Card". Verify success message.
+        4. Verify Balance shows "$0.00 (Paid)" in green. Verify Payment History table shows the transaction. Verify `Pay Tuition` button is disabled.
+* **Input Validation:**
+    * Try creating Persons/Users with empty fields, invalid emails, short passwords. Verify error messages appear and operation fails.
+    * Try entering non-numeric grades as Faculty. Verify error.
+    * Try searching with empty search terms. Verify prompts appear.
 
 ---
 
 ## 9. Challenges & Solutions
-* **Challenge:** Integrating diverse functionalities for multiple roles within a single Swing application while maintaining separation of concerns.
-    * **Solution:** Used a `CardLayout` panel (`CardSequencePanel`) in the main frame to switch between different role-specific `JPanel`s. Each role panel encapsulates its own logic and UI components.
-* **Challenge:** Managing shared data (like Person directory, Course schedules) accessibly across different parts of the application.
-    * **Solution:** Centralized core data structures within the `Business` and `Department` classes, passing the `Business` object down to panels that require access.
-* **Challenge:** Implementing specific business rules like credit limits, GPA calculations, and academic standing determination accurately.
-    * **Solution:** Encapsulated calculation logic within relevant classes (e.g., `Transcript` for GPA and academic standing, `CourseRegistrationJPanel` for credit limit checks).
-* **Challenge:** Ensuring UI updates correctly after data modifications (e.g., refreshing tables after adding/deleting records).
-    * **Solution:** Implemented explicit refresh methods (e.g., `populateTable()`, `loadMyCourses()`) and called them after relevant actions or when navigating back to list views.
+
+* **Challenge:** Implementing Role-Based Access Control cleanly.
+    * **Solution:** Utilized the provided Access Control package. Login determines the role string. [cite_start]A `CardLayout` in the main frame switches visibility to the correct role's primary `JPanel`, inherently restricting access to UI elements of other roles[cite: 575, 588, 714].
+* **Challenge:** Ensuring data consistency across different panels and roles (e.g., Admin deletes a user, Student logs in).
+    * **Solution:** Passed the central `Business` object containing directories (`UserAccountDirectory`, `PersonDirectory`, etc.) to necessary panels. [cite_start]Implemented refresh mechanisms (`populateTable`, `loadData`) called upon returning to list views or after data modifications to reflect changes[cite: 757].
+* **Challenge:** Correctly calculating GPA, academic standing, and graduation requirements based on specific rules.
+    * [cite_start]**Solution:** Encapsulated calculation logic within model classes (`Transcript.java` for GPA/Standing [cite: 660, 671][cite_start], `GraduationAuditJPanel.java` for graduation checks [cite: 651][cite_start]) to keep UI classes cleaner and ensure rules are applied consistently[cite: 757]. [cite_start]Used standard GPA calculation formulas [cite: 677-680].
+* **Challenge:** Implementing multiple search methods for Student/Faculty records and Course Registration.
+    * **Solution:** Created separate button actions for each search type (ID, Name, Dept). [cite_start]Each action calls a specific search method in the relevant directory (`StudentDirectory`, `FacultyDirectory`, or iterates `CourseSchedule`) and refreshes the JTable with the filtered results using an overloaded `populateTable` method[cite: 610, 648, 757].
+* **Challenge:** Managing state for editing operations (e.g., Profile editing).
+    * **Solution:** Implemented `setViewMode()` and `setEditMode()` methods in profile panels (`ProfileJPanel`, `AdminManageProfileJPanel`, `ManageProfileJPanel`) to toggle field editability and button states (Edit, Save, Cancel). [cite_start]Stored original values before editing to allow cancellation[cite: 757].
+* **Challenge:** Generating unique but sequential IDs for new Persons (S###, F###).
+    * [cite_start]**Solution:** Implemented `generateNextPersonId` helper method in `AdministerPersonJPanel` which iterates through existing Person IDs with the same prefix (e.g., "S"), finds the highest number, increments it, and formats it with leading zeros[cite: 602, 757].
 
 ---
 
 ## 10. Future Enhancements
-* Implement full CRUD (Create, Read, Update, Delete) functionality for all manageable entities (Courses, Offerings, etc.).
-* Add more detailed financial management features (payment methods, fee types, reporting).
-* Implement the "Course Work" submission feature for students.
-* Develop more sophisticated analytics and reporting features.
-* Add persistence layer (e.g., database connectivity) to save and load application state.
-* Improve error handling and user feedback messages.
-* Implement features for other potential roles (e.g., Department Head, Advisor).
-* Refine the UI/UX for better usability.
-* Add automated unit and integration tests.
+
+* [cite_start]**Database Integration:** Replace in-memory ArrayLists with a database (e.g., MySQL, PostgreSQL) for data persistence[cite: 759].
+* [cite_start]**Enhanced Registrar Role:** Fully implement course offering creation/editing, student enrollment/dropping from admin side, financial reporting, and institutional analytics [cite: 692-708].
+* [cite_start]**Coursework Implementation:** Develop the assignment submission and detailed progress tracking for students[cite: 647].
+* [cite_start]**Improved Faculty Grading:** Allow grading of specific assignments, weighted averages for final grades, and feedback mechanisms[cite: 634].
+* **Notifications:** Implement a system for notifications (e.g., new grades available, tuition due, enrollment changes).
+* **Detailed Financial Module:** Add features like scholarships, financial aid, different payment plans, and integration with external payment gateways.
+* **Security Enhancements:** Implement more robust password hashing, session management, and potentially finer-grained permissions.
+* **UI/UX Refinement:** Improve visual design, layout consistency, and user experience across all panels. Add features like sorting/filtering directly in tables.
+* **Testing:** Introduce automated unit tests (JUnit) and potentially integration tests to ensure code quality and prevent regressions.
+* **Internationalization (I18N):** Support for multiple languages in the user interface.
 
 ---
 
 ## 11. Contribution Breakdown
 
-*(Please fill this section with specific contributions)*
+[cite_start]*(Please provide specific details for each member [cite: 761, 762])*
 
 * **[Member Name 1] (NUID: [NUID 1]):**
-    * **Coding:** Implemented features [Feature A, Feature B], developed classes [Class X, Class Y].
-    * **Documentation:** Wrote sections [Section 1, Section 2] of the README.
-    * **Testing:** Tested functionalities related to [Role Z].
-    * **Other:** [Any other contributions, e.g., UI design, project setup].
+    * **Assigned Use Case:** [Admin/Faculty/Student/Registrar]
+    * **Coding:** Implemented [Specific features like User Account Management, Person Registration, ManageRecordsJPanel search methods, Analytics Dashboard tabs X & Y...]. Developed/Modified classes: [`ClassA.java`, `ClassB.java`...]. Addressed [Number] Pull Request reviews.
+    * **Documentation:** Authored README sections: [e.g., Project Overview, Installation]. Added code comments for [Specific classes/methods].
+    * **Testing:** Performed testing for [Admin login, User creation/deletion, Record search...]. Verified authentication/authorization for Admin role.
+    * **Commits/PRs:** Contributed [Number] meaningful commits to personal branch, created [Number] Pull Requests to main.
 * **[Member Name 2] (NUID: [NUID 2]):**
-    * **Coding:** Implemented features [Feature C, Feature D], bug fixing in [Module P].
-    * **Documentation:** Created UML diagrams, wrote section [Section 3].
-    * **Testing:** Performed integration testing for [Use Case Q].
-    * **Other:** [e.g., Version control management].
+    * **Assigned Use Case:** [Admin/Faculty/Student/Registrar]
+    * **Coding:** Implemented [Specific features like Course Management, Student Grading, Performance Reports export, ManageStudentsJPanel ranking...]. Developed/Modified classes: [`ClassC.java`, `ClassD.java`...]. Addressed [Number] Pull Request reviews.
+    * **Documentation:** Authored README sections: [e.g., Features Implemented (Faculty), Usage Instructions]. Added code comments for [Specific classes/methods].
+    * **Testing:** Performed testing for [Faculty login, Grading functionality, Report generation...]. Verified authentication/authorization for Faculty role.
+    * **Commits/PRs:** Contributed [Number] meaningful commits to personal branch, created [Number] Pull Requests to main.
 * **[Member Name 3] (NUID: [NUID 3]):**
-    * **Coding:** Developed UI panels for [Role R], implemented [Feature E].
-    * **Documentation:** Wrote Usage Instructions and Testing Guide sections.
-    * **Testing:** Conducted usability testing.
-    * **Other:** [e.g., Presentation preparation].
-* **[Member Name 4] (NUID: [NUID 4]):**
-    * **Coding:** Implemented data models [Model S, Model T], worked on [Feature F].
-    * **Documentation:** Wrote Project Overview and Future Enhancements sections.
-    * **Testing:** Tested Admin functionalities.
-    * **Other:** [e.g., Code reviews].
+    * **Assigned Use Case:** [Admin/Faculty/Student/Registrar]
+    * **Coding:** Implemented [Specific features like Course Registration, Graduation Audit, Transcript view, Financial Management panel...]. Developed/Modified classes: [`ClassE.java`, `ClassF.java`...]. Addressed [Number] Pull Request reviews.
+    * **Documentation:** Authored README sections: [e.g., Authentication, Testing Guide]. Added code comments for [Specific classes/methods].
+    * **Testing:** Performed testing for [Student login, Course enrollment/drop, GPA calculation, Tuition payment...]. Verified authentication/authorization for Student role.
+    * **Commits/PRs:** Contributed [Number] meaningful commits to personal branch, created [Number] Pull Requests to main.
+* **[Member Name 4 (if applicable)] (NUID: [NUID 4]):**
+    * **Assigned Use Case:** [Admin/Faculty/Student/Registrar]
+    * **Coding:** Implemented [Specific features like Registrar's Course Offering Management, Student Registration Admin-side...]. Developed/Modified classes: [`ClassG.java`, `ClassH.java`...]. Addressed [Number] Pull Request reviews.
+    * **Documentation:** Authored README sections: [e.g., Challenges & Solutions, Future Enhancements]. Added code comments for [Specific classes/methods].
+    * **Testing:** Performed testing for [Registrar login, Course Offering display...]. Verified authentication/authorization for Registrar role.
+    * **Commits/PRs:** Contributed [Number] meaningful commits to personal branch, created [Number] Pull Requests to main.
