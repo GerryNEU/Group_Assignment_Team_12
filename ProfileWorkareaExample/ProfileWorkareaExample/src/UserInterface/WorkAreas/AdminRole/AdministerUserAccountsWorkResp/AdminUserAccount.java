@@ -62,13 +62,13 @@ public class AdminUserAccount extends javax.swing.JPanel {
     
     private void populateFields() {
         // Possible roles (reference)
-        String[] possibleRoles = {"Admin", "Student", "Faculty", "Register"};
+        String[] possibleRoles = {"Admin", "Student", "Faculty", "Register"}; // Added Register based on .form
 
         if (isEditMode && accountToEdit != null) {
             // --- Edit Mode ---
             if(lblPerson != null) lblPerson.setText("Editing Person:"); // **** CHANGE LABEL TEXT ****
-            if(cmbPerson != null) cmbPerson.setVisible(false);
-            if(txtPersonId != null) {
+            if(cmbPerson != null) cmbPerson.setVisible(false); // Hide dropdown
+            if(txtPersonId != null) { // Show Person Info field
                 txtPersonId.setVisible(true);
                 txtPersonId.setText(accountToEdit.getAssociatedPerson() != null ?
                                     accountToEdit.getAssociatedPerson().toString() : "N/A");
@@ -77,11 +77,12 @@ public class AdminUserAccount extends javax.swing.JPanel {
             if(txtUsername != null) txtUsername.setText(accountToEdit.getUserLoginName());
             // txtUsername.setEditable(false); // Optional: disable username editing
 
-            if(txtPassword != null) txtPassword.setText("");
-            if(txtConfirmPassword != null) txtConfirmPassword.setText("");
+            if(txtPassword != null) txtPassword.setText(""); // Still clear for security
+            if(txtConfirmPassword != null) txtConfirmPassword.setText(""); // Clear confirmation field too
             if(lblPassword != null) lblPassword.setText("New Password (blank = no change):");
-            if(lblConfirmPassword != null) lblConfirmPassword.setVisible(false);
-            if(txtConfirmPassword != null) txtConfirmPassword.setVisible(false);
+            // Keep confirm password fields visible as requested
+            if(lblConfirmPassword != null) lblConfirmPassword.setVisible(true);
+            if(txtConfirmPassword != null) txtConfirmPassword.setVisible(true);
 
             if(txtRole != null) txtRole.setText(accountToEdit.getRole());
             if(txtRole != null) txtRole.setEditable(false);
@@ -89,8 +90,8 @@ public class AdminUserAccount extends javax.swing.JPanel {
         } else {
             // --- Add Mode ---
             if(lblPerson != null) lblPerson.setText("Select Person:"); // **** CHANGE LABEL TEXT ****
-            if(cmbPerson != null) cmbPerson.setVisible(true);
-            if(txtPersonId != null) txtPersonId.setVisible(false);
+            if(cmbPerson != null) cmbPerson.setVisible(true); // Show dropdown
+            if(txtPersonId != null) txtPersonId.setVisible(false); // Hide Person Info field
 
             populatePersonComboBox(); // Fill the person dropdown
 
@@ -118,6 +119,8 @@ public class AdminUserAccount extends javax.swing.JPanel {
         PersonDirectory pd = business.getDepartment().getPersonDirectory();
         UserAccountDirectory uad = business.getUserAccountDirectory();
         ArrayList<Person> personsWithoutAccounts = new ArrayList<>();
+        System.out.println("Populating Person ComboBox..."); // Debug: Start population
+
         if (pd != null && pd.getPersonList() != null && uad != null && uad.getUserAccountList() != null) {
             for (Person p : pd.getPersonList()) {
                  if (p == null) continue;
@@ -129,13 +132,22 @@ public class AdminUserAccount extends javax.swing.JPanel {
                          break;
                      }
                  }
+                 // Debug: Print check result
+                 System.out.println("  Checking Person: " + p.toString() + " - Has Account? " + hasAccount);
                 if (!hasAccount) personsWithoutAccounts.add(p);
             }
-        } else { System.err.println("Error populating Person ComboBox: Directory is null."); }
+        } else {
+             System.err.println("Error populating Person ComboBox: Directory is null.");
+             // Show error to user only once, not repeatedly during population
+             // JOptionPane.showMessageDialog(this,"Error accessing directories. Cannot populate Person list.","Error", JOptionPane.ERROR_MESSAGE);
+         }
         if (personsWithoutAccounts.isEmpty()) {
              cmbPerson.setEnabled(false);
              if(txtRole != null) txtRole.setText("N/A");
-             System.out.println("Info: No persons available without user accounts.");
+             // Debug: No available persons
+             System.out.println("  No persons found without accounts.");
+             // Avoid JOptionPane here, handle potential empty state in UI logic
+             // System.out.println("Info: No persons available without user accounts.");
         } else {
             for (Person p : personsWithoutAccounts) model.addElement(p);
             cmbPerson.setEnabled(true);
@@ -144,6 +156,8 @@ public class AdminUserAccount extends javax.swing.JPanel {
                  determineAndSetRole((Person) cmbPerson.getSelectedItem());
             } else { if(txtRole != null) txtRole.setText("N/A"); }
         }
+         // Debug: Population finished
+         System.out.println("Person ComboBox population finished. Items added: " + model.getSize());
     }
     
     // Helper method to determine role based on Person's profile
@@ -273,9 +287,8 @@ public class AdminUserAccount extends javax.swing.JPanel {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
-       // 1. Get Input
+        // 1. Get Input
         String username = (txtUsername != null) ? txtUsername.getText().trim() : "";
-        // **** CHANGED: Use getText() for JTextField ****
         String password = (txtPassword != null) ? txtPassword.getText() : "";
         String confirmPassword = (txtConfirmPassword != null) ? txtConfirmPassword.getText() : "";
         String determinedRole = (txtRole != null) ? txtRole.getText() : "N/A";
@@ -289,15 +302,17 @@ public class AdminUserAccount extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Username cannot be empty and a valid Role must be determined for the selected Person.", "Input Error", JOptionPane.ERROR_MESSAGE);
             return; // Stay on page
         }
+        // Password required only for new accounts
         if (!isEditMode && password.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Password cannot be empty for new accounts.", "Input Error", JOptionPane.ERROR_MESSAGE);
              return; // Stay on page
         }
-         // **** CHANGED: Compare Strings directly ****
-         if (!isEditMode && !password.equals(confirmPassword)) {
+         // Password match check needed if password field is not empty (allows no change in edit mode)
+         if (!password.isEmpty() && !password.equals(confirmPassword)) {
              JOptionPane.showMessageDialog(this, "Passwords do not match.", "Input Error", JOptionPane.ERROR_MESSAGE);
              return; // Stay on page
          }
+         // Password policy check (only if password is not empty)
          if (!password.isEmpty() && password.length() < 4) {
              JOptionPane.showMessageDialog(this, "Password must be at least 4 characters long.", "Input Error", JOptionPane.ERROR_MESSAGE);
               return; // Stay on page
@@ -328,20 +343,29 @@ public class AdminUserAccount extends javax.swing.JPanel {
                  // !!! IMPORTANT: Need UserAccount.setPassword(String) method !!!
                  // accountToEdit.setPassword(password); // Implement password setting securely
                  System.out.println("Placeholder: Password would be updated for " + accountToEdit.getUserLoginName());
+            } else {
+                 System.out.println("Password field empty, password not changed for " + accountToEdit.getUserLoginName());
             }
 
-             // Update role (verify)
+
+             // Update role (verify - role shouldn't change here typically)
              // !!! IMPORTANT: Need UserAccount.setRole(String) method !!!
-             // accountToEdit.setRole(determinedRole);
-              System.out.println("Placeholder: Role (" + determinedRole + ") verified/updated for " + accountToEdit.getUserLoginName());
+             // accountToEdit.setRole(determinedRole); // Usually role is fixed or changed via profile management
+              System.out.println("Placeholder: Role (" + determinedRole + ") verified for " + accountToEdit.getUserLoginName());
 
              JOptionPane.showMessageDialog(this, "User account updated successfully.", "Update Success", JOptionPane.INFORMATION_MESSAGE);
              saveSuccessful = true;
 
         } else {
             // --- Create ---
-             if (selectedPerson == null) { /* Error */ return; }
-             if (determinedRole.equals("N/A")) { /* Error */ return; }
+             if (selectedPerson == null) {
+                 JOptionPane.showMessageDialog(this, "Please select a Person to associate the account with.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                 return; // Stay on page
+              }
+             if (determinedRole.equals("N/A")) {
+                 JOptionPane.showMessageDialog(this, "Cannot create account: Role could not be determined for the selected person.", "Creation Error", JOptionPane.ERROR_MESSAGE);
+                 return; // Stay on page
+              }
 
             // Create new UserAccount using the determined role
             UserAccount newUserAccount = uad.newUserAccount(selectedPerson, username, password, determinedRole);
@@ -354,8 +378,6 @@ public class AdminUserAccount extends javax.swing.JPanel {
                  saveSuccessful = false; // Stay on page
             }
         }
-
-        // No need to clear password arrays anymore
 
         // Navigate back only on success
         if (saveSuccessful) {
@@ -373,7 +395,7 @@ public class AdminUserAccount extends javax.swing.JPanel {
     
     // Helper method to find and refresh the ManageUserAccountsJPanel table
     private void refreshPreviousTable() {
-       // ... (refreshPreviousTable logic remains the same) ...
+        // ... (refreshPreviousTable logic remains the same) ...
         Component[] components = CardSequencePanel.getComponents();
         for (int i = components.length - 1; i >= 0; i--) {
             if (components[i] instanceof ManageUserAccountsJPanel) {
