@@ -12,6 +12,7 @@ import info5100.university.example.Persona.Person;
 import UserInterface.WorkAreas.RegistrarRole.ManageCourseOfferingsJPanel;
 import UserInterface.WorkAreas.RegistrarRole.ManageRegistrarProfileJPanel;
 import javax.swing.JOptionPane;
+import UserInterface.WorkAreas.RegistrarRole.ReportingAnalyticsJPanel;
 import UserInterface.WorkAreas.RegistrarRole.TuitionFinancialJPanel;
 import UserInterface.WorkAreas.RegistrarRole.ManageCourseOfferingsJPanel;
 
@@ -85,6 +86,11 @@ public class RegistrarWorkAreaJPanel extends javax.swing.JPanel {
 
         btnReportingAnalytics.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnReportingAnalytics.setText("Reporting & Analytics");
+        btnReportingAnalytics.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportingAnalyticsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -169,6 +175,13 @@ public class RegistrarWorkAreaJPanel extends javax.swing.JPanel {
         CardSequencePanel.add("TuitionFinancial", tuitionPanel);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_btnTuitionFinancialActionPerformed
+
+    private void btnReportingAnalyticsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportingAnalyticsActionPerformed
+        // TODO add your handling code here:
+        ReportingAnalyticsJPanel reportingPanel = new ReportingAnalyticsJPanel(business, CardSequencePanel);
+        CardSequencePanel.add("ReportingAnalytics", reportingPanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+    }//GEN-LAST:event_btnReportingAnalyticsActionPerformed
 
 
 

@@ -90,5 +90,28 @@ public class Transcript {
         return temp2;
 
     }
+    
+    // --- Add calculateOverallGPA() to Transcript.java ---
+    public double calculateOverallGPA() {
+        double totalQualityPoints = 0;
+        int totalCreditHours = 0;
+        ArrayList<SeatAssignment> allAssignments = getCourseList(); // Use existing method
 
+        if (allAssignments.isEmpty()) {
+            return 0.0; // No courses taken, GPA is 0
+        }
+
+        for (SeatAssignment sa : allAssignments) {
+            double points = sa.getGradePoints(); // Hypothetical method
+            int credits = sa.getCreditHours();
+
+            totalQualityPoints += points * credits;
+            totalCreditHours += credits;
+        }
+
+        if (totalCreditHours == 0) {
+            return 0.0; // Avoid division by zero
+        }
+        return totalQualityPoints / totalCreditHours;
+    }
 }

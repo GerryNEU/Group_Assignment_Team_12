@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Set; 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -208,6 +209,72 @@ public class TuitionFinancialJPanel extends javax.swing.JPanel {
 
     private void btnGenerateReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateReportActionPerformed
         // TODO add your handling code here:
+        // --- 1. Get Selected Semester ---
+        String selectedSemester = (String) comboSemester.getSelectedItem();
+
+        // --- 2. Validate Selection ---
+        if (selectedSemester == null || selectedSemester.equals("Select Semester")) {
+            JOptionPane.showMessageDialog(this, "Please select a semester to generate the report.", "Selection Required", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // --- 3. Initialize Calculation Variables ---
+        double totalBilledForSemester = 0.0;
+        double totalUnpaidBalance = 0.0;
+
+        // --- 4. Get Student Data ---
+        Department department = business.getDepartment();
+        StudentDirectory studentDirectory = department.getStudentDirectory();
+
+        // Check if student directory and list are valid
+        if (studentDirectory == null || studentDirectory.getStudentlist() == null) {
+            JOptionPane.showMessageDialog(this, "Cannot generate report: Student data is unavailable.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        ArrayList<StudentProfile> studentList = studentDirectory.getStudentlist();
+
+        // --- 5. Iterate Through Students and Calculate ---
+        for (StudentProfile student : studentList) {
+            // Get student's course load for the selected semester
+            CourseLoad cl = student.getCourseLoadBySemester(selectedSemester);
+
+            if (cl != null) {
+                // Calculate tuition billed for this student in this semester
+                for (SeatAssignment sa : cl.getSeatAssignments()) {
+                    totalBilledForSemester += sa.getAssociatedCourse().getCoursePrice();
+                }
+            }
+
+            // Sum up positive balances (unpaid amounts) across all students
+            if (student.getTuitionBalance() > 0) {
+                totalUnpaidBalance += student.getTuitionBalance();
+            }
+        }
+
+        // --- 6. Calculate Total Collected ---
+        // Simple calculation: Total Billed - Total Currently Unpaid
+        double totalCollectedForSemester = totalBilledForSemester - totalUnpaidBalance;
+        // Ensure collected doesn't go negative if balances include past debts/credits
+        if (totalCollectedForSemester < 0) {
+             totalCollectedForSemester = 0; // Or adjust logic based on how balance is truly managed
+        }
+
+
+        // --- 7. Format the Report ---
+        StringBuilder reportText = new StringBuilder();
+        reportText.append("Financial Report for Semester: ").append(selectedSemester).append("\n");
+        reportText.append("=============================================\n\n");
+        reportText.append(String.format("Total Tuition Billed: $%,.2f\n", totalBilledForSemester));
+        reportText.append(String.format("Total Unpaid Tuition (Current Balance > 0): $%,.2f\n", totalUnpaidBalance));
+        reportText.append(String.format("Estimated Total Tuition Collected: $%,.2f\n", totalCollectedForSemester));
+        reportText.append("\n");
+
+        // Per-Department Breakdown (Placeholder - Requires Model Enhancement)
+        reportText.append("Per-Department Revenue Breakdown:\n");
+        reportText.append("  (Note: Requires linking students or courses to departments in the data model)\n");
+
+        // --- 8. Display the Report ---
+        txtAreaReport.setText(reportText.toString());
     }//GEN-LAST:event_btnGenerateReportActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed

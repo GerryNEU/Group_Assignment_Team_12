@@ -123,5 +123,13 @@ public class SeatAssignment {
     public double getRawScore() {
         return rawScore;
     }
-   
+    
+    public double getGradePoints() {
+        if (this.grade < 0) {
+             System.err.println("Warning: Grade in SeatAssignment might be unassigned or invalid (" + this.grade + "). Returning 0.0 points.");
+             return 0.0;
+        }
+        return (double) this.grade; 
+    }
+    
 }

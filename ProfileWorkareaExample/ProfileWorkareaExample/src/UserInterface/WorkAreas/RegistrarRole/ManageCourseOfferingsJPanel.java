@@ -137,7 +137,7 @@ public void populateTable() {
             }
         });
 
-        btnBack.setText("Back");
+        btnBack.setText("《〈Back");
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBackActionPerformed(evt);
