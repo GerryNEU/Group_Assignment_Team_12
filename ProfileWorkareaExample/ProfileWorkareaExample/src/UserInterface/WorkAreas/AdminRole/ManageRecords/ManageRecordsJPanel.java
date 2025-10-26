@@ -76,15 +76,14 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
         for (StudentProfile sp : studentList) {
             Person person = sp.getPerson(); // StudentProfile should have an associated Person
             if (person != null) {
-                Object[] row = new Object[5];
-                // --- MODIFIED HERE ---
-                // Store the Person ID string for display, instead of the whole object
+                Object[] row = new Object[6];
                 row[0] = person.getPersonId(); 
-                // --- END MODIFICATION ---
                 row[1] = person.getName();
                 row[2] = person.getEmail();
-                row[3] = sp.getTranscript().getAcademicStatus(); // Assignment requirement [source: 36]
-                row[4] = String.format("%.2f", sp.getTranscript().calculateOverallGPA()); // Format GPA
+                row[3] = department.getName(); // Added Department
+                row[4] = sp.getTranscript().getAcademicStatus(); // Assignment requirement [source: 36]
+                row[5] = String.format("%.2f", sp.getTranscript().calculateOverallGPA()); // Format GPA
+                // --- END MODIFICATION ---
                 model.addRow(row);
             }
         }
@@ -249,20 +248,25 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
         });
 
         btnSearchStudentByDept.setText("Search by Dept");
+        btnSearchStudentByDept.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchStudentByDeptActionPerformed(evt);
+            }
+        });
 
         tblStudents.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4", "GPA"
+                "ID", "Name", "Email", "Dept", "Academic Status", "Overall GPT"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -421,6 +425,30 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "No student found with name matching: " + searchName, "Search Result", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnSearchStudentByNameActionPerformed
+
+    private void btnSearchStudentByDeptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchStudentByDeptActionPerformed
+        // TODO add your handling code here:
+                String searchDept = txtStudentSearch.getText().trim();
+        if (searchDept.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a department name to search.", "Input Required", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        ArrayList<StudentProfile> searchResults = new ArrayList<>();
+        
+        // Check if the search term matches the current department's name (case-insensitive)
+        if (department.getName().equalsIgnoreCase(searchDept)) {
+            // If it matches, return all students from this department
+            searchResults = department.getStudentDirectory().getStudentlist();
+        }
+        // If it doesn't match, searchResults remains empty.
+        
+        populateStudentTable(searchResults); 
+        
+        if (searchResults.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No students found for department: " + searchDept, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btnSearchStudentByDeptActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
