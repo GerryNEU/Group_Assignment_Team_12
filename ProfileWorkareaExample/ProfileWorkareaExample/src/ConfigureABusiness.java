@@ -60,6 +60,12 @@ class ConfigureABusiness {
         // Assign the original "Kal Faculty" name to the first faculty for consistency
         faculties[0].getPerson().setName("Kal Faculty");
         
+        // Registrar
+        // Create Registrar
+        Person registrarPerson = pd.newPerson("R001");
+        registrarPerson.setName("Registrar");
+        uad.newUserAccount(registrarPerson, "registrar", "regpass", "Registrar");
+        System.out.println("Registrar account created: Username=registrar, Name=" + registrarPerson.getName());
         
         // Studnets
         // Create 10 Students and Profiles
@@ -72,8 +78,7 @@ class ConfigureABusiness {
             uad.newUserAccount(studentPerson, "student" + (i + 1), "****", "Student");
         }
         
-        // TODO: 1 Register
-        // Wait for Teammate Define the Register Class
+        
         
         // ----------------------------------------------------------------------
         // Course Part
