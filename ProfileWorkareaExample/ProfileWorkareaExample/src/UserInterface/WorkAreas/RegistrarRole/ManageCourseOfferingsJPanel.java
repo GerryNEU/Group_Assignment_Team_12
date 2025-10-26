@@ -11,8 +11,9 @@ import info5100.university.example.Department.Department;
 import info5100.university.example.CourseSchedule.CourseSchedule;
 import info5100.university.example.CourseSchedule.CourseOffer; 
 import info5100.university.example.Persona.Faculty.FacultyProfile;
+import info5100.university.example.CourseSchedule.CourseOffer; 
 import java.util.ArrayList;
-
+import javax.swing.JOptionPane; 
 
 /**
  *
@@ -32,7 +33,7 @@ public class ManageCourseOfferingsJPanel extends javax.swing.JPanel {
         this.CardSequencePanel = clp;
     }
 
-private void populateTable() {
+public void populateTable() {
     DefaultTableModel model = (DefaultTableModel) tblCourseOfferings.getModel();
     model.setRowCount(0);
 
@@ -115,8 +116,18 @@ private void populateTable() {
         jScrollPane1.setViewportView(tblCourseOfferings);
 
         btnCreate.setText("Create");
+        btnCreate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateActionPerformed(evt);
+            }
+        });
 
         btnViewEdit.setText("View/Edit");
+        btnViewEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewEditActionPerformed(evt);
+            }
+        });
 
         btnDelete.setText("Delete");
 
@@ -176,6 +187,54 @@ private void populateTable() {
         java.awt.CardLayout layout = (java.awt.CardLayout) CardSequencePanel.getLayout();
         layout.previous(CardSequencePanel);
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
+        // TODO add your handling code here:
+        // Create instance of the new panel, passing business, card panel, and 'this' (for refreshing later)
+        CreateCourseOfferingJPanel createPanel = new CreateCourseOfferingJPanel(business, CardSequencePanel, this); // Pass 'this'
+
+        // Add the new panel to the card sequence panel
+        CardSequencePanel.add("CreateCourseOffering", createPanel);
+
+        // Switch to the new panel
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+    }//GEN-LAST:event_btnCreateActionPerformed
+
+    private void btnViewEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewEditActionPerformed
+        // TODO add your handling code here:
+        // --- 1. Get Selected Row ---
+        int selectedRowIndex = tblCourseOfferings.getSelectedRow();
+
+        if (selectedRowIndex < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a course offering to view/edit.", "Selection Required", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // --- 2. Get CourseOffer Object ---
+        // We need the Course Number from the selected row to find the CourseOffer
+        DefaultTableModel model = (DefaultTableModel) tblCourseOfferings.getModel();
+        String selectedCourseNumber = (String) model.getValueAt(selectedRowIndex, 0); // Assuming Course Number is in column 0
+
+        Department department = business.getDepartment();
+        CourseSchedule courseSchedule = department.getCourseSchedule("Fall 2025"); // Assuming Fall 2025
+        if (courseSchedule == null) {
+             JOptionPane.showMessageDialog(this, "Course schedule not found.", "Error", JOptionPane.ERROR_MESSAGE);
+             return;
+        }
+
+        CourseOffer selectedCourseOffer = courseSchedule.getCourseOfferByNumber(selectedCourseNumber);
+        if (selectedCourseOffer == null) {
+            JOptionPane.showMessageDialog(this, "Could not find the selected course offering.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // --- 3. Navigate to Edit Panel ---
+        EditCourseOfferingJPanel editPanel = new EditCourseOfferingJPanel(business, CardSequencePanel, this, selectedCourseOffer); // Pass the selected CourseOffer
+
+        CardSequencePanel.add("EditCourseOffering", editPanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+
+    }//GEN-LAST:event_btnViewEditActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
