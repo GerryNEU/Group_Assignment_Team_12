@@ -58,7 +58,15 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
                 row[0] = person.getPersonId();
                 row[1] = person.getName();
                 row[2] = person.getEmail();
-                row[3] = department.getName(); 
+                
+                // --- MODIFICATION: Get department from profile, not panel ---
+                if (fp.getDepartment() != null) {
+                    row[3] = fp.getDepartment().getName();
+                } else {
+                    row[3] = "Unassigned"; // More accurate
+                }
+                // --- END MODIFICATION ---
+
                 model.addRow(row);
             }
         }
@@ -87,10 +95,19 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
                 row[0] = person.getPersonId(); 
                 row[1] = person.getName();
                 row[2] = person.getEmail();
-                row[3] = department.getName(); // Added Department
+                
+                // --- MODIFICATION: Get department from profile, not panel ---
+                // (Assuming StudentProfile was also updated with getDepartment())
+                if (sp.getDepartment() != null) {
+                    row[3] = sp.getDepartment().getName();
+                } else {
+                    row[3] = "Unassigned"; // More accurate
+                }
+                // --- END MODIFICATION ---
+                
                 row[4] = sp.getTranscript().getAcademicStatus(); // Assignment requirement [source: 36]
                 row[5] = String.format("%.2f", sp.getTranscript().calculateOverallGPA()); // Format GPA
-                // --- END MODIFICATION ---
+                
                 model.addRow(row);
             }
         }
@@ -155,7 +172,7 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Name", "Email", "Dept Name"
+                "ID", "Name", "Email", "Dept Name"
             }
         ) {
             boolean[] canEdit = new boolean [] {

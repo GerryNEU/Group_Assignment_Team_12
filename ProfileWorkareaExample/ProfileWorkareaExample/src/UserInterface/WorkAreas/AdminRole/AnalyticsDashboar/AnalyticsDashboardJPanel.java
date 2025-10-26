@@ -1,0 +1,414 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ */
+package UserInterface.WorkAreas.AdminRole.AnalyticsDashboard;
+
+import Business.Business;
+import Business.UserAccounts.UserAccount;
+import Business.UserAccounts.UserAccountDirectory;
+import info5100.university.example.CourseCatalog.Course;
+import info5100.university.example.CourseSchedule.CourseLoad;
+import info5100.university.example.CourseSchedule.CourseOffer;
+import info5100.university.example.CourseSchedule.CourseSchedule;
+import info5100.university.example.CourseSchedule.SeatAssignment;
+import info5100.university.example.Department.Department;
+import info5100.university.example.Persona.StudentDirectory;
+import info5100.university.example.Persona.StudentProfile;
+import info5100.university.example.Persona.Transcript;
+import java.text.NumberFormat;
+
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+// --- MODIFICATION: Added imports for listeners ---
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+/**
+ *
+ * @author gerrysu
+ */
+public class AnalyticsDashboardJPanel extends javax.swing.JPanel {
+    
+    private JPanel CardSequencePanel;
+    private Business business;
+    private Department department;
+    
+    /**
+     * Creates new form AnalyticsDashboardJPanel
+     */
+    public AnalyticsDashboardJPanel(Business b, JPanel clp) {
+        this.business = b;
+        this.CardSequencePanel = clp;
+        this.department = b.getDepartment(); // Assuming Admin works within one department context        
+        
+        initComponents();
+        setupTableModelsAndViews();
+        
+        // --- MODIFICATION: Add listeners after initComponents() ---
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+        
+        tabbedPaneReports.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                tabbedPaneReportsStateChanged(evt);
+            }
+        });
+    }
+    
+    private void setupTableModelsAndViews() {
+        populateCoursesPerSemesterTable();
+        populateEnrollmentPerCourseTable();
+        populateTuitionRevenueTable();
+        populateUsersByRoleTable();
+    }
+     
+    private void populateCoursesPerSemesterTable() {
+        // TODO: Implement logic to count courses per semester
+        DefaultTableModel model = (DefaultTableModel) tableCoursesPerSemester.getModel();
+        model.setRowCount(0);
+        System.out.println("Populating Courses per Semester table..."); // Debug print
+
+        if (department == null || department.getMastercoursecatalog() == null) {
+             System.err.println("Department or CourseScheduleMap is null.");
+            return;
+        }
+
+        // Iterate through the map of course schedules (Key: Semester Name, Value: CourseSchedule object)
+        for (Map.Entry<String, CourseSchedule> entry : department.getMastercoursecatalog().entrySet()) {
+            String semester = entry.getKey();
+            CourseSchedule schedule = entry.getValue();
+            
+            if (schedule != null && schedule.getSchedule() != null) {
+                int courseCount = schedule.getSchedule().size(); // The size of the CourseOffer list is the count
+                 model.addRow(new Object[]{semester, courseCount});
+            } else {
+                 model.addRow(new Object[]{semester, 0}); // Add semester with 0 courses if schedule is null
+            }
+        }
+    }
+
+    private void populateEnrollmentPerCourseTable() {
+        // TODO: Implement logic to count enrollment per course
+        DefaultTableModel model = (DefaultTableModel) tableEnrollmentPerCourse.getModel();
+        model.setRowCount(0);
+        System.out.println("Populating Enrollment per Course table..."); // Debug print
+
+         if (department == null || department.getMastercoursecatalog() == null) {
+             System.err.println("Department or CourseScheduleMap is null.");
+            return;
+        }
+
+        // Iterate through each semester's course schedule
+        for (Map.Entry<String, CourseSchedule> entry : department.getMastercoursecatalog().entrySet()) {
+            String semester = entry.getKey();
+            CourseSchedule schedule = entry.getValue();
+
+            if (schedule != null && schedule.getSchedule() != null) {
+                // Iterate through each course offered in that semester
+                for (CourseOffer co : schedule.getSchedule()) {
+                    if (co != null && co.getCourse() != null) {
+                        Course course = co.getCourse();
+                        String courseId = course.getCourseNumber();
+                        String courseName = course.getName();
+                        
+                        // Get the number of registered students (size of SeatAssignment list)
+                        int enrollmentCount = co.getSeatAssignments() != null ? co.getSeatAssignments().size() : 0; 
+                        
+                        model.addRow(new Object[]{semester, courseId, courseName, enrollmentCount});
+                    }
+                }
+            }
+        }
+    }
+
+    private void populateTuitionRevenueTable() {
+        // TODO: Implement logic to calculate tuition revenue
+        DefaultTableModel model = (DefaultTableModel) tableTuitionRevenue.getModel();
+        model.setRowCount(0);
+        System.out.println("Populating Tuition Revenue table..."); // Debug print
+
+        // Get the Student Directory from the department
+        StudentDirectory studentDirectory = department.getStudentDirectory();
+        if (studentDirectory == null || studentDirectory.getStudentlist() == null) {
+             System.err.println("StudentDirectory or Student List is null.");
+             model.addRow(new Object[]{"Total Tuition Revenue", "Error calculating"}); // Provide feedback in the table
+            return;
+        }
+
+        double totalRevenue = 0;
+
+        // Iterate through all students in the directory
+        for (StudentProfile sp : studentDirectory.getStudentlist()) {
+            if (sp != null) {
+                // Get the student's transcript
+                Transcript transcript = sp.getTranscript();
+                if (transcript != null) {
+                     // Get all seat assignments (course registrations) for the student across all semesters
+                     // Assuming transcript.getCourseList() returns ArrayList<SeatAssignment>
+                     ArrayList<SeatAssignment> allAssignments = transcript.getCourseList();
+                     if (allAssignments != null) {
+                         // Iterate through each course registration
+                         for (SeatAssignment sa : allAssignments) {
+                             // Check for nulls to prevent errors
+                             if (sa != null && sa.getCourseOffer() != null && sa.getCourseOffer().getCourse() != null) {
+                                 Course course = sa.getCourseOffer().getCourse();
+                                 // Add the price of the course to the total revenue
+                                 // Assuming Course has getCoursePrice() which returns the total price for the course
+                                 totalRevenue += course.getCoursePrice();
+                             }
+                         }
+                     }
+                }
+            }
+        }
+
+        // Format the total revenue as currency using the default locale (e.g., $)
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
+        String formattedRevenue = currencyFormatter.format(totalRevenue);
+
+        // Add the final calculated revenue to the table
+        model.addRow(new Object[]{"Total Tuition Revenue", formattedRevenue});
+    }
+    
+    
+    private void populateUsersByRoleTable() {
+        // TODO: Implement logic to count users by role
+        DefaultTableModel model = (DefaultTableModel) tableUsersByRole.getModel();
+        model.setRowCount(0); // Clear existing data
+        System.out.println("Populating Users by Role table..."); // Debug print
+
+        UserAccountDirectory uad = business.getUserAccountDirectory();
+        if (uad == null || uad.getUserAccountList() == null) {
+            System.err.println("UserAccountDirectory or UserAccountList is null.");
+            return;
+        }
+
+        // Use a Map to store counts for each role
+        Map<String, Integer> roleCounts = new HashMap<>();
+        roleCounts.put("Student", 0);
+        roleCounts.put("Faculty", 0);
+        roleCounts.put("Admin", 0);
+        roleCounts.put("Registrar", 0);
+        // Add other roles if they exist
+
+        // Iterate through all user accounts and count roles
+        for (UserAccount ua : uad.getUserAccountList()) {
+            String role = ua.getRole();
+            roleCounts.put(role, roleCounts.getOrDefault(role, 0) + 1);
+        }
+
+        // Add the counts to the table model
+        for (Map.Entry<String, Integer> entry : roleCounts.entrySet()) {
+             model.addRow(new Object[]{entry.getKey(), entry.getValue()});
+        }
+    }
+    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        lblTitle = new javax.swing.JLabel();
+        btnBack = new javax.swing.JButton();
+        tabbedPaneReports = new javax.swing.JTabbedPane();
+        usersByRoleScrollPane = new javax.swing.JScrollPane();
+        tableUsersByRole = new javax.swing.JTable();
+        coursesPerSemesterScrollPane = new javax.swing.JScrollPane();
+        tableCoursesPerSemester = new javax.swing.JTable();
+        enrollmentPerCourseScrollPane = new javax.swing.JScrollPane();
+        tableEnrollmentPerCourse = new javax.swing.JTable();
+        tuitionRevenueScrollPane = new javax.swing.JScrollPane();
+        tableTuitionRevenue = new javax.swing.JTable();
+
+        lblTitle.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        lblTitle.setText("University Analytics Dashboard");
+
+        btnBack.setText("<< Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+
+        tableUsersByRole.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Role", "Total Active Users"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        usersByRoleScrollPane.setViewportView(tableUsersByRole);
+
+        tabbedPaneReports.addTab("Users by Role", usersByRoleScrollPane);
+
+        tableCoursesPerSemester.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Semester", "Total Courses Offered"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        coursesPerSemesterScrollPane.setViewportView(tableCoursesPerSemester);
+
+        tabbedPaneReports.addTab("Courses per Semester", coursesPerSemesterScrollPane);
+
+        tableEnrollmentPerCourse.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Semester", "Course ID", "Course Name", "Total Enrolled Students"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, true, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        enrollmentPerCourseScrollPane.setViewportView(tableEnrollmentPerCourse);
+
+        tabbedPaneReports.addTab("Enrollment per Course", enrollmentPerCourseScrollPane);
+
+        tableTuitionRevenue.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Metric", "Value"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tuitionRevenueScrollPane.setViewportView(tableTuitionRevenue);
+
+        tabbedPaneReports.addTab("Tuition Revenue Summary", tuitionRevenueScrollPane);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(btnBack))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(207, 207, 207)
+                                .addComponent(lblTitle)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(tabbedPaneReports)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblTitle)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tabbedPaneReports, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnBack)
+                .addContainerGap())
+        );
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        CardSequencePanel.remove(this);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).previous(CardSequencePanel);        
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void tabbedPaneReportsStateChanged(javax.swing.event.ChangeEvent evt) {                                               
+        // When the user changes tabs, populate the corresponding table
+        int selectedIndex = tabbedPaneReports.getSelectedIndex();
+        switch (selectedIndex) {
+            case 0: // Users by Role
+                populateUsersByRoleTable();
+                break;
+            case 1: // Courses per Semester
+                populateCoursesPerSemesterTable();
+                break;
+            case 2: // Enrollment per Course
+                populateEnrollmentPerCourseTable();
+                break;
+            case 3: // Tuition Revenue
+                populateTuitionRevenueTable();
+                break;
+            default:
+                break;
+        }
+    } 
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBack;
+    private javax.swing.JScrollPane coursesPerSemesterScrollPane;
+    private javax.swing.JScrollPane enrollmentPerCourseScrollPane;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JTabbedPane tabbedPaneReports;
+    private javax.swing.JTable tableCoursesPerSemester;
+    private javax.swing.JTable tableEnrollmentPerCourse;
+    private javax.swing.JTable tableTuitionRevenue;
+    private javax.swing.JTable tableUsersByRole;
+    private javax.swing.JScrollPane tuitionRevenueScrollPane;
+    private javax.swing.JScrollPane usersByRoleScrollPane;
+    // End of variables declaration//GEN-END:variables
+}

@@ -2,6 +2,7 @@ package info5100.university.example.Persona.Faculty;
 
 import info5100.university.example.Persona.Person;
 import info5100.university.example.CourseSchedule.CourseOffer;
+import info5100.university.example.Department.Department;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class FacultyProfile {
     private String office;
     private String phone;
     private String bio;
+    private Department department;
     
     public FacultyProfile(Person p) {
 
@@ -100,4 +102,14 @@ public class FacultyProfile {
     public void setBio(String bio) {
         this.bio = bio;
     }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+    
+    
 }

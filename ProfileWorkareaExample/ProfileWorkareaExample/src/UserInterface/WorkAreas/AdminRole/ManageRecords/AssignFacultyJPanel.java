@@ -163,9 +163,13 @@ public class AssignFacultyJPanel extends javax.swing.JPanel {
         
         // 2. Perform the assignment
         // The CourseOffer object should have a method to set the faculty
-        // Based on CourseOffer.java [source: 226], it uses assignFaculty(FacultyProfile fp)
         selectedCourseOffer.assignFaculty(facultyProfile);
         
+        // --- MODIFICATION: Set the faculty's department ---
+        // This is now valid because we modified FacultyProfile.java
+        facultyProfile.setDepartment(this.department); // Explicitly set department
+        // --- END MODIFICATION ---
+
         // 3. Give confirmation
         JOptionPane.showMessageDialog(this, 
                 "Faculty " + facultyProfile.getPerson().getName() + " has been assigned to \n" +
@@ -181,7 +185,15 @@ public class AssignFacultyJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         // Go back (no refresh needed unless we add assignment status to the table)
         CardSequencePanel.remove(this);
-        ((java.awt.CardLayout) CardSequencePanel.getLayout()).previous(CardSequencePanel);        
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).previous(CardSequencePanel);
+        
+        // --- FIX: Refresh the ManageRecordsJPanel table ---
+        for (java.awt.Component c : CardSequencePanel.getComponents()) {
+            if (c instanceof ManageRecordsJPanel) {
+                ((ManageRecordsJPanel) c).populateFacultyTable(); 
+                break;
+            }
+        }         
     }//GEN-LAST:event_btnBackActionPerformed
 
 
