@@ -12,7 +12,7 @@ import info5100.university.example.Persona.Person;
 import UserInterface.WorkAreas.RegistrarRole.ManageCourseOfferingsJPanel;
 import UserInterface.WorkAreas.RegistrarRole.ManageRegistrarProfileJPanel;
 import javax.swing.JOptionPane;
-
+import UserInterface.WorkAreas.RegistrarRole.TuitionFinancialJPanel;
 import UserInterface.WorkAreas.RegistrarRole.ManageCourseOfferingsJPanel;
 
 
@@ -59,13 +59,6 @@ public class RegistrarWorkAreaJPanel extends javax.swing.JPanel {
             }
         });
 
-        btnManageCourseOfferings.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnManageCourseOfferingsActionPerformed(evt);
-            }
-        });
-
-
         btnManageStudentReg.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnManageStudentReg.setText("Student Registration");
         btnManageStudentReg.addActionListener(new java.awt.event.ActionListener() {
@@ -84,6 +77,11 @@ public class RegistrarWorkAreaJPanel extends javax.swing.JPanel {
 
         btnTuitionFinancial.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnTuitionFinancial.setText("Tuition & Financial Reconciliation");
+        btnTuitionFinancial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTuitionFinancialActionPerformed(evt);
+            }
+        });
 
         btnReportingAnalytics.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnReportingAnalytics.setText("Reporting & Analytics");
@@ -164,6 +162,13 @@ public class RegistrarWorkAreaJPanel extends javax.swing.JPanel {
         CardSequencePanel.add("ManageRegistrarProfile", manageProfilePanel);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_btnManageProfileActionPerformed
+
+    private void btnTuitionFinancialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTuitionFinancialActionPerformed
+        // TODO add your handling code here:
+        TuitionFinancialJPanel tuitionPanel = new TuitionFinancialJPanel(business, CardSequencePanel);
+        CardSequencePanel.add("TuitionFinancial", tuitionPanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+    }//GEN-LAST:event_btnTuitionFinancialActionPerformed
 
 
 
