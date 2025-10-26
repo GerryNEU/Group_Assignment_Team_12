@@ -169,8 +169,18 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
         facultyScrollPane.setViewportView(tblFaculty);
 
         btnViewEditFaculty.setText("View / Edit Details");
+        btnViewEditFaculty.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewEditFacultyActionPerformed(evt);
+            }
+        });
 
         btnDeleteFaculty.setText("Delete Record");
+        btnDeleteFaculty.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteFacultyActionPerformed(evt);
+            }
+        });
 
         btnSearchFacultyById.setText("Search by ID");
         btnSearchFacultyById.addActionListener(new java.awt.event.ActionListener() {
@@ -588,6 +598,87 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_btnDeleteStudentActionPerformed
+
+    private void btnDeleteFacultyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteFacultyActionPerformed
+        // TODO add your handling code here:
+        // 1. Get the selected row
+        int selectedRow = tblFaculty.getSelectedRow();
+
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a faculty member from the table to delete.", "No Faculty Selected", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // 2. Get the Faculty ID from the table (column 0)
+        String facultyId = (String) tblFaculty.getValueAt(selectedRow, 0);
+
+        // 3. Show confirmation dialog
+        int dialogResult = JOptionPane.showConfirmDialog(this,
+            "Are you sure you want to delete faculty " + facultyId + "?\nThis will also delete their associated Person and User Account records.",
+            "Confirm Deletion",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE);
+
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            // 4. Proceed with deletion
+            try {
+                // Get the directories
+                FacultyDirectory facultyDirectory = department.getFacultyDirectory();
+                UserAccountDirectory userAccountDirectory = business.getUserAccountDirectory();
+                PersonDirectory personDirectory = department.getPersonDirectory();
+
+                // 5. Execute deletion in order (Profile -> Account -> Person)
+                boolean profileRemoved = facultyDirectory.removeFacultyById(facultyId);
+                boolean accountRemoved = userAccountDirectory.removeUserAccountByPersonId(facultyId);
+                boolean personRemoved = personDirectory.removePersonById(facultyId);
+
+                // 6. Provide feedback
+                if (profileRemoved && accountRemoved && personRemoved) {
+                    JOptionPane.showMessageDialog(this, "Faculty " + facultyId + " and all associated records have been deleted.", "Deletion Successful", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    String feedback = "Partial deletion. Please check data:\n";
+                    if (!profileRemoved) feedback += "- Faculty Profile not found or not removed.\n";
+                    if (!accountRemoved) feedback += "- User Account not found or not removed.\n";
+                    if (!personRemoved) feedback += "- Person record not found or not removed.\n";
+                    JOptionPane.showMessageDialog(this, feedback, "Deletion Warning", JOptionPane.WARNING_MESSAGE);
+                }
+
+                // 7. Refresh the table
+                populateFacultyTable();
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "An error occurred during deletion: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }        
+    }//GEN-LAST:event_btnDeleteFacultyActionPerformed
+
+    private void btnViewEditFacultyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewEditFacultyActionPerformed
+        // TODO add your handling code here:
+        // 1. Get the selected row
+        int selectedRow = tblFaculty.getSelectedRow();
+        
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a faculty member from the table to view/edit.", "No Faculty Selected", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // 2. Get the Faculty ID from the table (column 0)
+        String facultyId = (String) tblFaculty.getValueAt(selectedRow, 0);
+        
+        // 3. Find the FacultyProfile object
+        FacultyProfile facultyProfile = department.getFacultyDirectory().findFacultyByPersonId(facultyId);
+        
+        if (facultyProfile == null) {
+            // This should not happen if the table is in sync, but good to check
+            JOptionPane.showMessageDialog(this, "Could not find the selected faculty. Please refresh.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // 4. Create and navigate to the new panel
+        ViewEditFacultyJPanel viewEditPanel = new ViewEditFacultyJPanel(business, CardSequencePanel, facultyProfile);
+        CardSequencePanel.add("ViewEditFacultyJPanel", viewEditPanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);        
+    }//GEN-LAST:event_btnViewEditFacultyActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
