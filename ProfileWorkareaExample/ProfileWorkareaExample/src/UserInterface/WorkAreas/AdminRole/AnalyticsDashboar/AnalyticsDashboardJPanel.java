@@ -55,9 +55,25 @@ public class AnalyticsDashboardJPanel extends javax.swing.JPanel {
         // TODO: Implement logic to count courses per semester
         DefaultTableModel model = (DefaultTableModel) tblCoursesPerSemester.getModel();
         model.setRowCount(0);
-         System.out.println("Populating Courses per Semester table..."); // Debug print
-         // Example Row
-         // model.addRow(new Object[]{"Fall 2025", 5});
+        System.out.println("Populating Courses per Semester table..."); // Debug print
+
+        if (department == null || department.getCourseScheduleMap() == null) {
+             System.err.println("Department or CourseScheduleMap is null.");
+            return;
+        }
+
+        // Iterate through the map of course schedules (Key: Semester Name, Value: CourseSchedule object)
+        for (Map.Entry<String, CourseSchedule> entry : department.getCourseScheduleMap().entrySet()) {
+            String semester = entry.getKey();
+            CourseSchedule schedule = entry.getValue();
+            
+            if (schedule != null && schedule.getSchedule() != null) {
+                int courseCount = schedule.getSchedule().size(); // The size of the CourseOffer list is the count
+                 model.addRow(new Object[]{semester, courseCount});
+            } else {
+                 model.addRow(new Object[]{semester, 0}); // Add semester with 0 courses if schedule is null
+            }
+        }
     }
 
     private void populateEnrollmentPerCourseTable() {
