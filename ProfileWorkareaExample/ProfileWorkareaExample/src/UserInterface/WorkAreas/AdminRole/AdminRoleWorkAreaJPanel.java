@@ -14,6 +14,7 @@ import Business.Business;
 import UserInterface.WorkAreas.AdminRole.AdministerUserAccountsWorkResp.ManageUserAccountsJPanel;
 import UserInterface.WorkAreas.AdminRole.ManagePersonnelWorkResp.ManagePersonsJPanel;
 import UserInterface.WorkAreas.AdminRole.ManageRecords.ManageRecordsJPanel;
+import info5100.university.example.Persona.Person;
 
 import javax.swing.JPanel;
 
@@ -25,15 +26,18 @@ public class AdminRoleWorkAreaJPanel extends javax.swing.JPanel {
 
     javax.swing.JPanel CardSequencePanel;
     Business business;
+    Person loggedPerson;
 
     /**
      * Creates new form UnitRiskWorkArea
      */
 
-    public AdminRoleWorkAreaJPanel(Business b, JPanel clp) {
+    public AdminRoleWorkAreaJPanel(Business b, JPanel clp, Person p) {
 
         business = b;
         this.CardSequencePanel = clp;
+        this.loggedPerson = p;
+        
         initComponents();
 
     }
