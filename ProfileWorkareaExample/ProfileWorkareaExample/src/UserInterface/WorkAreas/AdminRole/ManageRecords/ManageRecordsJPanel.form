@@ -193,6 +193,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Search by ID"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSearchFacultyByIdActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnSearchFacultyByName">
               <Properties>
@@ -283,6 +286,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Search by ID"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSearchStudentByIdActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnSearchStudentByName">
               <Properties>

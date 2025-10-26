@@ -155,6 +155,11 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
         btnDeleteFaculty.setText("Delete Record");
 
         btnSearchFacultyById.setText("Search by ID");
+        btnSearchFacultyById.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchFacultyByIdActionPerformed(evt);
+            }
+        });
 
         btnSearchFacultyByName.setText("Search by Name");
 
@@ -213,6 +218,11 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
         tabbedPane.addTab("Faculty", facultyPanel);
 
         btnSearchStudentById.setText("Search by ID");
+        btnSearchStudentById.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchStudentByIdActionPerformed(evt);
+            }
+        });
 
         btnSearchStudentByName.setText("Search by Name");
 
@@ -317,6 +327,35 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
                 .addComponent(btnBack))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSearchFacultyByIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchFacultyByIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSearchFacultyByIdActionPerformed
+
+    private void btnSearchStudentByIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchStudentByIdActionPerformed
+        // TODO add your handling code here:
+        // --- "Search by ID" is implemented ---
+        String searchId = txtStudentSearch.getText().trim();
+        if (searchId.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a Student ID to search.", "Input Required", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // Use the findStudent method from StudentDirectory
+        StudentProfile foundStudent = department.getStudentDirectory().findStudent(searchId);
+        
+        ArrayList<StudentProfile> searchResults = new ArrayList<>();
+        if (foundStudent != null) {
+            searchResults.add(foundStudent); // Found, add to list
+        } 
+        
+        // Refresh the table using the new populate method
+        populateStudentTable(searchResults); 
+        
+        if (searchResults.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No student found with ID: " + searchId, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btnSearchStudentByIdActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
