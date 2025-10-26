@@ -17,6 +17,10 @@ public class CourseLoad {
     private StudentProfile studentProfile;
     ArrayList<SeatAssignment> seatassignments;
     
+    public String getTerm() {
+        return semester;
+    }
+    
     public CourseLoad(String s){
         seatassignments = new ArrayList();
         semester = s;
