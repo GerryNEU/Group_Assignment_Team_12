@@ -14,6 +14,7 @@ import info5100.university.example.Persona.Faculty.FacultyProfile;
 import info5100.university.example.CourseSchedule.CourseOffer; 
 import java.util.ArrayList;
 import javax.swing.JOptionPane; 
+import java.util.ArrayList;
 
 /**
  *
@@ -130,6 +131,11 @@ public void populateTable() {
         });
 
         btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         btnBack.setText("Back");
         btnBack.addActionListener(new java.awt.event.ActionListener() {
@@ -235,6 +241,62 @@ public void populateTable() {
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 
     }//GEN-LAST:event_btnViewEditActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        // --- 1. Get Selected Row ---
+        int selectedRowIndex = tblCourseOfferings.getSelectedRow();
+
+        if (selectedRowIndex < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a course offering to delete.", "Selection Required", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // --- 2. Get CourseOffer Object ---
+        DefaultTableModel model = (DefaultTableModel) tblCourseOfferings.getModel();
+        String selectedCourseNumber = (String) model.getValueAt(selectedRowIndex, 0); // Assuming Course Number is in column 0
+
+        Department department = business.getDepartment();
+        CourseSchedule courseSchedule = department.getCourseSchedule("Fall 2025"); // Assuming Fall 2025
+        if (courseSchedule == null) {
+             JOptionPane.showMessageDialog(this, "Course schedule not found.", "Error", JOptionPane.ERROR_MESSAGE);
+             return;
+        }
+
+        CourseOffer courseOfferToDelete = courseSchedule.getCourseOfferByNumber(selectedCourseNumber);
+        if (courseOfferToDelete == null) {
+            JOptionPane.showMessageDialog(this, "Could not find the selected course offering.", "Error", JOptionPane.ERROR_MESSAGE);
+            // It might have been deleted already, refresh table just in case
+            populateTable();
+            return;
+        }
+
+        // --- 3. Confirmation Dialog ---
+        int confirmation = JOptionPane.showConfirmDialog(
+            this,
+            "Are you sure you want to delete the offering for " + selectedCourseNumber + "?\nThis action cannot be undone.",
+            "Confirm Deletion",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE
+        );
+
+        // --- 4. Delete if Confirmed ---
+        if (confirmation == JOptionPane.YES_OPTION) {
+            // Remove the CourseOffer from the schedule's list
+            // We need to access the underlying ArrayList in CourseSchedule
+            ArrayList<CourseOffer> scheduleList = courseSchedule.getSchedule(); // Assuming getSchedule() returns the ArrayList
+            boolean removed = scheduleList.remove(courseOfferToDelete);
+
+            if (removed) {
+                JOptionPane.showMessageDialog(this, "Course Offering deleted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                // Refresh the table to show the updated list
+                populateTable();
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to delete the course offering.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        // If user chose NO, do nothing.
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

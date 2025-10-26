@@ -6,9 +6,12 @@ package UserInterface.WorkAreas.RegistrarRole;
 
 import Business.*;
 import javax.swing.JPanel;
-
+import Business.UserAccounts.UserAccount;
+import Business.UserAccounts.UserAccountDirectory;
+import info5100.university.example.Persona.Person;
 import UserInterface.WorkAreas.RegistrarRole.ManageCourseOfferingsJPanel;
-
+import UserInterface.WorkAreas.RegistrarRole.ManageRegistrarProfileJPanel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -47,13 +50,11 @@ public class RegistrarWorkAreaJPanel extends javax.swing.JPanel {
 
         btnManageCourseOfferings.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnManageCourseOfferings.setText("Course Offering Management");
-
         btnManageCourseOfferings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnManageCourseOfferingsActionPerformed(evt);
             }
         });
-
 
         btnManageStudentReg.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnManageStudentReg.setText("Student Registration");
@@ -65,6 +66,11 @@ public class RegistrarWorkAreaJPanel extends javax.swing.JPanel {
 
         btnManageProfile.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnManageProfile.setText("Manage own profile");
+        btnManageProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnManageProfileActionPerformed(evt);
+            }
+        });
 
         btnTuitionFinancial.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnTuitionFinancial.setText("Tuition & Financial Reconciliation");
@@ -116,6 +122,9 @@ public class RegistrarWorkAreaJPanel extends javax.swing.JPanel {
 
     private void btnManageStudentRegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageStudentRegActionPerformed
         // TODO add your handling code here:
+        ManageStudentRegistrationJPanel manageStudentRegPanel = new ManageStudentRegistrationJPanel(business, CardSequencePanel);
+        CardSequencePanel.add("ManageStudentRegistration", manageStudentRegPanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_btnManageStudentRegActionPerformed
 
 
@@ -125,6 +134,26 @@ public class RegistrarWorkAreaJPanel extends javax.swing.JPanel {
         CardSequencePanel.add("ManageCourseOfferings", manageCourseOfferingsPanel);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_btnManageCourseOfferingsActionPerformed
+
+    private void btnManageProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageProfileActionPerformed
+        // TODO add your handling code here:
+        // --- Find the Registrar User Account (Simplified Approach) ---
+        UserAccountDirectory uad = business.getUserAccountDirectory();
+        UserAccount registrarAccount = uad.findUserAccount("registrar"); // Find by username used in ConfigureABusiness
+
+        if (registrarAccount == null) {
+             JOptionPane.showMessageDialog(this, "Could not find Registrar account.", "Error", JOptionPane.ERROR_MESSAGE);
+             return;
+        }
+         // Alternative if finding by Person ID R001:
+         // Person registrarPerson = business.getDepartment().getPersonDirectory().findPerson("R001");
+         // UserAccount registrarAccount = uad.findUserAccountByPerson(registrarPerson); // Need to add findUserAccountByPerson to UserAccountDirectory
+
+        // --- Navigate ---
+        ManageRegistrarProfileJPanel manageProfilePanel = new ManageRegistrarProfileJPanel(business, CardSequencePanel, registrarAccount); // Pass the found account
+        CardSequencePanel.add("ManageRegistrarProfile", manageProfilePanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+    }//GEN-LAST:event_btnManageProfileActionPerformed
 
 
 
