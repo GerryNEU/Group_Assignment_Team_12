@@ -5,6 +5,7 @@
 package UserInterface.WorkAreas.AdminRole.ManageRecords;
 
 import Business.Business;
+import Business.UserAccounts.UserAccountDirectory;
 import info5100.university.example.Department.Department;
 import info5100.university.example.Persona.Person;
 import info5100.university.example.Persona.PersonDirectory;
@@ -39,6 +40,7 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
         initComponents();
         
         populateFacultyTable();
+        populateStudentTable();
     }
     
     public void populateFacultyTable(ArrayList<FacultyProfile> facultyList) {
@@ -293,6 +295,11 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
         btnViewEditStudent.setText("View / Edit Details");
 
         btnDeleteStudent.setText("Delete Record");
+        btnDeleteStudent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteStudentActionPerformed(evt);
+            }
+        });
 
         btnRefreshStudentList.setText("Refresh Table");
         btnRefreshStudentList.addActionListener(new java.awt.event.ActionListener() {
@@ -527,6 +534,60 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "No faculty found for department: " + searchDept, "Search Result", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnSearchFacultyByDeptActionPerformed
+
+    private void btnDeleteStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteStudentActionPerformed
+        // TODO add your handling code here:
+            // 1. Get the selected row
+        int selectedRow = tblStudents.getSelectedRow();
+        
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a student from the table to delete.", "No Student Selected", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // 2. Get the Student ID from the table (column 0)
+        String studentId = (String) tblStudents.getValueAt(selectedRow, 0);
+
+        // 3. Show confirmation dialog
+        int dialogResult = JOptionPane.showConfirmDialog(this, 
+                "Are you sure you want to delete student " + studentId + "?\nThis will also delete their associated Person and User Account records.",
+                "Confirm Deletion", 
+                JOptionPane.YES_NO_OPTION, 
+                JOptionPane.WARNING_MESSAGE);
+        
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            // 4. Proceed with deletion
+            try {
+                // Get the directories
+                StudentDirectory studentDirectory = department.getStudentDirectory();
+                UserAccountDirectory userAccountDirectory = business.getUserAccountDirectory();
+                PersonDirectory personDirectory = department.getPersonDirectory();
+
+                // 5. Execute deletion in order (Profile -> Account -> Person)
+                boolean profileRemoved = studentDirectory.removeStudentById(studentId);
+                boolean accountRemoved = userAccountDirectory.removeUserAccountByPersonId(studentId);
+                boolean personRemoved = personDirectory.removePersonById(studentId);
+                
+                // 6. Provide feedback
+                if (profileRemoved && accountRemoved && personRemoved) {
+                    JOptionPane.showMessageDialog(this, "Student " + studentId + " and all associated records have been deleted.", "Deletion Successful", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    // This indicates a potential data integrity issue
+                    String feedback = "Partial deletion. Please check data:\n";
+                    if (!profileRemoved) feedback += "- Student Profile not found or not removed.\n";
+                    if (!accountRemoved) feedback += "- User Account not found or not removed.\n";
+                    if (!personRemoved) feedback += "- Person record not found or not removed.\n";
+                    JOptionPane.showMessageDialog(this, feedback, "Deletion Warning", JOptionPane.WARNING_MESSAGE);
+                }
+                
+                // 7. Refresh the table
+                populateStudentTable();
+                
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "An error occurred during deletion: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnDeleteStudentActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

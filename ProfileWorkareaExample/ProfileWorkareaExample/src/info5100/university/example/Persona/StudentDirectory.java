@@ -67,4 +67,21 @@ public class StudentDirectory {
         
     }
     
+    public boolean removeStudentById(String personId) {
+        StudentProfile studentToRemove = null;
+        for (StudentProfile sp : studentlist) {
+            // Check if the Person object is not null before getting the ID
+            if (sp.getPerson() != null && sp.getPerson().getPersonId().equals(personId)) {
+                studentToRemove = sp;
+                break; // Found the student, no need to continue looping
+            }
+        }
+
+        if (studentToRemove != null) {
+            studentlist.remove(studentToRemove);
+            return true; // Successfully removed
+        } else {
+            return false; // Student not found
+        }
+    }
 }
