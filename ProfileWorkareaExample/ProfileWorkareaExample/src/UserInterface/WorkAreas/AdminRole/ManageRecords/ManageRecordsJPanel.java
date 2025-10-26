@@ -42,20 +42,20 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
     }
     
         public void populateFacultyTable() {
-        DefaultTableModel model = (DefaultTableModel) tblFaculty.getModel(); // 假设你的教职工表格叫 tblFaculty
+        DefaultTableModel model = (DefaultTableModel) tblFaculty.getModel();
         model.setRowCount(0);
 
         FacultyDirectory facultyDirectory = department.getFacultyDirectory();
 
         if (facultyDirectory != null && facultyDirectory.getTeacherList() != null) {
             for (FacultyProfile fp : facultyDirectory.getTeacherList()) {
-                Person person = fp.getPerson(); // FacultyProfile 应该有关联的 Person
+                Person person = fp.getPerson();
                 if (person != null) {
                     Object[] row = new Object[4];
-                    row[0] = fp; // 存储 FacultyProfile 对象
+                    row[0] = fp;
                     row[1] = person.getName();
                     row[2] = person.getEmail();
-                    row[3] = department.getName(); // 假设他们都在这个系
+                    row[3] = department.getName();
                     model.addRow(row);
                 }
             }
@@ -63,21 +63,21 @@ public class ManageRecordsJPanel extends javax.swing.JPanel {
     }
 
         public void populateStudentTable() {
-        DefaultTableModel model = (DefaultTableModel) tblStudents.getModel(); // 假设你的学生表格叫 tblStudents
+        DefaultTableModel model = (DefaultTableModel) tblStudents.getModel();
         model.setRowCount(0);
 
         StudentDirectory studentDirectory = department.getStudentDirectory();
 
         if (studentDirectory != null && studentDirectory.getStudentlist() != null) {
             for (StudentProfile sp : studentDirectory.getStudentlist()) {
-                Person person = sp.getPerson(); // StudentProfile 应该有关联的 Person
+                Person person = sp.getPerson();
                 if (person != null) {
                     Object[] row = new Object[5];
-                    row[0] = sp; // 存储 StudentProfile 对象
+                    row[0] = sp;
                     row[1] = person.getName();
                     row[2] = person.getEmail();
-                    row[3] = sp.getTranscript().getAcademicStatus(); // 作业要求 [source: 36]
-                    row[4] = String.format("%.2f", sp.getTranscript().calculateOverallGPA()); // 格式化GPA
+                    row[3] = sp.getTranscript().getAcademicStatus();
+                    row[4] = String.format("%.2f", sp.getTranscript().calculateOverallGPA());
                     model.addRow(row);
                 }
             }
