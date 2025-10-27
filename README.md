@@ -232,7 +232,7 @@ This project integrates a reference implementation of a Digital University Syste
     * **Documentation:** Authored README sections: [Project Overview, Installation, Usage Instructions]. Added code comments for [All Classes under Admin, and some of students, faculties, directions].
     * **Testing:** Performed testing for [Admin login, User creation/deletion, Records Part, Person creatrion/deletion, Assgin departments to faculties]. Verified authentication/authorization for Admin role.
     * **Commits/PRs:** Contributed [47] meaningful commits to personal branch, created [15] Pull Requests to main.
-* **[Member Name 2] (NUID: [NUID 2]):**
+* **[Zhizhi Li] (NUID: [002591966]):**
     * **Assigned Use Case:** [Admin/Faculty/Student/Registrar]
     * **Coding:** Implemented [List specific features like Course Management, Student Grading, Performance Reports export, ManageStudentsJPanel ranking...]. Developed/Modified classes: [`ClassC.java`, `ClassD.java`...]. Addressed [Number] Pull Request reviews.
     * **Documentation:** Authored README sections: [e.g., Features Implemented (Faculty), Usage Instructions]. Added code comments for [Specific classes/methods].
