@@ -9,8 +9,8 @@ Profile Workarea Example - Implementing Access-Controlled Use Cases in a Digital
     * [Member Name 1] - Role: [Role 1 assigned from PDF: Admin/Faculty/Student/Registrar], Responsibilities: [Specific features implemented, e.g., User Account Management, Course Management], NUID: [NUID 1]
     * [Member Name 2] - Role: [Role 2 assigned from PDF], Responsibilities: [Specific features implemented], NUID: [NUID 2]
     * [Member Name 3] - Role: [Role 3 assigned from PDF], Responsibilities: [Specific features implemented], NUID: [NUID 3]
-    * [Member Name 4 (if applicable)] - Role: [Role 4 assigned from PDF], Responsibilities: [Specific features implemented], NUID: [NUID 4]
-    *(请填写实际的姓名、角色、职责和 NUID)*
+    * Kairui Ouyang - Role: Registrar, Responsibilities: Course Offering Management, Student Registration (Admin-Side), Profile Management, Tuition & Financial Reconciliation, Reporting & Analytics, NUID: 002528459
+   
 
 ---
 
@@ -25,7 +25,8 @@ This project integrates a reference implementation of a Digital University Syste
 * **Course Management (Faculty):** Viewing assigned courses, updating details, managing syllabi, and controlling enrollment status.
 * **Student Management (Faculty):** Grading assignments, viewing enrolled students, accessing transcripts, ranking students, and calculating class GPA.
 * **Course Registration & Academics (Student):** Searching/registering for courses within credit limits, dropping courses, viewing transcripts with GPA/standing, tracking graduation progress, and managing tuition payments.
-* **Course Offering Management (Registrar):** Creating and managing course offerings per semester, including assigning faculty and setting capacity.
+* **Course Offering Management (Registrar):** Creating, viewing, editing, and deleting course offerings per semester, including assigning faculty and setting capacity/schedule/room.
+* **Student Registration (Registrar):** Enrolling students into course offerings and dropping them, with validation checks (e.g., capacity, credit limits).
 * **Profile Management:** All roles can view and update their personal profile information.
 * **Analytics & Reporting:** Admins view a dashboard with user/course/enrollment/revenue summaries. Faculty generate course performance reports. Registrar generates institutional reports.
 
@@ -105,9 +106,12 @@ This project integrates a reference implementation of a Digital University Syste
 * **Registration** (`CourseRegistrationJPanel`): Search available courses by Course ID, Teacher, or Course Name (3 methods). Displays results in table showing ID, Name, Instructor, Credits, Seats (Available/Total), Status (Open/Full). Allows enrolling if seats available and within 8-credit limit. Displays "My Courses" for the current semester. Allows dropping enrolled courses.
 * **Transcript** (`TranscriptJPanel`): Displays full academic history. Allows filtering by semester via dropdown. Shows Term, Academic Standing (Good, Warning, Probation based on Term/Overall GPA), Course ID, Name, Letter Grade, Term GPA, and Overall GPA. GPA calculation follows standard rules (Grade Points * Credits).
 
-**Registrar Role** (`RegistrarWorkAreaJPanel`): *(Implemented by: [Member Name(s)])*
-* **Course Offering Management** (`ManageCourseOfferingsJPanel`): View list of course offerings for the current semester (Fall 2025). (Create, Edit, Delete buttons are present but may have limited functionality).
-* *(Other buttons are placeholders as per the UI design)*.
+**Registrar Role** (`RegistrarWorkAreaJPanel`): *(Implemented by: Kairui Ouyang)*
+* **Course Offering Management** (`ManageCourseOfferingsJPanel`): View list of course offerings for a selected semester (e.g., Fall 2025). Create new offerings (`CreateCourseOfferingJPanel`) by selecting a course from the catalog, assigning faculty (optional), setting capacity, schedule, and room. Edit existing offerings (`EditCourseOfferingJPanel`) to update faculty, capacity, schedule, room. Delete course offerings with confirmation.
+* **Student Registration (Admin-Side)** (`ManageStudentRegistrationJPanel`): View lists of students and course offerings. Select a student and a course offering to enroll the student, subject to validation checks (course full, student already enrolled, credit limit exceeded). Select a student and a course offering to drop the student from the course with confirmation. Tables refresh to show updated enrollment counts.
+* **Manage Profile** (`ManageRegistrarProfileJPanel`): View and update the logged-in Registrar's own profile information (Name, Contact Info, Office Hours). User ID is displayed read-only. Changes are saved to the associated `Person` object.
+* **Tuition & Financial Reconciliation** (`TuitionFinancialJPanel`): Monitor the tuition balance for all students displayed in a table. Select a semester and generate a summary financial report showing total billed tuition, total unpaid balance (based on current positive balances), and estimated total collected tuition for that semester. (Per-department breakdown requires data model enhancements).
+* **Reporting & Analytics** (`ReportingAnalyticsJPanel`): Select report type via dropdown. Generate and display reports in a table: "Enrollment by Course" (shows course details, faculty, enrollment, capacity for a semester) and "GPA Distribution" (shows the count of students falling into predefined GPA ranges based on overall GPA, requires GPA calculation logic in Transcript/SeatAssignment).
 
 ---
 
@@ -132,14 +136,18 @@ This project integrates a reference implementation of a Digital University Syste
     * **Check Graduation:** Click `Graduation Audit`. Review credit progress, core course status, GPA, and overall readiness.
     * **Pay Tuition:** Click `Course Work`. View balance and fee breakdown. Click `Pay Tuition`, confirm amount, select method. View updated balance and payment history.
 5.  **Registrar Workflow:**
-    * Click `Course Offering Management`. View the list of courses for Fall 2025. (Further actions like Create/Edit depend on implementation).
+    * *Manage Offerings:* Click `Course Offering Management`. View list for Fall 2025. Click `Create` to add a new offering (select course, set details, save). Select an existing offering, click `View/Edit` to modify details (faculty, capacity, schedule, room), click `Save Changes`. Select an offering, click `Delete`, confirm.
+    * *Register Students:* Click `Student Registration Management`. Select a student from the top table. Select a course offering from the bottom table. Click `Enroll Student`. Confirm success/error message. Select a student. Select a course they are enrolled in. Click `Drop Student`. Confirm. Verify enrollment count updates.
+    * *Update Profile:* Click `Manage Profile`. View current info. Edit Name, Contact Info, Office Hours. Click `Save Changes`.
+    * *Check Finances:* Click `Tuition & Financial`. View student balance table. Select "Fall 2025" from dropdown, click `Generate Report`. View summary in the text area.
+    * *Generate Reports:* Click `Reporting & Analytics`. Select "Enrollment by Course" or "GPA Distribution" from dropdown. Click `Generate Report`. View results in the table.
 
 ---
 
 ## 8. Testing Guide
 
 * **Authentication & Authorization Verification:**
-    * Log in using credentials for each role (Admin: `admin`/`****`, Faculty: `prof1`/`1234`, Student: `student1`/`****`, Registrar: `registrar`/`regpass`). Verify the correct main menu/work area appears.
+    * Log in using credentials for each role (Admin: `admin`/`****`, Faculty: `prof1`/`1234`, Student: `student1`/`****`, Registrar: `registrar`/`registrar`). Verify the correct main menu/work area appears.
     * Attempt invalid logins (wrong password, wrong username). Verify login fails with no access granted.
     * Log in as Student. Ensure Admin/Faculty/Registrar specific buttons (e.g., "Administer User Accounts", "Manage Courses", "Course Offering Management") are *not* visible or accessible. Repeat for Faculty (ensure Admin/Student buttons are inaccessible).
 * **Sample Test Cases:**
@@ -169,6 +177,12 @@ This project integrates a reference implementation of a Digital University Syste
         2. Go to `Course Work`. Verify balance shows $6000 (4 * 1500). Verify Course Fees table shows INFO 5100 with $6000.
         3. Click `Pay Tuition`. Confirm payment. Select "Credit Card". Verify success message.
         4. Verify Balance shows "$0.00 (Paid)" in green. Verify Payment History table shows the transaction. Verify `Pay Tuition` button is disabled.
+    * **Registrar - Course Offering Cycle:**
+        1.  Login as `registrar/regpass`.
+        2.  Go to `Course Offering Management`. Verify existing offerings (INFO 5100, 6100, etc.) are displayed.
+        3.  Click `Create`. Select Course "INFO 5200" (Data Management). Select Faculty "[Faculty Name]". Enter Capacity "25", Schedule "Wed 1-3pm", Room "Snell 101". Click `Save`. Verify success and return to list. Verify INFO 5200 is now in the table.
+        4.  Select the newly added "INFO 5200" row. Click `View/Edit`. Change Schedule to "Wed 2-4pm", Room to "Ryder 250". Click `Save Changes`. Verify success and return. Verify details updated in table.
+        5.  Select "INFO 5200" again. Click `Delete`. Click "Yes" on confirmation. Verify success. Verify INFO 5200 is removed from the table.
 * **Input Validation:**
     * Try creating Persons/Users with empty fields, invalid emails, short passwords. Verify error messages appear and operation fails.
     * Try entering non-numeric grades as Faculty. Verify error.
@@ -230,9 +244,9 @@ This project integrates a reference implementation of a Digital University Syste
     * **Documentation:** Authored README sections: [e.g., Authentication, Testing Guide]. Added code comments for [Specific classes/methods].
     * **Testing:** Performed testing for [Student login, Course enrollment/drop, GPA calculation, Tuition payment...]. Verified authentication/authorization for Student role.
     * **Commits/PRs:** Contributed [Number] meaningful commits to personal branch, created [Number] Pull Requests to main.
-* **[Member Name 4 (if applicable)] (NUID: [NUID 4]):**
-    * **Assigned Use Case:** [Admin/Faculty/Student/Registrar]
-    * **Coding:** Implemented [List specific features like Registrar's Course Offering Management, Student Registration Admin-side...]. Developed/Modified classes: [`ClassG.java`, `ClassH.java`...]. Addressed [Number] Pull Request reviews.
-    * **Documentation:** Authored README sections: [e.g., Challenges & Solutions, Future Enhancements]. Added code comments for [Specific classes/methods].
-    * **Testing:** Performed testing for [Registrar login, Course Offering display...]. Verified authentication/authorization for Registrar role.
-    * **Commits/PRs:** Contributed [Number] meaningful commits to personal branch, created [Number] Pull Requests to main.
+* **Kairui Ouyang (NUID: 002528459):**
+    * **Assigned Use Case:** Registrar
+    * **Coding:** Implemented the Registrar role user creation in `ConfigureABusiness`. Developed the main `RegistrarWorkAreaJPanel` and navigation logic. Implemented `ManageCourseOfferingsJPanel` for viewing course offerings. Implemented `CreateCourseOfferingJPanel` and `EditCourseOfferingJPanel` for creating and editing offerings (Course selection, Faculty assignment, Capacity, Schedule, Room - *requires `setRoom` in `CourseOffer`*). Implemented delete functionality in `ManageCourseOfferingsJPanel`. Developed `ManageStudentRegistrationJPanel` for enrolling and dropping students with validation checks (capacity, existing enrollment, credit limit). Implemented `ManageRegistrarProfileJPanel` for viewing/editing Registrar's own profile (Name, Contact, Office Hours - *required additions to `Person.java`*). Developed `TuitionFinancialJPanel` to display student tuition balances and generate semester financial summary reports. Developed `ReportingAnalyticsJPanel` to generate and display "Enrollment by Course" and "GPA Distribution" reports (*GPA report requires prior implementation of GPA calculation in model classes*). Added necessary helper methods or modifications to model classes (`StudentDirectory`, `Department`, `Seat`, `Person`, `StudentProfile`) to support Registrar functionalities.
+    * **Documentation:** Updated README sections (6, 7, 11) to reflect implemented Registrar features and contributions. Added code comments for Registrar-related classes/methods.
+    * **Testing:** Performed testing for Registrar login, course offering CRUD operations, student enrollment/drop functionality, profile editing, and report generation features. Verified authorization for Registrar role.
+    * **Commits/PRs:** Contributed 19 meaningful commits to personal branch, created 5 Pull Requests to main.
