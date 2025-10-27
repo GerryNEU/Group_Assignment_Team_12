@@ -217,12 +217,12 @@ This project integrates a reference implementation of a Digital University Syste
     * **Documentation:** Authored README sections: [Project Overview, Installation, Usage Instructions]. Added code comments for [All Classes under Admin, and some of students, faculties, directions].
     * **Testing:** Performed testing for [Admin login, User creation/deletion, Records Part, Person creatrion/deletion, Assgin departments to faculties]. Verified authentication/authorization for Admin role.
     * **Commits/PRs:** Contributed [47] meaningful commits to personal branch, created [15] Pull Requests to main.
-* **[Member Name 2] (NUID: [NUID 2]):**
-    * **Assigned Use Case:** [Admin/Faculty/Student/Registrar]
-    * **Coding:** Implemented [List specific features like Course Management, Student Grading, Performance Reports export, ManageStudentsJPanel ranking...]. Developed/Modified classes: [`ClassC.java`, `ClassD.java`...]. Addressed [Number] Pull Request reviews.
-    * **Documentation:** Authored README sections: [e.g., Features Implemented (Faculty), Usage Instructions]. Added code comments for [Specific classes/methods].
-    * **Testing:** Performed testing for [Faculty login, Grading functionality, Report generation...]. Verified authentication/authorization for Faculty role.
-    * **Commits/PRs:** Contributed [Number] meaningful commits to personal branch, created [Number] Pull Requests to main.
+* **[Zhizhi Li] (NUID: [002591966]):**
+    * **Assigned Use Case:** [Faculty]
+    * **Coding:** Implemented [ Course Management, Student Grading, Performance Reports export, ManageStudentsJPanel ranking, Profile Management, Student Management, Performance Reporting,Tuition button]. Developed/Modified classes: [All Classes under Faculty, and some of students, course]. Addressed [5] Pull                    Request reviews.
+    * **Documentation:** Authored README sections: [Features Implemented (Faculty), Usage Instructions]. Added code comments for [All Classes under Faculty, and some of students, course].
+    * **Testing:** Performed testing for [account : prof1  ; passwords: 1234. Faculty login, Grading functionality, Report generation, see the scroes of students and transcript, view total tuition ]. Verified authentication/authorization for Faculty role.
+    * **Commits/PRs:** Contributed [15] meaningful commits to personal branch, created [12] Pull Requests to main.
 * **[Member Name 3] (NUID: [NUID 3]):**
     * **Assigned Use Case:** [Admin/Faculty/Student/Registrar]
     * **Coding:** Implemented [List specific features like Course Registration, Graduation Audit, Transcript view, Financial Management panel...]. Developed/Modified classes: [`ClassE.java`, `ClassF.java`...]. Addressed [Number] Pull Request reviews.
