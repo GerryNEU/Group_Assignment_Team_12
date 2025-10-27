@@ -16,7 +16,9 @@ public class Person {
     private String name;
     String email;
     String phoneNumber;
-
+    private String contactInfo;
+    private String officeHours;
+    
     public String getEmail() {
         return email;
     }
@@ -56,8 +58,29 @@ public class Person {
         return name;
     }
 
+
+    public String getContactInfo() {
+        return contactInfo;
+    }
+
+    public void setContactInfo(String contactInfo) {
+        this.contactInfo = contactInfo;
+    }
+
+    public String getOfficeHours() {
+        return officeHours;
+    }
+
+    public void setOfficeHours(String officeHours) {
+        this.officeHours = officeHours;
+    }
+    
+    
+
+
     @Override
     public String toString() {
         return personId;
     }
 }
+

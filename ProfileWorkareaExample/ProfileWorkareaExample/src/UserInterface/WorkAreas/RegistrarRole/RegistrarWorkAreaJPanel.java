@@ -6,7 +6,14 @@ package UserInterface.WorkAreas.RegistrarRole;
 
 import Business.*;
 import javax.swing.JPanel;
-
+import Business.UserAccounts.UserAccount;
+import Business.UserAccounts.UserAccountDirectory;
+import info5100.university.example.Persona.Person;
+import UserInterface.WorkAreas.RegistrarRole.ManageCourseOfferingsJPanel;
+import UserInterface.WorkAreas.RegistrarRole.ManageRegistrarProfileJPanel;
+import javax.swing.JOptionPane;
+import UserInterface.WorkAreas.RegistrarRole.ReportingAnalyticsJPanel;
+import UserInterface.WorkAreas.RegistrarRole.TuitionFinancialJPanel;
 import UserInterface.WorkAreas.RegistrarRole.ManageCourseOfferingsJPanel;
 
 
@@ -47,13 +54,11 @@ public class RegistrarWorkAreaJPanel extends javax.swing.JPanel {
 
         btnManageCourseOfferings.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnManageCourseOfferings.setText("Course Offering Management");
-
         btnManageCourseOfferings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnManageCourseOfferingsActionPerformed(evt);
             }
         });
-
 
         btnManageStudentReg.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnManageStudentReg.setText("Student Registration");
@@ -65,57 +70,64 @@ public class RegistrarWorkAreaJPanel extends javax.swing.JPanel {
 
         btnManageProfile.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnManageProfile.setText("Manage own profile");
+        btnManageProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnManageProfileActionPerformed(evt);
+            }
+        });
 
         btnTuitionFinancial.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnTuitionFinancial.setText("Tuition & Financial Reconciliation");
+        btnTuitionFinancial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTuitionFinancialActionPerformed(evt);
+            }
+        });
 
         btnReportingAnalytics.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         btnReportingAnalytics.setText("Reporting & Analytics");
+        btnReportingAnalytics.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportingAnalyticsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnManageProfile)
-                .addGap(327, 327, 327))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(137, 137, 137)
-                        .addComponent(btnManageCourseOfferings)
-                        .addGap(126, 126, 126)
-                        .addComponent(btnManageStudentReg))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(116, 116, 116)
-                        .addComponent(btnTuitionFinancial)
-                        .addGap(128, 128, 128)
-                        .addComponent(btnReportingAnalytics)))
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addGap(244, 244, 244)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnTuitionFinancial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnReportingAnalytics, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnManageProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnManageStudentReg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnManageCourseOfferings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(260, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(212, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnManageCourseOfferings)
-                        .addGap(68, 68, 68))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnManageStudentReg)
-                        .addGap(77, 77, 77)))
+                .addGap(108, 108, 108)
+                .addComponent(btnManageCourseOfferings)
+                .addGap(46, 46, 46)
+                .addComponent(btnManageStudentReg)
+                .addGap(53, 53, 53)
                 .addComponent(btnManageProfile)
-                .addGap(60, 60, 60)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnTuitionFinancial)
-                    .addComponent(btnReportingAnalytics))
-                .addGap(164, 164, 164))
+                .addGap(45, 45, 45)
+                .addComponent(btnReportingAnalytics)
+                .addGap(53, 53, 53)
+                .addComponent(btnTuitionFinancial)
+                .addContainerGap(150, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnManageStudentRegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageStudentRegActionPerformed
         // TODO add your handling code here:
+        ManageStudentRegistrationJPanel manageStudentRegPanel = new ManageStudentRegistrationJPanel(business, CardSequencePanel);
+        CardSequencePanel.add("ManageStudentRegistration", manageStudentRegPanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_btnManageStudentRegActionPerformed
 
 
@@ -125,6 +137,40 @@ public class RegistrarWorkAreaJPanel extends javax.swing.JPanel {
         CardSequencePanel.add("ManageCourseOfferings", manageCourseOfferingsPanel);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_btnManageCourseOfferingsActionPerformed
+
+    private void btnManageProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageProfileActionPerformed
+        // TODO add your handling code here:
+        // --- Find the Registrar User Account (Simplified Approach) ---
+        UserAccountDirectory uad = business.getUserAccountDirectory();
+        UserAccount registrarAccount = uad.findUserAccount("registrar"); // Find by username used in ConfigureABusiness
+
+        if (registrarAccount == null) {
+             JOptionPane.showMessageDialog(this, "Could not find Registrar account.", "Error", JOptionPane.ERROR_MESSAGE);
+             return;
+        }
+         // Alternative if finding by Person ID R001:
+         // Person registrarPerson = business.getDepartment().getPersonDirectory().findPerson("R001");
+         // UserAccount registrarAccount = uad.findUserAccountByPerson(registrarPerson); // Need to add findUserAccountByPerson to UserAccountDirectory
+
+        // --- Navigate ---
+        ManageRegistrarProfileJPanel manageProfilePanel = new ManageRegistrarProfileJPanel(business, CardSequencePanel, registrarAccount); // Pass the found account
+        CardSequencePanel.add("ManageRegistrarProfile", manageProfilePanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+    }//GEN-LAST:event_btnManageProfileActionPerformed
+
+    private void btnTuitionFinancialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTuitionFinancialActionPerformed
+        // TODO add your handling code here:
+        TuitionFinancialJPanel tuitionPanel = new TuitionFinancialJPanel(business, CardSequencePanel);
+        CardSequencePanel.add("TuitionFinancial", tuitionPanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+    }//GEN-LAST:event_btnTuitionFinancialActionPerformed
+
+    private void btnReportingAnalyticsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportingAnalyticsActionPerformed
+        // TODO add your handling code here:
+        ReportingAnalyticsJPanel reportingPanel = new ReportingAnalyticsJPanel(business, CardSequencePanel);
+        CardSequencePanel.add("ReportingAnalytics", reportingPanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+    }//GEN-LAST:event_btnReportingAnalyticsActionPerformed
 
 
 

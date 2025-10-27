@@ -41,4 +41,10 @@ public class Seat {
     public SeatAssignment getSeatAssignment() {
         return seatassignment;
     }
+    
+    // Method to mark the seat as unoccupied and remove the link to the assignment
+    public void unassignSeat() {
+        this.occupied = false;
+        this.seatassignment = null; // Remove the reference back to the SeatAssignment
+    }
 }

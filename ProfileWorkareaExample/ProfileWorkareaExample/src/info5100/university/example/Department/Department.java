@@ -17,6 +17,8 @@ import info5100.university.example.Persona.PersonDirectory;
 import info5100.university.example.Persona.StudentDirectory;
 import info5100.university.example.Persona.StudentProfile;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set; 
 
 /**
  *
@@ -114,6 +116,13 @@ public class Department {
         CourseOffer co = cs.getCourseOfferByNumber(cn);
 
         co.assignEmptySeat(cl);
+    }
+    
+    public Set<String> getAvailableSemesters() {
+            if (mastercoursecatalog == null) {
+                return new HashSet<>(); 
+            }
+            return mastercoursecatalog.keySet();
     }
 
     public String getName() {

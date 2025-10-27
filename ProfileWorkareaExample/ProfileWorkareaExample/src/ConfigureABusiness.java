@@ -65,8 +65,8 @@ class ConfigureABusiness {
         // Create Registrar
         Person registrarPerson = pd.newPerson("R001");
         registrarPerson.setName("Registrar");
-        uad.newUserAccount(registrarPerson, "registrar", "regpass", "Registrar");
-        System.out.println("Registrar account created: Username=registrar, Name=" + registrarPerson.getName());
+        uad.newUserAccount(registrarPerson, "registrar", "registrar", "Registrar");
+        System.out.println("  Username=registrar" + "  ->  PersonID= R001" + ", Name=" + registrarPerson.getName());
         
         // Studnets
         // Create 10 Students and Profiles

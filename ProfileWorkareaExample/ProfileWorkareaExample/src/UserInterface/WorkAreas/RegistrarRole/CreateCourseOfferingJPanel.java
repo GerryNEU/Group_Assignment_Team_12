@@ -4,19 +4,102 @@
  */
 package UserInterface.WorkAreas.RegistrarRole;
 
+import Business.Business;
+import info5100.university.example.CourseCatalog.Course;
+import info5100.university.example.CourseCatalog.CourseCatalog;
+import info5100.university.example.CourseSchedule.CourseSchedule;
+import info5100.university.example.CourseSchedule.CourseOffer;
+import info5100.university.example.Department.Department;
+import info5100.university.example.Persona.Faculty.FacultyDirectory;
+import info5100.university.example.Persona.Faculty.FacultyProfile;
+import info5100.university.example.Persona.Person; 
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane; 
+import javax.swing.JPanel;
+     
+
 /**
  *
  * @author ouyangkairui
  */
 public class CreateCourseOfferingJPanel extends javax.swing.JPanel {
-
+    
+    private JPanel CardSequencePanel;
+    private Business business;
+    private ManageCourseOfferingsJPanel manageCourseOfferingsPanel;
+    
     /**
      * Creates new form CreateCourseOfferingJPanel
      */
-    public CreateCourseOfferingJPanel() {
+    public CreateCourseOfferingJPanel(Business bz, JPanel clp, ManageCourseOfferingsJPanel previousPanel) {
         initComponents();
+        this.business = bz;
+        this.CardSequencePanel = clp;
+        this.manageCourseOfferingsPanel = previousPanel;
+        
+        populateCourseCombo();
+        populateFacultyCombo();
+    }
+    
+    private void populateCourseCombo() {
+        DefaultComboBoxModel<Course> model = new DefaultComboBoxModel<>();
+        Department department = business.getDepartment();
+        CourseCatalog courseCatalog = department.getCourseCatalog();
+        ArrayList<Course> courses = courseCatalog.getCourseList();
+
+        for (Course course : courses) {
+            model.addElement(course); // Add the Course object itself
+        }
+        comboCourse.setModel(model);
+        // Optional: Make combo box display course name/number nicely
+        comboCourse.setRenderer(new javax.swing.DefaultListCellRenderer() {
+            @Override
+            public java.awt.Component getListCellRendererComponent(javax.swing.JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof Course) {
+                    Course course = (Course) value;
+                    setText(course.getCourseNumber() + " - " + course.getName()); // Display format
+                }
+                return this;
+            }
+        });
     }
 
+    // Method to fill the faculty dropdown
+    private void populateFacultyCombo() {
+        DefaultComboBoxModel<FacultyProfile> model = new DefaultComboBoxModel<>();
+        Department department = business.getDepartment();
+        FacultyDirectory facultyDirectory = department.getFacultyDirectory();
+        ArrayList<FacultyProfile> faculties = facultyDirectory.getTeacherList();
+
+        model.addElement(null); // Add a null option for "Unassigned"
+
+        for (FacultyProfile faculty : faculties) {
+            model.addElement(faculty); // Add the FacultyProfile object
+        }
+        comboFaculty.setModel(model);
+        // Optional: Make combo box display faculty name nicely
+        comboFaculty.setRenderer(new javax.swing.DefaultListCellRenderer() {
+            @Override
+            public java.awt.Component getListCellRendererComponent(javax.swing.JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof FacultyProfile) {
+                    FacultyProfile faculty = (FacultyProfile) value;
+                    Person person = faculty.getPerson(); // Get the associated Person
+                    if (person != null) {
+                        setText(person.getName()); // Display faculty name
+                    } else {
+                        setText("Unknown Faculty");
+                    }
+                } else {
+                    setText("Select Faculty (Optional)"); // Text for the null option
+                }
+                return this;
+            }
+        });
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,39 +111,229 @@ public class CreateCourseOfferingJPanel extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        comboCourse = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
+        comboFaculty = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
+        txtCapacity = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        txtSchedule = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        txtRoom = new javax.swing.JTextField();
+        btnSave = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         jLabel1.setText("Create New Course Offering");
 
         jLabel2.setText("Course:");
 
+        comboCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboCourseActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Assign Faculty:");
+
+        jLabel4.setText("Capacity (Seats):");
+
+        jLabel5.setText("Schedule:");
+
+        jLabel6.setText("Room:");
+
+        btnSave.setText("Save");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+
+        btnCancel.setText("Cancel");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(269, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(228, 228, 228))
             .addGroup(layout.createSequentialGroup()
-                .addGap(93, 93, 93)
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel4)
+                        .addComponent(jLabel5)
+                        .addComponent(jLabel6)
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel3))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnSave)
+                        .addGap(61, 61, 61)))
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(comboCourse, 0, 115, Short.MAX_VALUE)
+                    .addComponent(comboFaculty, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtCapacity)
+                    .addComponent(txtSchedule)
+                    .addComponent(txtRoom)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(btnCancel)))
+                .addGap(271, 271, 271))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(241, 241, 241)
+                .addComponent(jLabel1)
+                .addContainerGap(256, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
+                .addGap(60, 60, 60)
                 .addComponent(jLabel1)
                 .addGap(37, 37, 37)
-                .addComponent(jLabel2)
-                .addContainerGap(481, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(comboCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(comboFaculty, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(22, 22, 22)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(txtCapacity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(txtSchedule, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(txtRoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(38, 38, 38)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSave)
+                    .addComponent(btnCancel))
+                .addContainerGap(222, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void comboCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCourseActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboCourseActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        // TODO add your handling code here:
+        // Remove this panel from the card sequence panel
+        CardSequencePanel.remove(this);
+        // Get the layout manager
+        java.awt.CardLayout layout = (java.awt.CardLayout) CardSequencePanel.getLayout();
+        // Show the previous panel (ManageCourseOfferingsJPanel)
+        layout.previous(CardSequencePanel);
+    }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        // TODO add your handling code here:
+        // --- 1. Get User Input ---
+        Course selectedCourse = (Course) comboCourse.getSelectedItem();
+        FacultyProfile selectedFaculty = (FacultyProfile) comboFaculty.getSelectedItem();
+        String capacityStr = txtCapacity.getText().trim();
+        String scheduleStr = txtSchedule.getText().trim();
+        String roomStr = txtRoom.getText().trim();
+
+        // --- 2. Input Validation ---
+        if (selectedCourse == null) {
+            JOptionPane.showMessageDialog(this, "Please select a course.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int capacity;
+        try {
+            capacity = Integer.parseInt(capacityStr);
+            if (capacity <= 0) {
+                JOptionPane.showMessageDialog(this, "Capacity must be a positive number.", "Input Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid number for capacity.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Add more validation if needed (e.g., for schedule format, room format)
+        if (scheduleStr.isEmpty()) {
+             JOptionPane.showMessageDialog(this, "Please enter a schedule.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+         if (roomStr.isEmpty()) {
+             JOptionPane.showMessageDialog(this, "Please enter a room.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+
+        // --- 3. Create Course Offering ---
+        Department department = business.getDepartment();
+        // Assuming we are always working with "Fall 2025" for now
+        CourseSchedule courseSchedule = department.getCourseSchedule("Fall 2025");
+        if (courseSchedule == null) {
+            // If the schedule doesn't exist, maybe create it? Or show error.
+            courseSchedule = department.newCourseSchedule("Fall 2025");
+            //JOptionPane.showMessageDialog(this, "Course schedule for Fall 2025 not found.", "Error", JOptionPane.ERROR_MESSAGE);
+            //return;
+        }
+
+        // Check if this course is already offered in this semester
+        if (courseSchedule.getCourseOfferByNumber(selectedCourse.getCourseNumber()) != null) {
+             JOptionPane.showMessageDialog(this, "This course (" + selectedCourse.getCourseNumber() + ") is already offered in Fall 2025.", "Creation Error", JOptionPane.WARNING_MESSAGE);
+             return;
+        }
+
+        // Create the new CourseOffer using the selected course's number
+        CourseOffer newCourseOffer = courseSchedule.newCourseOffer(selectedCourse.getCourseNumber());
+        if (newCourseOffer == null) {
+            JOptionPane.showMessageDialog(this, "Failed to create course offering. Course might not exist in catalog.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // --- 4. Set Properties ---
+        newCourseOffer.generatSeats(capacity); // Set capacity
+        if (selectedFaculty != null) {
+            newCourseOffer.assignFaculty(selectedFaculty); // Assign faculty if one was selected
+        }
+        newCourseOffer.setScheduleTime(scheduleStr); // Set schedule
+
+        // You need to add setRoom method to CourseOffer.java first!
+        // Assuming you added `private String room;` and `public void setRoom(String room){ this.room = room; }`
+        // newCourseOffer.setRoom(roomStr); // Set room
+
+        // --- 5. Confirmation and Navigation ---
+        JOptionPane.showMessageDialog(this, "Course Offering created successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+        // Refresh the table in the previous panel
+        manageCourseOfferingsPanel.populateTable();
+
+        // Go back to the previous panel
+        CardSequencePanel.remove(this);
+        java.awt.CardLayout layout = (java.awt.CardLayout) CardSequencePanel.getLayout();
+        layout.previous(CardSequencePanel);
+    }//GEN-LAST:event_btnSaveActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnSave;
+    private javax.swing.JComboBox<Course> comboCourse;
+    private javax.swing.JComboBox<FacultyProfile> comboFaculty;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JTextField txtCapacity;
+    private javax.swing.JTextField txtRoom;
+    private javax.swing.JTextField txtSchedule;
     // End of variables declaration//GEN-END:variables
 }
