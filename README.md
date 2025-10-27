@@ -6,11 +6,10 @@ Profile Workarea Example - Implementing Access-Controlled Use Cases in a Digital
 ## 2. Team Information
 * **Team:** Team 12
 * **Members & Roles:**
-    * [Member Name 1] - Role: [Role 1 assigned from PDF: Admin/Faculty/Student/Registrar], Responsibilities: [Specific features implemented, e.g., User Account Management, Course Management], NUID: [NUID 1]
+    * [Guochang Su] - Role: [Administer], Responsibilities: [User Account Management, Person Management, Student&Faculty Management, Manager Profile, Analytics Dashboard], NUID: [002521648]
     * [Member Name 2] - Role: [Role 2 assigned from PDF], Responsibilities: [Specific features implemented], NUID: [NUID 2]
     * [Member Name 3] - Role: [Role 3 assigned from PDF], Responsibilities: [Specific features implemented], NUID: [NUID 3]
     * [Member Name 4 (if applicable)] - Role: [Role 4 assigned from PDF], Responsibilities: [Specific features implemented], NUID: [NUID 4]
-    *(请填写实际的姓名、角色、职责和 NUID)*
 
 ---
 
@@ -84,7 +83,7 @@ This project integrates a reference implementation of a Digital University Syste
 
 *(Note: Assign specific team members clearly for each main feature/responsibility as required by the grading criteria)*
 
-**Admin Role** (`AdminRoleWorkAreaJPanel`): *(Implemented by: [Member Name(s)])*
+**Admin Role** (`AdminRoleWorkAreaJPanel`): *(Implemented by: [Guochang Su])*
 * **User Account Management** (`ManageUserAccountsJPanel`): Create, view/edit, delete user accounts. Assigns roles based on person's profile. Requires `AdminUserAccount.java`.
 * **Person Registration (HR)** (`ManagePersonsJPanel`): Add new persons (Student/Faculty), prevents duplicates by email, auto-generates sequential ID (S###/F###), view/edit basic info, delete. Requires `AdministerPersonJPanel.java`.
 * **Student and Faculty Records Management** (`ManageRecordsJPanel`): Tabbed view for Students and Faculty. Allows viewing details, searching by ID, Name, Dept (3 methods implemented), editing contact info (`ViewEditStudentJPanel`, `ViewEditFacultyJPanel`), deleting records, and assigning faculty to courses (`AssignFacultyJPanel`).
@@ -212,12 +211,12 @@ This project integrates a reference implementation of a Digital University Syste
 
 *(Please provide specific details for each member, following the structure below)*
 
-* **[Member Name 1] (NUID: [NUID 1]):**
-    * **Assigned Use Case:** [Admin/Faculty/Student/Registrar]
-    * **Coding:** Implemented [List specific features, e.g., User Account Management, Person Registration, ManageRecordsJPanel search methods, Analytics Dashboard tabs X & Y...]. Developed/Modified classes: [`ClassA.java`, `ClassB.java`...]. Addressed [Number] Pull Request reviews.
-    * **Documentation:** Authored README sections: [e.g., Project Overview, Installation]. Added code comments for [Specific classes/methods].
-    * **Testing:** Performed testing for [Admin login, User creation/deletion, Record search...]. Verified authentication/authorization for Admin role.
-    * **Commits/PRs:** Contributed [Number] meaningful commits to personal branch, created [Number] Pull Requests to main.
+* **[Guochang Su] (NUID: [002521648]):**
+    * **Assigned Use Case:** [Admin]
+    * **Coding:** Implemented [User Account Management, Person Management, Student&Faculty Management, Manager Profile, Analytics Dashboard]. Developed/Modified classes: [All Classes under Admin, and some of students, faculties, directions]. Addressed [5] Pull Request reviews.
+    * **Documentation:** Authored README sections: [Project Overview, Installation, Usage Instructions]. Added code comments for [All Classes under Admin, and some of students, faculties, directions].
+    * **Testing:** Performed testing for [Admin login, User creation/deletion, Records Part, Person creatrion/deletion, Assgin departments to faculties]. Verified authentication/authorization for Admin role.
+    * **Commits/PRs:** Contributed [47] meaningful commits to personal branch, created [15] Pull Requests to main.
 * **[Member Name 2] (NUID: [NUID 2]):**
     * **Assigned Use Case:** [Admin/Faculty/Student/Registrar]
     * **Coding:** Implemented [List specific features like Course Management, Student Grading, Performance Reports export, ManageStudentsJPanel ranking...]. Developed/Modified classes: [`ClassC.java`, `ClassD.java`...]. Addressed [Number] Pull Request reviews.
