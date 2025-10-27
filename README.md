@@ -7,7 +7,7 @@ Profile Workarea Example - Implementing Access-Controlled Use Cases in a Digital
 * **Team:** Team 12
 * **Members & Roles:**
     * [Guochang Su] - Role: [Administer], Responsibilities: [User Account Management, Person Management, Student&Faculty Management, Manager Profile, Analytics Dashboard], NUID: [002521648]
-    * [Member Name 2] - Role: [Role 2 assigned from PDF], Responsibilities: [Specific features implemented], NUID: [NUID 2]
+    * [Zhizhi Li] - Role: [Faculty], Responsibilities: [Course Management, Profile Management, Student Management, Performance Reporting, Tuition/Enrollment Insight ], NUID: [002591966]
     * [JIAYI YANG] - Role:[Student], Responsibilities: [Course work,Course Registration,Student Profile Management,Graduation Status, Transcript], NUID: [002597470]
     * Kairui Ouyang - Role: Registrar, Responsibilities: Course Offering Management, Student Registration (Admin-Side), Profile Management, Tuition & Financial Reconciliation, Reporting & Analytics, NUID: 002528459
    
