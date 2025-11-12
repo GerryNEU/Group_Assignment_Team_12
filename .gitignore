@@ -7,7 +7,6 @@ bin/
 .gradle/
 .nb-gradle/
 *.class
-*.jar
 *.war
 *.ear
 *.log
